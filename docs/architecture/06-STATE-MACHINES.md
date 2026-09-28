@@ -69,6 +69,8 @@ Replacing bytes is a new version row. There is no transition back to `upload_pen
 
 Rejected and scan_rejected versions are never promoted to the private bucket.
 
+Slice 4 implements the transitions from `draft` through `upload_pending`, `quarantined`, and `scanning` to `pending_moderation` or `scan_rejected`. The checksum is written once, on the move to `quarantined`. A second verdict does not change the row. Moderator transitions, withdrawal, and the expired-intent return to `draft` are not implemented. `pending_moderation` is not sellable.
+
 ## Seller verification
 
 | From | To | Actor | Guard |

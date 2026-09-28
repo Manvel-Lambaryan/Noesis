@@ -11,12 +11,13 @@ import { AppModule } from "./app.module";
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, { logger: false });
   app.use(assignCorrelation);
+  app.use(uploadCors);
   app.use(requireInternalToken);
   app.useGlobalFilters(new ApiExceptionFilter());
   const config = new DocumentBuilder()
     .setTitle("NOESIS API")
-    .setDescription("Slice 3 catalog. Browser clients use the web BFF.")
-    .setVersion("0.3.0")
+    .setDescription("Slice 4 artifact upload. Browser clients use the web BFF.")
+    .setVersion("0.4.0")
     .build();
   SwaggerModule.setup("docs", app, SwaggerModule.createDocument(app, config));
   return app;
@@ -26,6 +27,30 @@ function assignCorrelation(request: Request, response: Response, next: NextFunct
   const correlationId = resolveCorrelationId(request.header("x-correlation-id"));
   request.headers["x-correlation-id"] = correlationId;
   response.setHeader("x-correlation-id", correlationId);
+  next();
+}
+
+function uploadCors(request: Request, response: Response, next: NextFunction): void {
+  if (!request.path.startsWith("/uploads/quarantine/")) {
+    next();
+    return;
+  }
+  const allowed = process.env.APP_PUBLIC_URL ?? "http://localhost:3000";
+  const origin = request.header("origin");
+  if (origin !== undefined && origin !== allowed) {
+    response.status(403).end();
+    return;
+  }
+  if (origin === allowed) {
+    response.setHeader("access-control-allow-origin", allowed);
+    response.setHeader("access-control-allow-methods", "PUT, OPTIONS");
+    response.setHeader("access-control-allow-headers", "content-type");
+    response.setHeader("vary", "Origin");
+  }
+  if (request.method === "OPTIONS") {
+    response.status(204).end();
+    return;
+  }
   next();
 }
 

@@ -19,6 +19,8 @@ Sharing a schema does not allow one module to write another module’s tables. S
 
 Slice 3 adds catalog-owned `categories`, `products`, `product_stacks`, `product_tags`, `preview_images`, and `preview_intents`. `products.seller_id` has no foreign key to `users`. Preview object keys must start with `previews/` and must not contain `quarantine`. Discovery owns `discovery_views` and `discovery_documents` in the same PostgreSQL schema, with no foreign key to `products`. `discovery_documents.product_id` is the primary key. A trigger maintains `search_vector` because `to_tsvector` is not immutable and cannot be a generated column. Rebuild reads the catalog port and the artifacts sellability port, then upserts or deletes discovery rows.
 
+Slice 4 adds artifacts-owned `product_versions`, `upload_intents`, and `scan_reports` in the catalog schema. `product_versions.product_id` and `seller_id` have no foreign keys. `upload_intents.version_id` references `product_versions` inside the artifacts module. A check constraint keeps `object_key` under `quarantine/` and out of `previews/`. `private_key` stays null until a later slice copies an approved object.
+
 Audit append may be a port implemented as a same-transaction write into `admin.audit_events`. That is a **deliberate exception**: the audit port is shared infrastructure, like the outbox helper. It is not a general “write another module’s tables” permission. The port accepts an already-built audit record and inserts one row. It does not update business tables.
 
 ### Capture transaction

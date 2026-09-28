@@ -13,6 +13,7 @@
     "@nestjs/swagger": "^11.2.0",
     "@node-rs/argon2": "^2.2.1",
     "@noesis/kernel": "workspace:*",
+    "bullmq": "^5.58.5",
     "@prisma/client": "^6.16.2",
     "ioredis": "^5.7.0",
     "reflect-metadata": "^0.2.2",

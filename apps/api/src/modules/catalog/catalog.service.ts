@@ -32,6 +32,14 @@ export class CatalogService implements CatalogAccess {
     return this.products.listForIndex();
   }
 
+  async findOwned(sellerId: string, productId: string): Promise<{ id: string } | null> {
+    const product = await this.products.findById(productId);
+    if (product === null || product.sellerId !== sellerId) {
+      return null;
+    }
+    return { id: product.id };
+  }
+
   listCategories(): Promise<CategoryView[]> {
     return this.products.listActiveCategories();
   }

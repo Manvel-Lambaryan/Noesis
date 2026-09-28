@@ -1,7 +1,10 @@
+import path from "node:path";
+
 export type ScanConfig = {
   redisUrl: string;
   logLevel: string;
   queueName: string;
+  quarantineDir: string;
 };
 
 export function loadScanConfig(env: Record<string, string | undefined>): ScanConfig {
@@ -16,5 +19,6 @@ export function loadScanConfig(env: Record<string, string | undefined>): ScanCon
     redisUrl,
     logLevel: env.LOG_LEVEL ?? "info",
     queueName: env.SCAN_QUEUE_NAME ?? "scan",
+    quarantineDir: env.QUARANTINE_DIR ?? path.join(process.env.TEMP ?? "/tmp", "noesis-quarantine"),
   };
 }

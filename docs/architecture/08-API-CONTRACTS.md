@@ -64,9 +64,11 @@ The standing detail shape includes public preview image URLs, a license summary,
 | PATCH | `/v1/seller/products/{id}` | Drafts only. Not money snapshots. Slice 3 |
 | POST | `/v1/seller/products/{id}/publish` | Not implemented. Guard in the state machine. Slice 5 |
 | POST | `/v1/seller/products/{id}/unpublish` | |
-| POST | `/v1/seller/products/{id}/versions` | version label |
-| POST | `/v1/seller/versions/{id}/upload-intents` | Returns presigned PUT, expiry |
-| POST | `/v1/seller/versions/{id}/complete-upload` | Body: declared size. The platform checksum is computed by the trusted worker (audit AF-3). A client hash is ignored |
+| POST | `/v1/seller/products/{id}/versions` | version label. Slice 4. Creates `draft` |
+| GET | `/v1/seller/products/{id}/versions` | Owner only. No object keys. Slice 4 |
+| GET | `/v1/seller/versions/{id}` | Owner only. Returns state, size, trusted checksum, and reason. Slice 4 |
+| POST | `/v1/seller/versions/{id}/upload-intents` | Returns a single-use PUT URL and expiry. Does not return the object key. Slice 4 |
+| POST | `/v1/seller/versions/{id}/complete-upload` | Body: declared size. The platform checksum is computed by the trusted worker (audit AF-3). A client hash is ignored. Returns 202. Slice 4 |
 | POST | `/v1/seller/products/{id}/preview-intents` | PNG, JPEG, or WebP only. Returns an intent id, not a quarantine presign. Slice 3 |
 | POST | `/v1/seller/products/{id}/previews` | Consumes one intent and stores bytes under `previews/`. Slice 3 |
 | POST | `/v1/admin/discovery/rebuild` | Moderation permission. Indexes a product only when it is `published` and artifacts report a sellable version. Slice 3 |
@@ -76,7 +78,7 @@ The standing detail shape includes public preview image URLs, a license summary,
 | POST | `/v1/seller/offers/{id}/archive` | |
 | GET | `/v1/seller/balance` | Projection per currency |
 
-Resource check: `product.seller_id` matches session seller.
+Resource check: `product.seller_id` matches session seller. `PUT /uploads/quarantine/{token}` is outside `/v1` and does not use the internal token. The public media controller does not read quarantine objects. Publication and moderation routes stay unimplemented.
 
 ## Checkout and buyer
 

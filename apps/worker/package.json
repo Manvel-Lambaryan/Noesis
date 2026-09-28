@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@noesis/kernel": "workspace:*",
+    "@prisma/client": "^6.16.2",
     "bullmq": "^5.58.5",
     "ioredis": "^5.7.0"
   },

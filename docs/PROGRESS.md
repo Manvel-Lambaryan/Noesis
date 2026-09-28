@@ -1,6 +1,6 @@
 # NOESIS progress
 
-**Phase:** Slice 3 catalog. **Production:** not deployed. **Live payments:** not configured.
+**Phase:** Slice 4 artifact upload. **Production:** not deployed. **Live payments:** not configured.
 
 Gate A is **accepted for Slice 1**. Gate B and Gate C stay open. Approval of the database, seller-verification, and catalog decisions does not approve payment provider, refunds, commission, guest checkout, or hosting.
 
@@ -51,7 +51,8 @@ Sandbox code may later use fixtures. It must not embed an unapproved refund wind
 | 1. Skeleton | Apps, CI, health, OpenAPI stub, log/trace baseline | Done locally. GitHub Actions has not been executed |
 | 2. Identity | Accounts, sessions, roles, seller draft | Done locally on 2026-09-28. See Slice 2 results |
 | 3. Catalog | Draft products, three discovery lenses, preview images | Done locally on 2026-09-28. See Slice 3 results |
-| 4–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
+| 4. Artifact upload | Quarantine upload, isolated scan, `pending_moderation` or `scan_rejected` | Done locally on 2026-09-28. See Slice 4 results. Q14 stays OPEN |
+| 5–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
 | Live payments | Real provider in production | Blocked on Gate B and ADR 0004 |
 | Production | Real users and seller funds | Blocked on Gate B, Gate C, and security tests for slices 4, 7, 8, 10 |
 
@@ -128,6 +129,28 @@ Public pages read that same discovery API. They stay empty until a later slice c
 Web check on the production server: `GET /marketplace`, `/marketplace/javascript`, `/marketplace/business-apps`, and `/marketplace/categories/ui-components` returned 200 with those titles, the viewport meta, and the filter form. The category title came from the API. Unsigned `/account/products` and `/account/products/new` returned 200. The stylesheet contains breakpoints at 720px and 1024px. No browser window was resized, so this was not a graphical viewport pass.
 
 Slice 3 does not implement archive upload, moderation, pricing, checkout, payouts, or reviews.
+
+## Slice 4 results
+
+Recorded after a local run on 2026-09-28. PostgreSQL 18 and Redis were local processes. `docker compose` was not executed. GitHub Actions was not executed. Q14 stays OPEN. The archive caps in code are the NFR fixtures, not approved marketplace policy.
+
+| Check | Result |
+| --- | --- |
+| `pnpm lint` | Exit 0. No errors or warnings |
+| `pnpm test` | 42 passed, 0 failed (40 package tests and 2 web tests). Secret scan exited 0. Includes the Slice 1–3 suites |
+| `pnpm run build` | Exit 0. Next.js 15.5.26 production build completed with no error or warning lines |
+| Migration `20260928190000_artifact_versions` | Applied with `prisma migrate deploy` |
+| Happy path | A stored zip reaches `pending_moderation`. The stored SHA-256 matches the worker hash of the file bytes and does not match the client value `deadbeef`. `private_key` is null. One `scan_reports` row. A second verdict returns `duplicate` |
+| Unsafe archives | Path traversal, a declared compression bomb, and a non-archive end in `scan_rejected` with `traversal`, `compression_bomb`, and `format` |
+| Authorization | Anonymous create is 401. A buyer is 403. Another seller reading the version is 404 |
+| Quarantine | The capability URL does not contain the version id. `GET` of that URL is not 200. `GET /media/quarantine/...` is 404. The owner JSON does not contain `quarantine/` |
+| Discovery | The product id stays out of public listings. The sellability port still returns an empty set |
+| Scanner isolation | `loadScanConfig` throws when `DATABASE_URL` is set. Compiled scan sources do not import `@prisma/client`. A second scan lease for the same version is rejected |
+| API boundary | Compiled API sources, other than the integration test, do not contain `inspect-archive` or `scan-job` |
+
+The production build emits `/account/products/[id]` and the BFF upload routes. A signed-in `GET /account/products/{id}` on the local production server returned 200 and included the archive form and the quarantine note. No browser window was opened, so this was not a graphical viewport pass. The upload assertions above used real zip bytes over HTTP against the API.
+
+Slice 4 does not implement moderation, publication, pricing, checkout, payouts, or a public download. An expired upload intent is rejected, and the row is not moved back to `draft`. There is no durable event outbox; the scan handoff is a BullMQ job, and the audit row is `scan_reports`. The malware check is the structural fixture `structural-fixture`, not an antivirus engine.
 
 ## Blockers
 

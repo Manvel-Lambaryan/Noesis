@@ -72,7 +72,7 @@ Documentation. Acceptance is the checklist in [PROGRESS](../PROGRESS.md). Rollba
 
 **Build:** upload intent, quarantine presign, complete, scan worker, archive fixtures, verdict stored. No private promotion yet.
 
-**Acceptance:** traversal and zip-bomb fixtures fail closed. Happy path ends in `pending_moderation`. API image does not contain the extractor entrypoint used by scan (separate image **PROPOSED**).
+**Acceptance:** traversal and zip-bomb fixtures fail closed. Happy path ends in `pending_moderation`. API image does not contain the extractor entrypoint used by scan (separate image **PROPOSED**). Local results are in PROGRESS. Q14 stays OPEN.
 
 **Threats:** malicious archive row in the threat model.
 **Ops:** scan queue age alert.

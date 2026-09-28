@@ -282,6 +282,71 @@ model DiscoveryDocument {
   @@schema("catalog")
 }
 
+enum VersionState {
+  draft
+  upload_pending
+  quarantined
+  scanning
+  scan_rejected
+  pending_moderation
+  approved
+  rejected
+  withdrawn
+
+  @@schema("catalog")
+}
+
+/// artifacts owns versions. product_id has no foreign key: catalog and artifacts are different modules.
+model ProductVersion {
+  id            String        @id @db.Uuid
+  productId     String        @map("product_id") @db.Uuid
+  sellerId      String        @map("seller_id") @db.Uuid
+  versionLabel  String        @map("version_label") @db.VarChar(40)
+  state         VersionState  @default(draft)
+  byteSize      BigInt?       @map("byte_size")
+  sha256        String?       @db.VarChar(64)
+  quarantineKey String?       @map("quarantine_key") @db.VarChar(240)
+  privateKey    String?       @map("private_key") @db.VarChar(240)
+  reasonCode    String?       @map("reason_code") @db.VarChar(80)
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  intents       UploadIntent[]
+
+  @@unique([productId, versionLabel])
+  @@index([sellerId, state])
+  @@map("product_versions")
+  @@schema("catalog")
+}
+
+model UploadIntent {
+  id          String         @id @db.Uuid
+  versionId   String         @map("version_id") @db.Uuid
+  tokenHash   String         @unique @map("token_hash")
+  contentType String         @map("content_type") @db.VarChar(40)
+  byteSize    BigInt         @map("byte_size")
+  objectKey   String         @map("object_key") @db.VarChar(240)
+  expiresAt   DateTime       @map("expires_at") @db.Timestamptz(3)
+  consumedAt  DateTime?      @map("consumed_at") @db.Timestamptz(3)
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  version     ProductVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  @@index([versionId])
+  @@map("upload_intents")
+  @@schema("catalog")
+}
+
+model ScanReport {
+  id         String   @id @db.Uuid
+  versionId  String   @unique @map("version_id") @db.Uuid
+  verdict    String   @db.VarChar(16)
+  reasonCode String   @map("reason_code") @db.VarChar(80)
+  engine     String   @db.VarChar(40)
+  scannedAt  DateTime @map("scanned_at") @db.Timestamptz(3)
+
+  @@map("scan_reports")
+  @@schema("catalog")
+}
+
 model CommerceAnchor {
   id String @id @default("commerce")
 

@@ -2,7 +2,7 @@
 
 NOESIS is one global developer marketplace. General code assets, a JavaScript/TypeScript discovery lens, and ready-to-launch business applications are three views over a single catalog.
 
-**Slice 3 catalog is in the repository.** Sellers can save private drafts and preview images. Public lenses read one discovery index. There is no checkout, publication, payout, or production deployment yet.
+**Slice 4 artifact upload is in the repository.** Sellers can save private drafts, preview images, and upload an archive into quarantine for scanning. Public lenses read one discovery index. There is no checkout, moderation, publication, payout, or production deployment yet.
 
 | Label | Meaning |
 | --- | --- |

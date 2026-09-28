@@ -85,7 +85,7 @@ A slice is done when all of the following are true:
 | Security | No extract-and-run path on the API image. Failed verdict does not copy to the private bucket. |
 | Tests | Traversal fixture ends in `scan_rejected`. Happy path ends in `pending_moderation` with a server-computed checksum. |
 | Acceptance | Those tests pass. API environment has no scanner entrypoint. |
-| Done | Global definition. |
+| Done | Implemented locally on 2026-09-28. Q14 stays OPEN. Private-bucket promotion stays in slice 5. Results are in PROGRESS. |
 
 ### Slice 5 — Moderation
 

@@ -39,7 +39,7 @@ State names in [06-STATE-MACHINES](06-STATE-MACHINES.md) remain authoritative (`
 - Presign expiry **PROPOSED** 15 minutes.
 - Complete-upload records that the object exists and checks the declared size. The trusted worker computes `sha256` and stores it. A client-supplied checksum is not the system record (audit AF-3).
 
-The API does not proxy the bytes.
+The API does not proxy the bytes. Slice 4 keeps that rule while the storage vendor is OPEN: the seller receives a single-use capability URL, `PUT /uploads/quarantine/{token}`, instead of storage credentials or the object key. The token is stored only as a SHA-256 hash. Bytes land under `QUARANTINE_DIR` and are not served by `/media`. The scan process reads that directory and Redis, refuses `DATABASE_URL`, does not extract archives onto disk, and does not execute seller code. The worker computes `sha256` once, on the move to `quarantined`, then moves the row to `scanning` and enqueues the scan job. A second verdict cannot leave `scanning` again. `private_key` stays null. Q14 limits in code are the NFR fixtures (2 GB compressed, 8 GB uncompressed, 10,000 entries, 100:1, 15-minute upload), not approved policy. The malware port is a structural fixture named `structural-fixture`; it is not an antivirus engine.
 
 ## Scanner duties
 

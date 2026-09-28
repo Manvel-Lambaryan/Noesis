@@ -15,7 +15,7 @@ describe("scan config", () => {
 
   it("keeps database settings out of the config object", () => {
     const config = loadScanConfig({ REDIS_URL: "redis://127.0.0.1:6379" });
-    assert.deepEqual(Object.keys(config).sort(), ["logLevel", "queueName", "redisUrl"]);
+    assert.deepEqual(Object.keys(config).sort(), ["logLevel", "quarantineDir", "queueName", "redisUrl"]);
   });
 });
 

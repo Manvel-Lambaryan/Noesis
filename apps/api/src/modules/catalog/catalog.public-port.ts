@@ -23,6 +23,7 @@ export type IndexSource = {
 
 export type CatalogAccess = {
   listForIndex(): Promise<IndexSource[]>;
+  findOwned(sellerId: string, productId: string): Promise<{ id: string } | null>;
 };
 
 export const CATALOG_ACCESS = Symbol("CATALOG_ACCESS");
