@@ -15,7 +15,7 @@ The platform earns a **configurable** transaction commission. The range 10–20%
 | Lens | What the buyer sees | What it is in the system |
 | --- | --- | --- |
 | General | Code assets across stacks | Discovery view with no stack restriction |
-| JavaScript / TypeScript | A curated JS/TS entry point | Discovery view: stack filter and/or an editorial flag. Whether "curated" means automatic stack match or human selection is **OPEN** |
+| JavaScript / TypeScript | JavaScript and TypeScript products | **ACCEPTED.** Discovery view: stacks include `javascript` or `typescript`. Same product rows. Not a separate database |
 | Business applications | Ready-to-launch apps | Discovery view where `product_kind = business_application` |
 
 A product can appear in more than one lens. A TypeScript SaaS starter is still one product row. Lenses are saved filters, not copies of the catalog. Authoritative rule: [ADR 0003](architecture/ADR/0003-search.md) and [domain model](architecture/04-DOMAIN-MODEL.md).

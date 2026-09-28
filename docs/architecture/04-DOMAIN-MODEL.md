@@ -24,7 +24,7 @@ There is no `JavascriptProduct` table and no `BusinessAppCatalog`.
 | `DiscoveryView` | `view_id`, human label, enabled |
 | `DiscoveryDocument` | `product_id` primary key, denormalized public fields, `listing_state`, search vector |
 
-`curated` supports an editorial JS/TS lens if the owner chooses that meaning (Q in assumptions). If the lens is only a stack filter, the flag can stay unused.
+`curated` is unused. The JS/TS lens is a stack filter, accepted on 2026-09-28. It is not an editorial flag.
 
 ## Commercial identity
 

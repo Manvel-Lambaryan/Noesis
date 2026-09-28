@@ -187,11 +187,16 @@ Password reset is included in the roadmap either way. It is a security function,
 | No. Drafts are allowed. Publish and payouts both wait for verification (recommended) | You do not take a buyer’s money for a seller you cannot pay |
 | Publish first, hold payouts | The catalog fills sooner. Refunds are harder if the seller never verifies |
 
-Audit AF-1. The documents no longer force both answers at once.
+**ACCEPTED on 2026-09-28.** Drafts are allowed. Publish and payouts both require verification.
+
+The JS/TS lens is a technology filter over the one catalog. It is not an editorial shortlist and not a second database.
 
 ## Decision log
 
 | Date | Decision | Status |
 | --- | --- | --- |
 | 2026-09-28 | Architecture pack drafted | Draft |
-| — | Gate A, B, C | Waiting |
+| 2026-09-28 | Four PostgreSQL schemas; module table ownership kept | ACCEPTED |
+| 2026-09-28 | Verification required before publish and before payout. Drafts allowed | ACCEPTED |
+| 2026-09-28 | One catalog. JS/TS view is a stack filter | ACCEPTED |
+| 2026-09-28 | Gate A closed for Slice 1. Gate B and Gate C remain open | ACCEPTED |

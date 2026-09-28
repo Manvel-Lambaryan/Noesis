@@ -66,7 +66,7 @@ Documentation. Acceptance is the checklist in [PROGRESS](../PROGRESS.md). Rollba
 **Ops:** index rebuild command.
 **Rollback:** hide routes; tables can remain. No buyer harm.
 
-**OPEN inside the slice:** category seed list is sample data, not the business category decision (Q6). JS lens curation rule stays behind a config `view.javascript.mode = stack | curated` defaulting to `stack` until the owner answers. Document the default in release notes as a default, not as their decision.
+**OPEN inside the slice:** category seed list is sample data, not the business category decision (Q6). The JS/TS lens is the accepted stack filter. Do not add a second product table.
 
 ## Slice 4 — Upload and scan
 

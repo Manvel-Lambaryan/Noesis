@@ -1,8 +1,8 @@
 # ADR 0002 — Persistence and ORM
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED for PostgreSQL, Prisma, and four schemas.  
 **Date:** 2026-09-28  
-**Deciders:** Not accepted. Owner Gate A. A spike in slice 7 can overturn the ORM choice.
+**Accepted:** 2026-09-28. The owner chose PostgreSQL and four schemas. Slice 1 requires Prisma. The slice 7 kill criteria below still gate ledger work. They do not block the foundation.
 
 ## Context
 
@@ -26,7 +26,7 @@ Maximum control, more boilerplate, easier to write unsafe SQL in every module.
 
 ## Decision
 
-**PROPOSED: PostgreSQL as the only system of record, with Prisma (option A), under kill criteria.**
+**ACCEPTED: PostgreSQL as the only system of record, with Prisma (option A), under the kill criteria below.**
 
 Kill criteria, evaluated in slice 7 before any live-money work (live money is already blocked):
 
@@ -36,7 +36,7 @@ Kill criteria, evaluated in slice 7 before any live-money work (live money is al
 
 If any kill criterion fails, adopt Drizzle for the payments module or for the whole API, and record the result in this ADR. Do not run two ORMs without that note.
 
-Schema-per-module, no cross-schema foreign keys (data ownership doc).
+Four schemas, not one per module: `identity`, `catalog`, `commerce`, `ops`. A module still writes only its own tables. No foreign keys across modules, including tables that share a schema. No cross-schema foreign keys. See data ownership.
 
 ## Consequences
 

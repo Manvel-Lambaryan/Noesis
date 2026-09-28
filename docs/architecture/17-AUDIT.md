@@ -93,29 +93,21 @@ Capture is special: the webhook composition root calls `payments`, `orders`, and
 
 | ID | Severity | Issue | What this audit did |
 | --- | --- | --- | --- |
-| AF-1 | High | Publish rules disagreed. The listing table allowed publish with an approved version and a non-suspended seller. A later sentence forbade publish before seller verification. | Left the choice OPEN. Documents no longer assert both. Owner decision Q20. |
+| AF-1 | High | Publish rules disagreed. | **ACCEPTED.** Drafts allowed. Publish and payouts require verification. |
+| AF-7 | Medium | Fifteen schemas were heavier than the boundary tests. | **ACCEPTED.** Four schemas. Module table ownership stays. |
 | AF-2 | High | `payments.charge_captured` and the capture transaction could both create an order. Refund and dispute events could revoke or freeze an entitlement twice. | Event catalog now has one side-effect owner per outcome. |
 | AF-3 | High | The seller could supply the archive checksum that the platform then trusted. | The trusted worker computes `sha256`. The client value is not the record. |
 | AF-4 | High | The scan process was described both as database-free (container diagram) and as loading the artifacts service (module doc). | Scan has object-storage and queue credentials only. The worker applies the verdict. |
 | AF-5 | Medium | The architecture map gave `checkout` a cart, while the domain model said a persistent cart is not an MVP entity. | Checkout owns the session. A multi-item cart is FUTURE. |
 | AF-6 | Medium | The brief told admins to “request changes.” The version state machine has no such state. | Reject with a note. The seller uploads a new version. |
-| AF-7 | Medium | Fifteen PostgreSQL schemas on day one fight Prisma and do not add a security boundary the import tests do not already give. | Not applied. Recommendation only. See below. |
 | AF-8 | Medium | No seller appeal route, no verification submit route, no preview-image upload, no password reset, no email verification. | Routes and slice tasks added as work, not as new product policy. |
 | AF-9 | Medium | `artifacts.version_withdrawn` and promotion (`private_key` set) had no events, so discovery could list a product that cannot be sold. | Events added. A version is sellable only after promotion. |
 | AF-10 | Medium | Idempotency keys were described as checkout-owned, but refunds and payouts need their own keys. | Each command’s module stores its own key. |
 | AF-11 | Low | Webhook text could be read as “return 200 after the inbox insert” before the journal and the order commit. | 200 means the capture transaction committed, or the event id was a duplicate. |
 
-## Proposed improvement not applied
+## Proposed improvement applied
 
-**AF-7. Fewer schemas, same modules.**
-
-| Option | Advantage | Disadvantage |
-| --- | --- | --- |
-| Keep 15 schemas | Matches the current data-ownership doc. A future split is obvious. | Heavy Prisma multi-schema setup. Easy to get migrations wrong. Little extra safety while one DB role is used. |
-| Four schemas: `identity`, `catalog`, `commerce`, `ops` (recommended) | Keeps payments/orders together and catalog/artifacts together. Fewer migration edges. Module boundaries stay in code and in the import test. | A later service split needs a schema move. |
-| One schema, table prefixes | Simplest first migration. | Weaker visual ownership. Prefix discipline tends to slip. |
-
-Recommendation: option two, if Gate A is accepted. Do not rewrite [05-DATA-OWNERSHIP](05-DATA-OWNERSHIP.md) until the owner agrees. Until then, implementers follow the current schema-per-module document.
+**AF-7. Four schemas, same modules.** Accepted by the owner on 2026-09-28. Data ownership is the current map. Do not add a schema per module.
 
 ## Security notes from this pass
 
@@ -141,10 +133,9 @@ Technical Gate A, plus the commercial list in [00-ASSUMPTIONS-QUESTIONS](00-ASSU
 
 | ID | Question | Recommended alternative | Advantage | Disadvantage |
 | --- | --- | --- | --- | --- |
-| Q20 / AF-1 | Must a seller be verified before a listing can be public? | Yes. Drafts are allowed earlier. Payouts also require verification. | Buyers do not pay a seller you cannot pay. | Slower first listings. |
-| | Alternative: publish first, hold payouts. | Faster catalog. | You may owe refunds you cannot claw back. |
-| AF-7 | How many database schemas at the start? | Four schemas, modules unchanged in code. | Less setup, same boundaries. | Differs from the current data-ownership file until you accept it. |
-| Q-curation | Is the JS/TS lens every JS/TS product, or only editor picks? | Start with the stack filter. Add the editorial flag when you want a curated homepage. | One catalog either way. | The homepage is less “curated” until you use the flag. |
+| Q20 / AF-1 | Seller verification before publish | **ACCEPTED.** Drafts allowed. Publish and payouts require verification | — | — |
+| AF-7 | Schema count | **ACCEPTED.** Four schemas | — | — |
+| Q-curation | JS/TS lens | **ACCEPTED.** Technology filter, not an editorial list | — | — |
 
 ## Implementation
 

@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["identity", "catalog", "commerce", "ops"]
+}
+
+/// Non-business anchors so Slice 1 can create the four accepted schemas.
+model IdentityAnchor {
+  id String @id @default("identity")
+
+  @@map("schema_anchor")
+  @@schema("identity")
+}
+
+model CatalogAnchor {
+  id String @id @default("catalog")
+
+  @@map("schema_anchor")
+  @@schema("catalog")
+}
+
+model CommerceAnchor {
+  id String @id @default("commerce")
+
+  @@map("schema_anchor")
+  @@schema("commerce")
+}
+
+model OpsAnchor {
+  id String @id @default("ops")
+
+  @@map("schema_anchor")
+  @@schema("ops")
+}

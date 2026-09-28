@@ -1,0 +1,7 @@
+﻿import { Module } from "@nestjs/common";
+import { AdminRepository } from "./admin.repository";
+
+@Module({
+  providers: [AdminRepository],
+})
+export class AdminModule {}

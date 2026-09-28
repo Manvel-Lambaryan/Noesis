@@ -32,7 +32,7 @@ Kernel must not import a module.
 | view_id | Meaning | Filter (proposed) |
 | --- | --- | --- |
 | `general` | All public products | visibility public |
-| `javascript` | JS/TS lens | stacks intersect `{javascript, typescript}` and, if Q-curation says so, `curated = true` |
+| `javascript` | JS/TS lens | **ACCEPTED.** Stacks intersect `{javascript, typescript}` |
 | `business_apps` | Business applications | `product_kind = business_application` |
 
 `javascript` is not a product type. `business_application` **is** a product kind because the brief defines that lens by what the product is, while still keeping one row. A business app written in TypeScript has kind `business_application` and stacks that include `typescript`, so both views can list it.

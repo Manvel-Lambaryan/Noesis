@@ -1,8 +1,8 @@
 # ADR 0001 — Modular monolith
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED  
 **Date:** 2026-09-28  
-**Deciders:** Not accepted. Owner Gate A.
+**Accepted:** 2026-09-28, by the Slice 1 implementation order. One NestJS API, a worker, and a scan process with no database credentials. Microservices were not requested.
 
 ## Context
 
@@ -26,7 +26,7 @@ Same codebase and module rules as A. `scan` runs as its own image and identity: 
 
 ## Decision
 
-**PROPOSED: option C.**
+**ACCEPTED: option C.** PostgreSQL uses four schemas (`identity`, `catalog`, `commerce`, `ops`), not one schema per module. Module ownership is unchanged. See ADR 0002.
 
 Microservices stay available later along event boundaries (`orders.order_paid`, `artifacts.version_approved`) if a measured bottleneck or a compliance rule appears. That is a new ADR, not a silent split.
 

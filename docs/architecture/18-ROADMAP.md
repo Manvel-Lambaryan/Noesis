@@ -57,7 +57,7 @@ A slice is done when all of the following are true:
 | Security | HttpOnly session cookie. No password in logs. Rate limit login and reset. Email token single use. |
 | Tests | Buyer receives 403 on an admin route. Revoked session cannot call `GET /v1/auth/session`. Reset token cannot be reused. |
 | Acceptance | The tests above pass. Unverified email cannot open seller publish later (the publish guard itself lands in slice 5 and must call this flag). |
-| Done | Global definition. Q20 can still change whether verification is required to publish; the email flag must exist either way. |
+| Done | Global definition. Email verification exists. Publish in slice 5 requires `verification_approved`. |
 
 ### Slice 3 — Catalog and lenses
 
@@ -93,7 +93,7 @@ A slice is done when all of the following are true:
 | --- | --- |
 | Objective | Nothing becomes public or sellable until a person approves it, and a takedown removes it from search. |
 | Scope | Queue, approve, reject with a note, private-bucket copy, takedown, seller appeal route, audit row. |
-| Technical | Sellable only when state is `approved` and `private_key` is set. Emit `artifacts.object_promoted` and `artifacts.version_withdrawn`. Q20 guard is a single function with the unimplemented branch explicit. |
+| Technical | Sellable only when state is `approved`, `private_key` is set, and the seller is `verification_approved`. Emit `artifacts.object_promoted` and `artifacts.version_withdrawn`. |
 | Depends on | Slice 4. |
 | Tasks | Admin decision route. Promotion worker. Appeal route `POST /v1/seller/listings/{id}/appeals`. Takedown hides the discovery document and blocks new grants. |
 | Security | Moderator cannot approve their own product. Audit row in the same transaction. Private bucket blocks public ACLs in staging policy tests. |

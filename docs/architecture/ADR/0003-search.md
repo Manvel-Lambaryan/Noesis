@@ -1,8 +1,8 @@
 # ADR 0003 — Search and discovery views
 
-**Status:** PROPOSED  
+**Status:** ACCEPTED for one catalog and a technology filter for the JS/TS lens.  
 **Date:** 2026-09-28  
-**Deciders:** Not accepted. Owner Gate A. The meaning of “curated” JS/TS is OPEN.
+**Accepted:** 2026-09-28. The owner chose one catalog. The JS/TS marketplace is a view where stacks include JavaScript or TypeScript. It is not a second database and not an editorial shortlist.
 
 ## Context
 
@@ -17,7 +17,7 @@ Volume is unknown. PostgreSQL full text is enough for many early marketplaces an
 `discovery.documents` has a `tsvector`, stack arrays, kind, and listing state. One row per product. Lenses are queries:
 
 - `general` — public
-- `javascript` — public and stacks overlap JS/TS, plus `curated = true` only if the owner selects editorial mode
+- `javascript` — public and stacks overlap `{javascript, typescript}`
 - `business_apps` — public and kind is `business_application`
 
 Pros: one database, transactional rebuild from events, no extra vendor. Cons: typo tolerance and relevance tuning are weaker. Heavy facets can get slow; we do not have a measurement yet.
@@ -32,11 +32,9 @@ Similar to B with less ops and a data-processing agreement. Jurisdiction is OPEN
 
 ## Decision
 
-**PROPOSED: option A for MVP.**
+**ACCEPTED: option A for MVP.** The JS/TS lens is the stack filter above. There is no separate JS/TS product table.
 
 The discovery module owns the document. Catalog remains the source. A wrong index must be fixable by replay without touching orders.
-
-`view.javascript.mode` is configuration: `stack` (proposed default for development only) or `curated`. The owner’s answer replaces the default. Shipping the default is not an approval of what “curated” means.
 
 ## Consequences
 

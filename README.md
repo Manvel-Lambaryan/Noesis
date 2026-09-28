@@ -57,17 +57,30 @@ NOESIS is one global developer marketplace. General code assets, a JavaScript/Ty
 
 ## Decision records
 
-All ADRs are **PROPOSED** or **OPEN**. None are accepted.
-
 | ADR | Topic | Status |
 | --- | --- | --- |
-| [0001](docs/architecture/ADR/0001-modular-monolith.md) | Modular monolith | PROPOSED |
-| [0002](docs/architecture/ADR/0002-persistence-orm.md) | PostgreSQL and ORM | PROPOSED |
-| [0003](docs/architecture/ADR/0003-search.md) | Search and discovery views | PROPOSED |
+| [0001](docs/architecture/ADR/0001-modular-monolith.md) | Modular monolith | ACCEPTED |
+| [0002](docs/architecture/ADR/0002-persistence-orm.md) | PostgreSQL, four schemas, Prisma | ACCEPTED (ledger spike remains at slice 7) |
+| [0003](docs/architecture/ADR/0003-search.md) | One catalog, JS/TS stack view | ACCEPTED |
 | [0004](docs/architecture/ADR/0004-payment-provider.md) | Payment provider | OPEN |
-| [0005](docs/architecture/ADR/0005-storage-delivery.md) | Private storage and delivery | PROPOSED |
+| [0005](docs/architecture/ADR/0005-storage-delivery.md) | Private storage and delivery | PROPOSED (vendor OPEN) |
 | [0006](docs/architecture/ADR/0006-deployment.md) | Deployment topology | OPEN |
 
 ## Environment template
 
 [`.env.example`](.env.example) lists variable names only. It contains no credentials.
+
+## Local foundation
+
+Docker Compose starts PostgreSQL and Redis only. The local database password in `docker-compose.yml` is a development default, not a production secret.
+
+```text
+docker compose up -d
+npx prisma migrate deploy
+npm test
+npm run build --workspace @noesis/web
+```
+
+API: `npm run start --workspace @noesis/api` then `GET /health` and `GET /docs`.
+Worker: `npm run start --workspace @noesis/worker`.
+Scan: `npm run start --workspace @noesis/scan`. The scan process exits if `DATABASE_URL` is set.

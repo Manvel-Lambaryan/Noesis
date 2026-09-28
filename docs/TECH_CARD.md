@@ -10,7 +10,7 @@ Authoritative decisions: [ADR 0001](architecture/ADR/0001-modular-monolith.md) t
 | --- | --- | --- |
 | Web | Next.js (App Router), React, TypeScript | PROPOSED baseline. SSR for public listings |
 | API | NestJS, TypeScript, REST, OpenAPI | PROPOSED. Modular monolith |
-| Data | PostgreSQL | PROPOSED baseline. Single database, schema per module |
+| Data | PostgreSQL | ACCEPTED. Single database, four schemas: `identity`, `catalog`, `commerce`, `ops` |
 | ORM | Prisma, with raw SQL migrations for ledger constraints | PROPOSED. See ADR 0002. Drizzle is the fallback if the spike fails |
 | Jobs | Redis + BullMQ | PROPOSED where work must leave the request |
 | Events | Transactional outbox in the owning schema | PROPOSED |

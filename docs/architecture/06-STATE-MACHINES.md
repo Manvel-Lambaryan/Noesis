@@ -21,7 +21,7 @@ stateDiagram-v2
 
 | From | To | Actor | Guard |
 | --- | --- | --- | --- |
-| draft | published | seller | At least one version `approved` with `private_key` set. Seller not `suspended`. Whether `verification_approved` is also required is **OPEN** (audit AF-1, Q20). Do not hard-code either rule until the owner chooses |
+| draft | published | seller | **ACCEPTED.** At least one version `approved` with `private_key` set. Seller is `verification_approved` and not `suspended` |
 | published | unpublished | seller | Owner |
 | unpublished | published | seller | Same as first publish |
 | published or unpublished | taken_down | admin | Reason required, audit |
@@ -79,7 +79,7 @@ Rejected and scan_rejected versions are never promoted to the private bucket.
 | verification_approved | suspended | admin | Blocks publish and payout submit |
 | verification_rejected | verification_submitted | seller | New evidence |
 
-Sellers may save listing drafts before verification. Payout submit requires `verification_approved` once that policy exists. Whether **publish** also requires it is OPEN (Q20). The audit removed the sentence that forbade publish and the table that allowed it at the same time.
+**ACCEPTED.** Sellers may register and save drafts before verification. Publish requires `verification_approved`. Payout submit also requires `verification_approved`.
 
 ## Checkout session
 

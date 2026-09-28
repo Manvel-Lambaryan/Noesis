@@ -1,6 +1,6 @@
 # Data ownership
 
-**Status:** PROPOSED. One PostgreSQL database. One schema per module. No cross-schema foreign keys.
+**Status:** ACCEPTED on 2026-09-28. One PostgreSQL database. Four schemas: `identity`, `catalog`, `commerce`, `ops`. Modules still own their tables. No foreign keys across modules. No cross-schema foreign keys.
 
 ## Why no cross-schema foreign keys
 
@@ -8,23 +8,14 @@ A foreign key from `orders` to `catalog.products` would let one module’s migra
 
 ## Schema ownership
 
-| Schema | Writer module | Tables (representative) | Others may |
+| Schema | Writing modules | Tables (representative) | Others may |
 | --- | --- | --- | --- |
-| `iam` | iam | users, credentials, sessions, role_assignments, outbox | Read a session only through the iam port |
-| `seller` | seller | profiles, verification_cases, payout_accounts, outbox | Read verification via port |
-| `catalog` | catalog | products, stacks, tags, categories, outbox | Read public product via port or discovery index |
-| `artifacts` | artifacts | versions, scan_reports, outbox | Read version state via port |
-| `discovery` | discovery | documents, view_definitions | Nobody else writes |
-| `pricing` | pricing | offers, license_texts, outbox | Quote via port |
-| `checkout` | checkout | sessions, checkout idempotency keys, outbox | — |
-| `orders` | orders | orders, order_lines, inbox, outbox | — |
-| `payments` | payments | ledger_entries, accounts, webhook_inbox, payout_instructions, provider_events, refund and payout idempotency keys | No other writer |
-| `entitlements` | entitlements | entitlements, download_grants, inbox | Check via port |
-| `reviews` | reviews | reviews, inbox | — |
-| `moderation` | moderation | decisions, appeals, outbox | — |
-| `notifications` | notifications | messages, inbox | — |
-| `admin` | admin | audit_events, break_glass_grants | Append audit via port from other modules |
-| `analytics` | analytics | funnel_daily, inbox | Read-only to humans |
+| `identity` | `iam`, `seller` | users, credentials, sessions, role_assignments; seller profiles, verification cases, payout-account refs; each module’s outbox | Session reads go through the iam port. Verification reads go through the seller port |
+| `catalog` | `catalog`, `artifacts`, `discovery`, `pricing` | products, stacks, tags, categories; versions, scan reports; discovery documents; offers, license texts; each module’s outbox | Public product via the catalog port or the discovery index. Version state via the artifacts port. Quotes via the pricing port. Nobody else writes discovery documents |
+| `commerce` | `checkout`, `orders`, `payments`, `entitlements`, `reviews` | checkout sessions and checkout idempotency keys; orders; ledger, webhook inbox, payouts, refund idempotency; entitlements, download grants; reviews | Payments is the only ledger writer |
+| `ops` | `moderation`, `notifications`, `admin`, `analytics` | decisions, appeals; notification messages; audit events, break-glass grants; funnel read models | Audit append is the shared insert port. Analytics is not a source of money or access |
+
+Sharing a schema does not allow one module to write another module’s tables. Slice 1 creates the schemas only. It does not create these business tables.
 
 Audit append may be a port implemented as a same-transaction write into `admin.audit_events`. That is a **deliberate exception**: the audit port is shared infrastructure, like the outbox helper. It is not a general “write another module’s tables” permission. The port accepts an already-built audit record and inserts one row. It does not update business tables.
 
