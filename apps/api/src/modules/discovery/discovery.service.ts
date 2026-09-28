@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { AuthFailure } from "../../auth/auth-failure";
 import { SELLABILITY, type Sellability } from "../artifacts/artifacts.public-port";
 import { CATALOG_ACCESS, type CatalogAccess, type IndexSource } from "../catalog/catalog.public-port";
+import { PRICING_ACCESS, type PricingAccess, type PublicOffer } from "../pricing/pricing.public-port";
 import { encodeCursor, parseListingQuery } from "./discovery-query";
 import { type DiscoveryAccess } from "./discovery.public-port";
 import { DISCOVERY_REPOSITORY, type DiscoveryRepository, type PublicListing } from "./discovery.repository";
@@ -12,22 +13,25 @@ export class DiscoveryService implements DiscoveryAccess {
     @Inject(DISCOVERY_REPOSITORY) private readonly documents: DiscoveryRepository,
     @Inject(CATALOG_ACCESS) private readonly catalog: CatalogAccess,
     @Inject(SELLABILITY) private readonly sellability: Sellability,
+    @Inject(PRICING_ACCESS) private readonly pricing: PricingAccess,
   ) {}
 
   async search(input: Record<string, unknown>) {
     const query = parseListingQuery(input);
     const rows = await this.documents.search(query);
     const page = rows.slice(0, query.limit);
+    const quotes = await this.pricing.activeQuotes(page.map((row) => row.productId));
     const last = page.at(-1);
     return {
-      items: page.map(toCard),
+      items: page.map((row) => toCard(row, quotes.get(row.productId) ?? null)),
       nextCursor: rows.length > query.limit && last !== undefined ? encodeCursor(last.updatedAt.toISOString(), last.productId) : null,
     };
   }
 
   async getBySlug(slug: string) {
     const row = await this.published(slug);
-    return { ...toCard(row), licenseSummary: null, price: null, versions: [] };
+    const quotes = await this.pricing.activeQuotes([row.productId]);
+    return { ...toCard(row, quotes.get(row.productId) ?? null), versions: [] };
   }
 
   async versions(slug: string) {
@@ -69,7 +73,7 @@ export class DiscoveryService implements DiscoveryAccess {
   }
 }
 
-function toCard(row: PublicListing) {
+function toCard(row: PublicListing, quote: PublicOffer | null) {
   return {
     productId: row.productId,
     slug: row.slug,
@@ -80,5 +84,9 @@ function toCard(row: PublicListing) {
     stacks: row.stacks,
     tags: row.tags,
     previews: row.previewUrls.map((url) => ({ url })),
+    price: quote === null ? null : { offerId: quote.offerId, amountMinor: quote.amountMinor, currency: quote.currency },
+    licenseSummary: quote?.licenseCode ?? null,
+    updatePolicy: quote?.updatePolicy ?? null,
+    demoUrl: quote?.demoUrl ?? null,
   };
 }

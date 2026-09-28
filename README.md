@@ -2,7 +2,7 @@
 
 NOESIS is one global developer marketplace. General code assets, a JavaScript/TypeScript discovery lens, and ready-to-launch business applications are three views over a single catalog.
 
-**Slice 5 moderation and publication are in the repository.** A moderator can approve or reject a scanned archive, and the worker can copy an approved archive into private storage. A verified seller can then publish into the existing discovery index. Takedown removes that discovery document. There is no pricing, checkout, payout, or production deployment yet. A passed structural scan is not a malware-free certification.
+**Slice 6 pricing and licensing are in the repository.** A seller can record an immutable offer in minor units. A price change creates a new offer. Public listings show the active price, license code, update policy, and an external demo link. There is no checkout, payout, or production deployment yet. A passed structural scan is not a malware-free certification.
 
 | Label | Meaning |
 | --- | --- |

@@ -113,7 +113,7 @@ A slice is done when all of the following are true:
 | Security | Do not server-fetch the demo URL. |
 | Tests | After a price change, the old offer id still has the old amount. |
 | Acceptance | That test passes. No provider call exists in this slice. |
-| Done | Global definition. |
+| Done | Implemented locally on 2026-09-28. Gate B, Gate C, Q4, and Q11 stay OPEN. Results are in PROGRESS. |
 
 ### Slice 7 — Checkout and ledger
 

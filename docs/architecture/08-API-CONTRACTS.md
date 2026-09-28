@@ -51,7 +51,7 @@ Passwords never appear in logs or events.
 
 Slice 3 implements `GET /v1/categories`, `GET /v1/discovery/listings`, `GET /v1/listings/{slug}`, and `GET /v1/listings/{slug}/versions`. Versions are an empty list until artifacts exist. The detail payload uses `summary` for the description. `licenseSummary` and `price` are null. Preview entries are public media URLs, not storage keys.
 
-The standing detail shape includes public preview image URLs, a license summary, the price of active offers, stacks, kind, and version labels. Slice 3 returns null for the license and the price. It does not include `quarantine_key` or `private_key`.
+The standing detail shape includes public preview image URLs, a license summary, the price of the active offer, stacks, kind, and version labels. Slice 6 fills price, license code, update policy, and demo URL from the active offer. An empty license code stays null. It does not include `quarantine_key`, `private_key`, or commission.
 
 ## Seller
 
@@ -75,11 +75,12 @@ The standing detail shape includes public preview image URLs, a license summary,
 | POST | `/v1/seller/verification` | Submits the seller for review. Evidence fields follow Q3 |
 | GET | `/v1/seller/products/{id}/review` | Owner only. Version state, structural-scan label, promotion flag, rejection note, appeal. Slice 5 |
 | POST | `/v1/seller/listings/{id}/appeals` | Owner only. One open appeal. Listing must be `taken_down`. Note required. Slice 5 |
-| POST | `/v1/seller/products/{id}/offers` | Creates a new offer. Does not edit an old one |
-| POST | `/v1/seller/offers/{id}/archive` | |
+| GET | `/v1/seller/products/{id}/offers` | Owner history. Amounts are minor-unit strings. Slice 6 |
+| POST | `/v1/seller/products/{id}/offers` | Creates a new active offer and archives the previous one. Does not edit an old amount. Slice 6 |
+| POST | `/v1/seller/offers/{id}/archive` | Owner only. Active offer becomes archived. Slice 6 |
 | GET | `/v1/seller/balance` | Projection per currency |
 
-Resource check: `product.seller_id` matches session seller. `PUT /uploads/quarantine/{token}` is outside `/v1` and does not use the internal token. The public media controller does not read quarantine or private objects. Slice 5 publish, review, appeal, queue, decision, and takedown routes are implemented. Unpublish, offers, and payout routes stay unimplemented.
+Resource check: `product.seller_id` matches session seller. `PUT /uploads/quarantine/{token}` is outside `/v1` and does not use the internal token. The public media controller does not read quarantine or private objects. Slice 5 publish, review, appeal, queue, decision, and takedown routes are implemented. Slice 6 offer routes are implemented. Unpublish and payout routes stay unimplemented. Checkout is not implemented. There is no approved currency list and no license-document catalog.
 
 ## Checkout and buyer
 

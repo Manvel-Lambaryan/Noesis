@@ -373,6 +373,47 @@ model CatalogOutbox {
   @@schema("catalog")
 }
 
+enum OfferState {
+  active
+  archived
+
+  @@schema("catalog")
+}
+
+/// pricing owns offers. product_id and version_id have no foreign keys.
+model Offer {
+  id            String     @id @db.Uuid
+  productId     String     @map("product_id") @db.Uuid
+  sellerId      String     @map("seller_id") @db.Uuid
+  versionId     String     @map("version_id") @db.Uuid
+  amountMinor   BigInt     @map("amount_minor")
+  currency      String     @db.Char(3)
+  licenseCode   String?    @map("license_code") @db.VarChar(32)
+  licenseTextId String?    @map("license_text_id") @db.Uuid
+  updatePolicy  String?    @map("update_policy") @db.VarChar(32)
+  demoUrl       String?    @map("demo_url") @db.VarChar(500)
+  state         OfferState
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([productId, createdAt])
+  @@index([sellerId, state])
+  @@map("offers")
+  @@schema("catalog")
+}
+
+model PricingOutbox {
+  id          String    @id @db.Uuid
+  type        String    @db.VarChar(80)
+  subjectId   String    @map("subject_id") @db.Uuid
+  payload     String    @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+
+  @@index([subjectId, type])
+  @@map("pricing_outbox")
+  @@schema("catalog")
+}
+
 model CommerceAnchor {
   id String @id @default("commerce")
 

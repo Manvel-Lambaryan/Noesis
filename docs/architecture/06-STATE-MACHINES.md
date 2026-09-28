@@ -71,6 +71,15 @@ Rejected and scan_rejected versions are never promoted to the private bucket.
 
 Slice 4 implements the transitions from `draft` through `upload_pending`, `quarantined`, and `scanning` to `pending_moderation` or `scan_rejected`. The checksum is written once, on the move to `quarantined`. A second verdict does not change the row. Slice 5 implements `pending_moderation` to `approved` or `rejected`. Approval does not set `private_key`; the promotion worker does, and only then is the version sellable. Takedown does not move an approved version to `withdrawn`. Seller withdrawal and the expired-intent return to `draft` are not implemented. Q15 stays OPEN.
 
+## Offer
+
+| From | To | Actor | Notes |
+| --- | --- | --- | --- |
+| — | active | seller | New row. Pins an approved version with `private_key`. Amount is a positive bigint of minor units |
+| active | archived | seller or a newer offer | Amount, currency, license code, license text id, update policy, and demo URL are not updated |
+
+A product has at most one `active` offer. Q4 (what an update policy means) and the currency list stay OPEN. `license_text_id` has no document table yet.
+
 ## Seller verification
 
 | From | To | Actor | Guard |

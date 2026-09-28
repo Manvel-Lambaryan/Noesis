@@ -23,4 +23,12 @@ export class PrismaSellability implements Sellability {
     });
     return rows.map((row) => ({ versionLabel: row.versionLabel, state: "approved" as const }));
   }
+
+  async isSellableVersion(productId: string, versionId: string): Promise<boolean> {
+    const row = await this.prisma.productVersion.findFirst({
+      where: { id: versionId, productId, state: "approved", NOT: { privateKey: null } },
+      select: { id: true },
+    });
+    return row !== null;
+  }
 }

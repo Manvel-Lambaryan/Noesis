@@ -33,7 +33,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <p>{product.summary}</p>
         <p className="note">Technologies: {product.stacks.join(", ") || "None listed"}</p>
         <p className="note">Tags: {product.tags.join(", ") || "None listed"}</p>
-        <p className="note">Price and license are not available until a later release. Approved file versions are not public yet.</p>
+        <p>{product.price === null ? "No public price." : `${product.price.amountMinor} ${product.price.currency} minor units`}</p>
+        <p className="note">License code: {product.licenseSummary ?? "not set"}. Update policy: {product.updatePolicy ?? "not set"}.</p>
+        {product.demoUrl !== null ? <p><a href={product.demoUrl} target="_blank" rel="noreferrer">External demo</a></p> : null}
+        <p className="note">Checkout is not available. This page does not start a payment.</p>
       </article>
     </main>
   );

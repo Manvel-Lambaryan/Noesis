@@ -92,7 +92,7 @@ Documentation. Acceptance is the checklist in [PROGRESS](../PROGRESS.md). Rollba
 
 **Build:** immutable offers, archive, public price, snapshot function used later by checkout. No charge.
 
-**Acceptance:** editing a price creates a new offer id; old id unchanged. Legal text is a version id. `license_code` and `update_policy` stored and unset or fixture-only.
+**Acceptance:** editing a price creates a new offer id; old id unchanged. Legal text is a version id. `license_code` and `update_policy` stored and unset or fixture-only. Local results are in PROGRESS. Gate B stays OPEN. No payment provider is called.
 
 **Threats:** SSRF via demo URL — render as external link only.
 **Ops:** none financial.

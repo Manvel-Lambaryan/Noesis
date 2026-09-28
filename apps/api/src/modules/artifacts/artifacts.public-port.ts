@@ -9,6 +9,7 @@ export type ApprovedLabel = { versionLabel: string; state: "approved" };
 export type Sellability = {
   sellableProductIds(productIds: readonly string[]): Promise<ReadonlySet<string>>;
   approvedLabels(productId: string): Promise<ApprovedLabel[]>;
+  isSellableVersion(productId: string, versionId: string): Promise<boolean>;
 };
 
 export const SELLABILITY = Symbol("SELLABILITY");
@@ -20,5 +21,9 @@ export class NoSellableVersions implements Sellability {
 
   approvedLabels(): Promise<ApprovedLabel[]> {
     return Promise.resolve([]);
+  }
+
+  isSellableVersion(): Promise<boolean> {
+    return Promise.resolve(false);
   }
 }

@@ -23,6 +23,8 @@ Slice 4 adds artifacts-owned `product_versions`, `upload_intents`, and `scan_rep
 
 Slice 5 adds `catalog.artifact_outbox` and `catalog.catalog_outbox` (indexed, not unique on subject and type, so a later takedown or appeal can emit another event). A check constraint keeps `private_key` null or shaped as `private/{productId}/{versionId}/{sha256}` and rejects `..`, `quarantine`, and `previews`. Ops-owned `moderation_decisions`, `appeals`, and `audit_events` have no foreign keys. One open appeal per product is a partial unique index. The commerce schema is unchanged.
 
+Slice 6 adds pricing-owned `offers` and `pricing_outbox` in the catalog schema. `product_id` and `version_id` have no foreign keys. `amount_minor` is a positive bigint. Currency is a 3-letter code, not an approved list. `license_text_id` is a nullable UUID with no document table. One active offer per product is a partial unique index. Archiving changes `state` only.
+
 Audit append may be a port implemented as a same-transaction write into `admin.audit_events`. That is a **deliberate exception**: the audit port is shared infrastructure, like the outbox helper. It is not a general “write another module’s tables” permission. The port accepts an already-built audit record and inserts one row. It does not update business tables.
 
 ### Capture transaction

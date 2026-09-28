@@ -13,6 +13,10 @@ export type ListingCard = {
   stacks: string[];
   tags: string[];
   previewUrl: string | null;
+  price: { offerId: string; amountMinor: string; currency: string } | null;
+  licenseSummary: string | null;
+  updatePolicy: string | null;
+  demoUrl: string | null;
 };
 
 export type CategoryOption = { id: string; slug: string; name: string };
@@ -117,7 +121,18 @@ function card(value: unknown): ListingCard | null {
     stacks: strings(value.stacks),
     tags: strings(value.tags),
     previewUrl: first !== undefined && typeof first.url === "string" ? first.url : null,
+    price: priceOf(value.price),
+    licenseSummary: typeof value.licenseSummary === "string" ? value.licenseSummary : null,
+    updatePolicy: typeof value.updatePolicy === "string" ? value.updatePolicy : null,
+    demoUrl: typeof value.demoUrl === "string" ? value.demoUrl : null,
   };
+}
+
+function priceOf(value: unknown): ListingCard["price"] {
+  if (!isRecord(value) || typeof value.offerId !== "string" || typeof value.amountMinor !== "string" || typeof value.currency !== "string") {
+    return null;
+  }
+  return { offerId: value.offerId, amountMinor: value.amountMinor, currency: value.currency };
 }
 
 function asDraft(value: unknown): DraftProduct | null {

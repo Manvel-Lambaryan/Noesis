@@ -1,6 +1,6 @@
 # NOESIS progress
 
-**Phase:** Slice 5 moderation and publication. **Production:** not deployed. **Live payments:** not configured.
+**Phase:** Slice 6 pricing and licensing. **Production:** not deployed. **Live payments:** not configured.
 
 Gate A is **accepted for Slice 1**. Gate B and Gate C stay open. Approval of the database, seller-verification, and catalog decisions does not approve payment provider, refunds, commission, guest checkout, or hosting.
 
@@ -53,7 +53,8 @@ Sandbox code may later use fixtures. It must not embed an unapproved refund wind
 | 3. Catalog | Draft products, three discovery lenses, preview images | Done locally on 2026-09-28. See Slice 3 results |
 | 4. Artifact upload | Quarantine upload, isolated scan, `pending_moderation` or `scan_rejected` | Done locally on 2026-09-28. See Slice 4 results. Q14 stays OPEN |
 | 5. Moderation and publication | Queue, decision, private copy, publish, takedown, appeal | Done locally on 2026-09-28. See Slice 5 results. Q15 stays OPEN |
-| 6–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
+| 6. Pricing and licensing | Immutable offers, public price, snapshot | Done locally on 2026-09-28. See Slice 6 results. Gate B stays OPEN |
+| 7–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
 | Live payments | Real provider in production | Blocked on Gate B and ADR 0004 |
 | Production | Real users and seller funds | Blocked on Gate B, Gate C, and security tests for slices 4, 7, 8, 10 |
 
@@ -177,6 +178,27 @@ Recorded after a local run on 2026-09-28. Docker is not installed, so Compose wa
 The production build emits `/admin/moderation` and the seller publish, review, and appeal BFF routes. An unsigned `GET /admin/moderation` on the local production server returned 200 and included the moderation-permission message. A BFF login returned 200 and set the `__Host-` session cookie. A later page request over plain HTTP did not establish that cookie, so the signed-in queue and publication panel were not rendered in this check. No browser window was opened. This was not a graphical viewport pass. The behavior assertions above used real zip bytes over HTTP against the API.
 
 Slice 5 writes outbox rows in the same transaction as the decision, listing change, or promotion claim. The row id is the dedupe key. There is no outbox poller and no Kafka. Discovery rebuild runs after the commit; `POST /v1/admin/discovery/rebuild` remains the retry. BullMQ retries a promotion job three times. The worker process also retries approved rows that still have a null `private_key` when it starts. A structural scan pass is not a malware-free result. Q14, Q15, Gate B, and Gate C stay OPEN. Seller withdrawal, expired-intent return to `draft`, and an admin screen that sets `verification_approved` are not in this slice. Q3 still defines what verification evidence means.
+
+## Slice 6 results
+
+Recorded after a local run on 2026-09-28. Docker Compose and GitHub Actions were not executed. The migration was applied to the local database only.
+
+| Check | Result |
+| --- | --- |
+| `pnpm lint` | Exit 0. No warning lines |
+| `pnpm test` | 50 passed, 0 failed (48 package tests and 2 web tests). Secret scan exited 0. Includes the Slice 1–5 suites |
+| `pnpm run build` | Exit 0. Next.js 15.5.26 production build completed. The build log has no error or warning lines |
+| Migration `20260928210000_pricing_offers` | Applied with `prisma migrate deploy` on the local database |
+| Ownership | Anonymous offer create is 401. A buyer is 403. Another seller is 404 |
+| Price and currency | `10.00` and a 2-letter currency are 400. `usd` is stored as `USD`. Amounts are bigint minor units |
+| Immutability | A second offer gets a new id. The first row stays `1500` and becomes `archived`. Seller history still returns `1500` |
+| License and update policy | `licenseCode` `mit`, `updatePolicy` `exact_version`, and a license text UUID are stored. No license-document table exists |
+| Public price | Before publish the slug is 404. After publish the listing JSON contains `2500` and does not contain `private/` or `commission`. Archiving the active offer clears `price` |
+| Providers | Compiled API sources do not contain `stripe`, `paypal`, or `adyen` |
+
+An offer can pin only an approved version that has `private_key`. Currency is a 3-letter shape, not an approved list. Update-policy meaning (Q4) and license types (Q11) stay OPEN. Commission is not calculated. Checkout is not implemented.
+
+A local API on port 3001 and Next.js on port 3010 served `GET /marketplace/products/priced-mulb1z6k-01eeacbe`. The response was HTTP 200, included "Checkout is not available", and did not include `private/`. That listing had no active offer, so the page showed "No public price". This was an HTTP check, not a graphical viewport pass.
 
 ## Blockers
 

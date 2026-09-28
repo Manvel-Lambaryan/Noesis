@@ -57,6 +57,7 @@ function ListingCardView({ item }: { item: ListingCard }) {
       <p className="note">{labelKind(item.kind)} · {item.categoryName}</p>
       <p>{item.summary}</p>
       <p className="note">{item.stacks.join(", ")}</p>
+      {item.price !== null ? <p>{item.price.amountMinor} {item.price.currency}</p> : null}
     </article>
   );
 }
