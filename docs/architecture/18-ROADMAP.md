@@ -56,7 +56,7 @@ A slice is done when all of the following are true:
 | Tasks | Auth routes. Email verification token. Reset token. Guard helper that fails closed. Seller profile `PUT`. |
 | Security | HttpOnly session cookie. No password in logs. Rate limit login and reset. Email token single use. |
 | Tests | Buyer receives 403 on an admin route. Revoked session cannot call `GET /v1/auth/session`. Reset token cannot be reused. |
-| Acceptance | The tests above pass. Unverified email cannot open seller publish later (the publish guard itself lands in slice 5 and must call this flag). |
+| Acceptance | The tests above pass. Q19 is accepted: unverified email cannot satisfy the purchase gate or the seller publication gate. The publish route itself lands in slice 5 and must call this gate. |
 | Done | Global definition. Email verification exists. Publish in slice 5 requires `verification_approved`. |
 
 ### Slice 3 — Catalog and lenses

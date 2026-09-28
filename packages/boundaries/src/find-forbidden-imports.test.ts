@@ -10,7 +10,7 @@ const fixturePath = path.resolve(
 );
 
 describe("module boundaries", () => {
-  it("accepts the Slice 1 modules", () => {
+  it("accepts public-port imports between modules", () => {
     const violations = findForbiddenImports(readTypeScriptFiles(modulesDir));
     assert.deepEqual(violations, []);
   });

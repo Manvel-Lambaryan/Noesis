@@ -16,6 +16,124 @@ model IdentityAnchor {
   @@schema("identity")
 }
 
+enum UserState {
+  active
+
+  @@schema("identity")
+}
+
+enum RoleName {
+  buyer
+  seller
+  admin
+
+  @@schema("identity")
+}
+
+enum AdminPermissionName {
+  moderation
+  finance
+
+  @@schema("identity")
+}
+
+enum AuthTokenPurpose {
+  email_verification
+  password_reset
+
+  @@schema("identity")
+}
+
+enum SellerVerificationState {
+  draft
+  verification_submitted
+  verification_approved
+  verification_rejected
+  suspended
+
+  @@schema("identity")
+}
+
+/// iam owns users, sessions, roles, admin permissions, and auth tokens.
+model User {
+  id              String    @id @db.Uuid
+  email           String    @unique @db.VarChar(254)
+  passwordHash    String    @map("password_hash")
+  state           UserState @default(active)
+  emailVerifiedAt DateTime? @map("email_verified_at") @db.Timestamptz(3)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  sessions        Session[]
+  roles           RoleAssignment[]
+  permissions     AdminPermission[]
+  tokens          AuthToken[]
+
+  @@map("users")
+  @@schema("identity")
+}
+
+model Session {
+  id        String    @id @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(3)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+  @@schema("identity")
+}
+
+model RoleAssignment {
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String   @map("user_id") @db.Uuid
+  role   RoleName
+
+  @@id([userId, role])
+  @@map("role_assignments")
+  @@schema("identity")
+}
+
+model AdminPermission {
+  user       User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String              @map("user_id") @db.Uuid
+  permission AdminPermissionName
+
+  @@id([userId, permission])
+  @@map("admin_permissions")
+  @@schema("identity")
+}
+
+model AuthToken {
+  id         String           @id @db.Uuid
+  userId     String           @map("user_id") @db.Uuid
+  purpose    AuthTokenPurpose
+  tokenHash  String           @unique @map("token_hash")
+  expiresAt  DateTime         @map("expires_at") @db.Timestamptz(3)
+  consumedAt DateTime?        @map("consumed_at") @db.Timestamptz(3)
+  createdAt  DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose])
+  @@map("auth_tokens")
+  @@schema("identity")
+}
+
+/// seller owns profiles. user_id has no foreign key: iam and seller are different modules.
+model SellerProfile {
+  id                 String                  @id @db.Uuid
+  userId             String                  @unique @map("user_id") @db.Uuid
+  displayName        String                  @map("display_name") @db.VarChar(80)
+  verificationState  SellerVerificationState @default(draft) @map("verification_state")
+  createdAt          DateTime                @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime                @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("seller_profiles")
+  @@schema("identity")
+}
+
 model CatalogAnchor {
   id String @id @default("catalog")
 

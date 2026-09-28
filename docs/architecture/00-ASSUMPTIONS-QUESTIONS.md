@@ -178,7 +178,9 @@ What you owe after purchase (install help, bugfix window, nothing beyond the lic
 | Verify sellers only | Faster buyer checkout. More fake buyer accounts and review abuse |
 | No verification | Fastest. Weak account recovery and more fraud |
 
-Password reset is included in the roadmap either way. It is a security function, not a commercial policy.
+**ACCEPTED on 2026-09-28.** Buyers may register and browse without verifying email. Buyers must verify email before purchase. Sellers must verify email before publication. Seller identity verification is a separate process and remains mandatory before publication and payouts.
+
+Password reset is included either way. It is a security function, not a commercial policy.
 
 ### Q20. Can a listing go public before the seller is verified?
 
@@ -200,3 +202,4 @@ The JS/TS lens is a technology filter over the one catalog. It is not an editori
 | 2026-09-28 | Verification required before publish and before payout. Drafts allowed | ACCEPTED |
 | 2026-09-28 | One catalog. JS/TS view is a stack filter | ACCEPTED |
 | 2026-09-28 | Gate A closed for Slice 1. Gate B and Gate C remain open | ACCEPTED |
+| 2026-09-28 | Q19. Buyers browse without email verification. Purchase and seller publication require a verified email. Identity verification stays separate and remains required before publication and payouts | ACCEPTED |

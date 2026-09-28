@@ -50,9 +50,9 @@ flowchart TB
 
 ## Why the web is a BFF
 
-**PROPOSED.** Next.js Route Handlers or server actions call NestJS. The session cookie is set for the web host (`__Host-` prefix, HttpOnly, Secure, SameSite=Lax).
+**Implemented in Slice 2.** Next.js route handlers call NestJS. The session cookie is set for the web host (`__Host-noesis_session`, HttpOnly, Secure, SameSite=Lax, no Domain attribute). State-changing BFF routes reject a cross-site `Origin` or `Sec-Fetch-Site: cross-site`.
 
-NestJS session record lives in PostgreSQL (`iam.sessions`) so revocation survives Redis loss. Redis may cache the session.
+The session record lives in PostgreSQL (`identity.sessions`) so revocation survives Redis loss. The cookie value is a random token. The database stores only its SHA-256 hash. Redis holds rate-limit counters, not the session authority. Login always creates a new token. Password reset revokes existing sessions. Absolute lifetime defaults to 14 days (`SESSION_TTL_SECONDS`) until an owner sets another operational value.
 
 If web and API later share a parent domain and you drop the BFF, the guard model stays. The cookie transport changes. That is an implementation detail of `iam`, not a domain change.
 

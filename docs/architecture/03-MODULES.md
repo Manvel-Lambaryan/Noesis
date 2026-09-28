@@ -41,7 +41,7 @@ Kernel must not import a module.
 
 ### iam
 
-Invariants: unique email; session revocable; roles `buyer`, `seller`, `admin`; a user may hold buyer and seller together. Admin is not implied by seller. Passwords hashed with a memory-hard algorithm (argon2id **PROPOSED**). Lockout and rate limit on login.
+Invariants: unique email; session revocable; roles `buyer`, `seller`, `admin`; a user may hold buyer and seller together. Admin is not implied by seller. Passwords hashed with Argon2id. Login and password reset are rate limited. `moderation` and `finance` are separate admin permissions. The admin role does not grant either permission by itself. Finance is required for payout holds. Moderation does not grant finance.
 
 ### seller
 

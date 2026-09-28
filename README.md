@@ -2,7 +2,7 @@
 
 NOESIS is one global developer marketplace. General code assets, a JavaScript/TypeScript discovery lens, and ready-to-launch business applications are three views over a single catalog.
 
-**This repository is in the architecture phase.** There is no application code, infrastructure, or payment integration yet.
+**Slice 2 identity is in the repository.** There is no checkout, publication, payout, or production deployment yet.
 
 | Label | Meaning |
 | --- | --- |
@@ -76,11 +76,12 @@ Docker Compose starts PostgreSQL and Redis only. The local database password in 
 
 ```text
 docker compose up -d
-npx prisma migrate deploy
-npm test
-npm run build --workspace @noesis/web
+pnpm exec prisma migrate deploy
+pnpm test
+pnpm run build
 ```
 
-API: `npm run start --workspace @noesis/api` then `GET /health` and `GET /docs`.
-Worker: `npm run start --workspace @noesis/worker`.
-Scan: `npm run start --workspace @noesis/scan`. The scan process exits if `DATABASE_URL` is set.
+API: `pnpm --filter @noesis/api start` then `GET /health` and `GET /docs`.
+Web: `pnpm --filter @noesis/web dev` on port 3000. Set `API_BASE_URL`, `APP_PUBLIC_URL`, and `INTERNAL_BFF_TOKEN` for the BFF. Set `EMAIL_PROVIDER=capture` only on a local API to open `/dev/mailbox`.
+Worker: `pnpm --filter @noesis/worker start`.
+Scan: `pnpm --filter @noesis/scan start`. The scan process exits if `DATABASE_URL` is set.

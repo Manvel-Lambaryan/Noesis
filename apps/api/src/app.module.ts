@@ -1,4 +1,6 @@
 import { Module } from "@nestjs/common";
+import { AuthModule } from "./auth/auth.module";
+import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 import { AdminModule } from "./modules/admin/admin.module";
 import { AnalyticsModule } from "./modules/analytics/analytics.module";
 import { ArtifactsModule } from "./modules/artifacts/artifacts.module";
@@ -18,9 +20,12 @@ import { HealthModule } from "./health/health.module";
 
 @Module({
   imports: [
-    HealthModule,
+    InfrastructureModule,
+    NotificationsModule,
     IamModule,
     SellerModule,
+    AuthModule,
+    HealthModule,
     CatalogModule,
     ArtifactsModule,
     DiscoveryModule,
@@ -31,7 +36,6 @@ import { HealthModule } from "./health/health.module";
     EntitlementsModule,
     ReviewsModule,
     ModerationModule,
-    NotificationsModule,
     AdminModule,
     AnalyticsModule,
   ],

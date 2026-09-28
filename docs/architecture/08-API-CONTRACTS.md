@@ -11,7 +11,7 @@
 - Errors: `{ "code": "string", "message": "string", "correlationId": "uuid" }`.
 - Correlation: client may send `X-Correlation-Id`; otherwise the API creates one and returns it.
 - Mutations that charge, refund, or pay out require `Idempotency-Key`.
-- Authn: session via BFF. The API receives the session id on an internal header set only by the web server, or a private network identity. The browser does not call privileged API routes directly (**PROPOSED**).
+- Authn: server session via the BFF. The browser calls the Next.js host. The API accepts `X-Session-Id` only together with `X-Internal-Token` (`INTERNAL_BFF_TOKEN`). That token is not a user credential. `/v1` routes reject callers that do not present it.
 - Authz: every route has a declared role and a resource check. Missing declaration fails closed in review.
 
 Public GET routes are cacheable only when the body contains no entitlement-specific fields. Responses must not include object storage keys for private archives.
@@ -24,12 +24,18 @@ Public GET routes are cacheable only when the body contains no entitlement-speci
 
 | Method | Path | Auth | Effect |
 | --- | --- | --- | --- |
-| POST | `/v1/auth/register` | no | Create user, role buyer. Seller role added when profile is created |
-| POST | `/v1/auth/login` | no | Session. Rate limited |
-| POST | `/v1/auth/logout` | session | Revoke session |
-| POST | `/v1/auth/email-verifications` | no | Consume a single-use token |
-| POST | `/v1/auth/password-resets` | no | Request and, with a second call, set a new password. Rate limited |
-| GET | `/v1/auth/session` | session | User id and roles |
+| POST | `/v1/auth/register` | no | Create user, role buyer. Returns `userId`. Sends a single-use email verification token |
+| POST | `/v1/auth/login` | no | New server session. Rate limited. Same error for an unknown email and a wrong password. The raw session token is for the BFF only |
+| POST | `/v1/auth/logout` | session | Revoke the presented session |
+| POST | `/v1/auth/email-verifications` | no | `{ token }` consumes a single-use token. `{ email }` requests another link and always returns 202 when the address is well formed. Rate limited |
+| POST | `/v1/auth/password-resets` | no | `{ email }` requests a link and does not reveal whether the account exists. `{ token, password }` sets a new password, revokes sessions, and cannot be reused. Rate limited |
+| GET | `/v1/auth/session` | session | User id, roles, permissions, email verification, and the purchase and seller-publication gates |
+
+Q19 gates on `GET /v1/auth/session`: purchase requires the buyer role and a verified email. Seller publication requires the seller role, a verified email, and `verification_approved`. Browsing does not call these gates. Checkout and publication are not implemented in Slice 2; later slices must call the same checks.
+
+`GET /v1/admin/moderation/queue` requires the `moderation` permission. `POST /v1/admin/payouts/{id}/hold` requires the `finance` permission and then returns `not_available` because payouts are not in this slice. A moderator does not pass the finance check.
+
+`PUT /v1/seller/profile` saves the caller's draft and grants the seller role. The body cannot choose another user. `GET /v1/seller/profile` returns only the caller's profile.
 
 Passwords never appear in logs or events.
 
@@ -116,7 +122,7 @@ Always store the raw body for verification. Respond 2xx only after the capture t
 
 ## Web to API
 
-**PROPOSED** internal header `X-Session-Id` plus a shared internal token `INTERNAL_BFF_TOKEN` in `.env` names when implemented. The token is not a user credential. Public ingress to the API does not accept that header from the internet (network rule). Webhook route is the exception: public, signature-authenticated, no session.
+Implemented for Slice 2. The web server sends `X-Session-Id` and `X-Internal-Token`. The browser receives an `__Host-` `HttpOnly`, `Secure`, `SameSite=Lax` cookie and never receives the raw session token or the internal token. Public ingress to the API must still not accept those headers from the internet (ADR 0006 remains open). The webhook route, when it exists, stays public and signature-authenticated.
 
 ## Compatibility
 

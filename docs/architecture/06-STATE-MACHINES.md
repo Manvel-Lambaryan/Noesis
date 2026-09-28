@@ -21,7 +21,7 @@ stateDiagram-v2
 
 | From | To | Actor | Guard |
 | --- | --- | --- | --- |
-| draft | published | seller | **ACCEPTED.** At least one version `approved` with `private_key` set. Seller is `verification_approved` and not `suspended` |
+| draft | published | seller | **ACCEPTED.** At least one version `approved` with `private_key` set. Seller email is verified (Q19). Seller is `verification_approved` and not `suspended` |
 | published | unpublished | seller | Owner |
 | unpublished | published | seller | Same as first publish |
 | published or unpublished | taken_down | admin | Reason required, audit |

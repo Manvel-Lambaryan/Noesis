@@ -1,6 +1,6 @@
 # NOESIS progress
 
-**Phase:** Slice 1 foundation. **Production:** not deployed. **Live payments:** not configured.
+**Phase:** Slice 2 identity. **Production:** not deployed. **Live payments:** not configured.
 
 Gate A is **accepted for Slice 1**. Gate B and Gate C stay open. Approval of the database, seller-verification, and catalog decisions does not approve payment provider, refunds, commission, guest checkout, or hosting.
 
@@ -31,7 +31,7 @@ No further technical choice blocks Slice 1. These stay open and do **not** appro
 
 - Payment provider, merchant of record, currencies, commission, refunds, chargeback fees, guest checkout (Gate B, [ADR 0004](architecture/ADR/0004-payment-provider.md)).
 - Host, region, and budget (Gate C, [ADR 0006](architecture/ADR/0006-deployment.md)).
-- Email-verification timing (Q19), archive size (Q14), takedown versus existing buyers (Q15).
+- Archive size (Q14), takedown versus existing buyers (Q15). Email-verification timing (Q19) was accepted on 2026-09-28.
 
 ### Gate B — Commercial and legal (blocks live money and payout promises)
 
@@ -49,7 +49,8 @@ Sandbox code may later use fixtures. It must not embed an unapproved refund wind
 | --- | --- | --- |
 | 0. Architecture pack | Documents in this repo | Drafted. Gate A accepted for Slice 1 |
 | 1. Skeleton | Apps, CI, health, OpenAPI stub, log/trace baseline | Done locally. GitHub Actions has not been executed |
-| 2–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
+| 2. Identity | Accounts, sessions, roles, seller draft | Done locally on 2026-09-28. See Slice 2 results |
+| 3–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
 | Live payments | Real provider in production | Blocked on Gate B and ADR 0004 |
 | Production | Real users and seller funds | Blocked on Gate B, Gate C, and security tests for slices 4, 7, 8, 10 |
 
@@ -73,6 +74,34 @@ Recorded after a local run on 2026-09-28. Docker is not installed on this machin
 | GitHub Actions | Workflow file is present. The remote run was not executed |
 
 Slice 1 does not include accounts, listings, checkout, or payments.
+
+## Slice 2 results
+
+Recorded after a local run on 2026-09-28. The same local PostgreSQL and Redis processes were used. `docker compose` was not executed. GitHub Actions was not executed.
+
+| Check | Result |
+| --- | --- |
+| `pnpm lint` | Exit 0. No errors or warnings |
+| `pnpm test` | 25 passed, 0 failed. Secret scan exited 0. Includes the Slice 1 health, boundary, scan, and worker tests |
+| `pnpm --filter @noesis/web run build` | Exit 0. No errors or warnings |
+| Migration `20260928160000_identity_accounts` | Applied with `prisma migrate deploy` |
+| Registration, login, invalid credentials | Pass. Unknown email and wrong password return the same 401 message |
+| Email verification and reuse | Pass. Second use of the token returns 400 |
+| Password reset and reuse | Pass. Reset revokes the previous session. The old password then returns 401 |
+| Session expiry and logout | Pass. Both return 401 on `GET /v1/auth/session` |
+| Buyer on `GET /v1/admin/moderation/queue` | 403 |
+| Moderator without finance on payout hold | 403. Finance permission without moderation: queue 403, hold 501 `not_available` |
+| Seller profile | Owner draft is saved. Another session receives 404. A `userId` in the body does not change the owner |
+| Q19 gates | Unverified buyer: purchase `email_unverified`. Verified buyer: purchase allowed. Verified seller draft: publication `seller_not_verified`. `verification_approved` plus verified email: publication allowed |
+| Rate limits | Third failed login and third reset request return 429 when the test limits are 2 |
+| Cookie | `__Host-noesis_session`; `HttpOnly`; `Secure`; `SameSite=lax`; `Path=/`; no `Domain`. Login JSON from the BFF does not include `sessionToken` |
+| OpenAPI | `GET /docs-json` includes `/v1/auth/session` |
+| Web pages | `GET /`, `/register`, `/login`, `/forgot-password`, `/verify-email`, `/reset-password` returned 200 and include the viewport meta. Signed-in `/account` shows the email and `email_unverified`. Signed-in `/account/seller` includes the draft form |
+| Logs | The identity test asserts that the password and verification token are absent from stdout |
+
+No browser window was resized. Responsive behavior is the viewport meta plus the CSS breakpoint at 720px, checked in the returned HTML and stylesheet, not by a graphical viewport pass.
+
+Slice 2 does not implement checkout, publication, payouts, or a production email provider. `EMAIL_PROVIDER=capture` is a local mailbox only.
 
 ## Blockers
 

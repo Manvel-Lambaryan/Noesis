@@ -15,7 +15,7 @@ A foreign key from `orders` to `catalog.products` would let one module’s migra
 | `commerce` | `checkout`, `orders`, `payments`, `entitlements`, `reviews` | checkout sessions and checkout idempotency keys; orders; ledger, webhook inbox, payouts, refund idempotency; entitlements, download grants; reviews | Payments is the only ledger writer |
 | `ops` | `moderation`, `notifications`, `admin`, `analytics` | decisions, appeals; notification messages; audit events, break-glass grants; funnel read models | Audit append is the shared insert port. Analytics is not a source of money or access |
 
-Sharing a schema does not allow one module to write another module’s tables. Slice 1 creates the schemas only. It does not create these business tables.
+Sharing a schema does not allow one module to write another module’s tables. Slice 1 creates the schemas. Slice 2 adds `identity.users`, `identity.sessions`, `identity.role_assignments`, `identity.admin_permissions`, `identity.auth_tokens` (iam) and `identity.seller_profiles` (seller). `seller_profiles.user_id` has no foreign key because iam and seller are different modules. Session and token rows may reference `users` because those tables belong to iam.
 
 Audit append may be a port implemented as a same-transaction write into `admin.audit_events`. That is a **deliberate exception**: the audit port is shared infrastructure, like the outbox helper. It is not a general “write another module’s tables” permission. The port accepts an already-built audit record and inserts one row. It does not update business tables.
 

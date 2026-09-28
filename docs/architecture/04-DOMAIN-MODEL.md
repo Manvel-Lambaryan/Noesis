@@ -64,9 +64,11 @@ erDiagram
 
 | Type | Fields that matter |
 | --- | --- |
-| `User` | `id`, `email`, `password_hash`, `state` |
-| `Session` | `id`, `user_id`, `expires_at`, `revoked_at` |
+| `User` | `id`, `email`, `password_hash`, `state`, `email_verified_at` |
+| `Session` | `id`, `user_id`, `token_hash`, `expires_at`, `revoked_at` |
 | `RoleAssignment` | `user_id`, `role` |
+| `AdminPermission` | `user_id`, `permission` (`moderation` or `finance`) |
+| `AuthToken` | `user_id`, `purpose`, `token_hash`, `expires_at`, `consumed_at` |
 | `SellerProfile` | `id`, `user_id`, `display_name`, `verification_state` |
 | `PayoutAccountRef` | `seller_id`, `provider`, `provider_account_id`, `state` |
 

@@ -34,13 +34,13 @@ Buyer, seller, moderator, finance admin, anonymous internet, malicious seller, s
 | Webhook spoofing | Fake entitlement | Signature verify, timestamp skew window, unique event id | 7 |
 | Duplicate charge or duplicate ledger | Wrong balances | Idempotency-Key, unique provider event, unique ledger `(source_type, source_id, leg)` | 7 |
 | Payout fraud (seller pays themselves via bug or stolen admin) | Loss of funds | Verification gate, hold state, finance role separate from moderator, reconciliation alert, audit | 10 |
-| Account takeover | Theft of entitlements and seller payouts | Argon2id, lockout, secure cookie, session revoke, **PROPOSED** MFA before payout change | 2, 10 |
+| Account takeover | Theft of entitlements and seller payouts | Argon2id, login rate limit, `__Host-` HttpOnly cookie, server-side revoke, single-use reset tokens. MFA before payout change remains **PROPOSED** | 2, 10 |
 | IDOR on drafts and downloads | Data leak | 404 for non-owners, entitlement check server-side | 3, 8 |
 | Review manipulation | Misleading quality | Only entitled buyers, one review, rate limit, hide-without-delete | 9 |
 | Search abuse and listing spam | Junk catalog | Moderation before publish, rate limit create/upload, report path | 3, 5 |
 | Seller impersonation | Brand harm | Unique slug policy, no unverified “official” badge, display name not an auth factor | 2 |
 | Admin misuse | Mass takedown or data theft | Audit same transaction, break-glass with reason and alert | 5 |
-| CSRF on cookie session | Unwanted purchase or payout change | SameSite=Lax, state-changing routes via BFF, **PROPOSED** CSRF token if any browser-to-API cookie appears later | 2 |
+| CSRF on cookie session | Unwanted purchase or payout change | SameSite=Lax cookie on the web host, state-changing routes via the BFF, cross-site Origin rejected. A CSRF token remains **PROPOSED** only if a browser-to-API cookie appears later | 2 |
 | XSS stealing session | Account takeover | HttpOnly cookie, CSP **PROPOSED**, no tokens in localStorage | 2 |
 | SSRF via demo URL or webhook | Internal network access | Demo is an external link rendered as text/anchor, not server-side fetch. Webhook URL is ours, not seller-supplied | 6 |
 | Dependency compromise | Platform compromise | Lockfile, CI scan, least privilege on cloud roles when they exist | 1 |

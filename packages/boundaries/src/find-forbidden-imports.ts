@@ -46,13 +46,17 @@ function classifyImport(
     return null;
   }
   const base = resolved.split("/").pop() ?? "";
-  if (base === "public-port.ts" || base === "public-port.js") {
+  if (isPublicPort(base)) {
     return null;
   }
   if (importer === null && (base.endsWith(".module.ts") || base.endsWith(".module.js"))) {
     return null;
   }
   return `Cross-module import of ${target}/${base} is forbidden`;
+}
+
+function isPublicPort(base: string): boolean {
+  return base === "public-port" || base.endsWith(".public-port") || base.includes(".public-port.") || base.startsWith("public-port.");
 }
 
 function importSpecifiers(source: string): string[] {

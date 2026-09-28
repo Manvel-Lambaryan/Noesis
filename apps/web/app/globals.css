@@ -1,0 +1,95 @@
+:root {
+  color-scheme: light;
+  --ink: #172033;
+  --muted: #526074;
+  --line: #d5dbe6;
+  --paper: #f6f7fb;
+  --card: #ffffff;
+  --accent: #1f4b99;
+  --danger: #8d1d2c;
+  --ok: #0f6b45;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+}
+
+a { color: var(--accent); }
+
+.wrap {
+  width: min(100% - 2rem, 40rem);
+  margin: 0 auto;
+  padding: 1.25rem 0 3rem;
+}
+
+.site-header {
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
+}
+
+.brand { font-weight: 700; text-decoration: none; color: var(--ink); }
+
+nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+form { display: grid; gap: 0.9rem; }
+
+label { display: grid; gap: 0.35rem; font-weight: 600; }
+
+input, button {
+  font: inherit;
+  min-height: 44px;
+  border-radius: 8px;
+}
+
+input {
+  width: 100%;
+  border: 1px solid var(--line);
+  padding: 0.55rem 0.7rem;
+  font-size: 1rem;
+}
+
+button {
+  border: 0;
+  background: var(--accent);
+  color: white;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+
+button:disabled { opacity: 0.7; cursor: wait; }
+
+.note { color: var(--muted); }
+
+.error { color: var(--danger); }
+
+.success { color: var(--ok); }
+
+.stack { display: grid; gap: 0.75rem; }
+
+@media (min-width: 720px) {
+  .wrap { width: min(100% - 4rem, 46rem); }
+  .card { padding: 1.75rem; }
+}
