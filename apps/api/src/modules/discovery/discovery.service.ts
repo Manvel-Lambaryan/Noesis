@@ -31,8 +31,8 @@ export class DiscoveryService implements DiscoveryAccess {
   }
 
   async versions(slug: string) {
-    await this.published(slug);
-    return { versions: [] };
+    const row = await this.published(slug);
+    return { versions: await this.sellability.approvedLabels(row.productId) };
   }
 
   async rebuild(): Promise<{ indexed: number; removed: number }> {

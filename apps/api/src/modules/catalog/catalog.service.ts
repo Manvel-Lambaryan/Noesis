@@ -1,10 +1,13 @@
 import { randomUUID } from "node:crypto";
 import { Inject, Injectable } from "@nestjs/common";
 import type { Logger } from "@noesis/kernel";
+import { sellerPublishGate } from "../../auth/authorization";
 import { AuthFailure } from "../../auth/auth-failure";
 import type { Actor } from "../../auth/actor";
 import { API_LOGGER } from "../../health/health.controller";
 import { ProductRateLimit } from "../../infrastructure/catalog/product-rate-limit";
+import { SELLABILITY, type Sellability } from "../artifacts/artifacts.public-port";
+import { SELLER_ACCESS, type SellerAccess } from "../seller/seller.public-port";
 import { type CatalogAccess, type CategoryView } from "./catalog.public-port";
 import { CATALOG_REPOSITORY, type CatalogRepository, type ProductRecord } from "./catalog.repository";
 import {
@@ -25,6 +28,8 @@ export class CatalogService implements CatalogAccess {
   constructor(
     @Inject(CATALOG_REPOSITORY) private readonly products: CatalogRepository,
     private readonly limits: ProductRateLimit,
+    @Inject(SELLABILITY) private readonly sellability: Sellability,
+    @Inject(SELLER_ACCESS) private readonly sellers: SellerAccess,
     @Inject(API_LOGGER) private readonly logger: Logger,
   ) {}
 
@@ -53,7 +58,33 @@ export class CatalogService implements CatalogAccess {
     return this.ownedDraft(actor, productId);
   }
 
-  // Drafts stay private. Publication must call sellerPublishGate in a later slice.
+  async publish(actor: Actor, productId: string): Promise<ProductRecord> {
+    const profile = await this.sellers.getOwnProfile(actor.userId);
+    const gate = sellerPublishGate(actor, profile?.verificationState ?? null);
+    if (!gate.allowed) {
+      throw new AuthFailure(403, gate.reason, "Publication is not allowed.");
+    }
+    const product = await this.products.findById(parseProductId(productId));
+    if (product === null || product.sellerId !== actor.userId) {
+      throw missingProduct();
+    }
+    const sellable = await this.sellability.sellableProductIds([product.id]);
+    if (!sellable.has(product.id)) {
+      throw new AuthFailure(409, "not_sellable", "An approved archive must be in private storage before publication.");
+    }
+    if (product.listingState === "published") {
+      return product;
+    }
+    if (product.listingState !== "draft" && product.listingState !== "unpublished") {
+      throw new AuthFailure(409, "conflict", "This listing cannot be published from its current state.");
+    }
+    const moved = await this.products.transitionListing(product.id, ["draft", "unpublished"], "published");
+    if (!moved) {
+      throw new AuthFailure(409, "conflict", "This listing cannot be published from its current state.");
+    }
+    return { ...product, listingState: "published" };
+  }
+
   async create(actor: Actor, body: Record<string, unknown>, ip: string, correlationId: string): Promise<ProductRecord> {
     requireSeller(actor);
     await this.limits.assertCreateAllowed(actor.userId, ip);

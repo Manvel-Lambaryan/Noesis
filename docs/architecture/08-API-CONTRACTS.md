@@ -62,7 +62,7 @@ The standing detail shape includes public preview image URLs, a license summary,
 | POST | `/v1/seller/products` | kind, title, category. Requires the seller role. Rate limited. Slice 3 |
 | GET | `/v1/seller/products/{id}` | Owner only. Another seller receives 404. Slice 3 |
 | PATCH | `/v1/seller/products/{id}` | Drafts only. Not money snapshots. Slice 3 |
-| POST | `/v1/seller/products/{id}/publish` | Not implemented. Guard in the state machine. Slice 5 |
+| POST | `/v1/seller/products/{id}/publish` | Seller, verified email, `verification_approved`, and an approved version with `private_key`. Returns `not_sellable` otherwise. Slice 5 |
 | POST | `/v1/seller/products/{id}/unpublish` | |
 | POST | `/v1/seller/products/{id}/versions` | version label. Slice 4. Creates `draft` |
 | GET | `/v1/seller/products/{id}/versions` | Owner only. No object keys. Slice 4 |
@@ -73,12 +73,13 @@ The standing detail shape includes public preview image URLs, a license summary,
 | POST | `/v1/seller/products/{id}/previews` | Consumes one intent and stores bytes under `previews/`. Slice 3 |
 | POST | `/v1/admin/discovery/rebuild` | Moderation permission. Indexes a product only when it is `published` and artifacts report a sellable version. Slice 3 |
 | POST | `/v1/seller/verification` | Submits the seller for review. Evidence fields follow Q3 |
-| POST | `/v1/seller/listings/{id}/appeals` | One open appeal |
+| GET | `/v1/seller/products/{id}/review` | Owner only. Version state, structural-scan label, promotion flag, rejection note, appeal. Slice 5 |
+| POST | `/v1/seller/listings/{id}/appeals` | Owner only. One open appeal. Listing must be `taken_down`. Note required. Slice 5 |
 | POST | `/v1/seller/products/{id}/offers` | Creates a new offer. Does not edit an old one |
 | POST | `/v1/seller/offers/{id}/archive` | |
 | GET | `/v1/seller/balance` | Projection per currency |
 
-Resource check: `product.seller_id` matches session seller. `PUT /uploads/quarantine/{token}` is outside `/v1` and does not use the internal token. The public media controller does not read quarantine objects. Publication and moderation routes stay unimplemented.
+Resource check: `product.seller_id` matches session seller. `PUT /uploads/quarantine/{token}` is outside `/v1` and does not use the internal token. The public media controller does not read quarantine or private objects. Slice 5 publish, review, appeal, queue, decision, and takedown routes are implemented. Unpublish, offers, and payout routes stay unimplemented.
 
 ## Checkout and buyer
 
@@ -105,10 +106,11 @@ Always store the raw body for verification. Respond 2xx only after the capture t
 
 | Method | Path | Notes |
 | --- | --- | --- |
-| GET | `/v1/admin/moderation/queue` | |
-| POST | `/v1/admin/versions/{id}/decisions` | approve, reject |
-| POST | `/v1/admin/listings/{id}/takedown` | reason |
-| POST | `/v1/admin/listings/{id}/restore` | from appeal |
+| GET | `/v1/admin/moderation/queue` | `moderation` permission. `pending_moderation` only. Slice 5 |
+| GET | `/v1/admin/versions/{id}` | Metadata, structural scan label, promotion flag, decision history. Slice 5 |
+| POST | `/v1/admin/versions/{id}/decisions` | `approve` or `reject`. Reject requires a note of 8–500 characters. Self-approval is forbidden. Slice 5 |
+| POST | `/v1/admin/listings/{id}/takedown` | Reason required. Hides discovery. Does not delete ledger rows. Slice 5 |
+| POST | `/v1/admin/listings/{id}/restore` | From `appeal_pending`. Body `decision: "reject"` rejects the appeal. Slice 5 |
 | POST | `/v1/admin/payouts/{id}/hold` | finance |
 | POST | `/v1/admin/payouts/{id}/release` | finance |
 | POST | `/v1/admin/orders/{id}/refunds` | Feature-flagged off until Q5 |

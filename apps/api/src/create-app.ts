@@ -16,8 +16,8 @@ export async function createApp(): Promise<INestApplication> {
   app.useGlobalFilters(new ApiExceptionFilter());
   const config = new DocumentBuilder()
     .setTitle("NOESIS API")
-    .setDescription("Slice 4 artifact upload. Browser clients use the web BFF.")
-    .setVersion("0.4.0")
+    .setDescription("Slice 5 moderation and publication. Browser clients use the web BFF.")
+    .setVersion("0.5.0")
     .build();
   SwaggerModule.setup("docs", app, SwaggerModule.createDocument(app, config));
   return app;

@@ -99,7 +99,7 @@ A slice is done when all of the following are true:
 | Security | Moderator cannot approve their own product. Audit row in the same transaction. Private bucket blocks public ACLs in staging policy tests. |
 | Tests | Rejected and unscanned versions are absent from public GET. Approve without a private copy is not sellable. Takedown removes the document. Ledger tables are untouched. |
 | Acceptance | Those tests pass. |
-| Done | Global definition. |
+| Done | Implemented locally on 2026-09-28. Q14, Q15, Gate B, and Gate C stay OPEN. Results are in PROGRESS. |
 
 ### Slice 6 — Price and license
 

@@ -58,9 +58,9 @@ The worker does not call install scripts, package managers, or interpreters on t
 
 ## Promotion
 
-On `approved`, a worker server-side copies quarantine object to `private/{productId}/{versionId}/{sha256}`. Then it sets `private_key`. Then the version may be sold.
+On `approved`, the API enqueues `artifact-promote`. The worker copies the quarantine object to `private/{productId}/{versionId}/{sha256}`, re-hashes both copies, and sets `private_key` only when the hash matches and the row is still `approved` with a null key. It then writes `artifacts.object_promoted`. A failed copy leaves `private_key` null, so the version is not sellable. A second successful call is a no-op. Quarantine bytes are kept; the 7-day deletion window stays **PROPOSED**, not approved.
 
-Delete quarantine object after a successful copy and a retention window (**PROPOSED** 7 days in assumptions, not approved), so a bad copy can be retried.
+This is a local directory (`PRIVATE_DIR`), not a cloud bucket policy. `/media` does not serve it. A passed structural scan, a human approval, and a completed promotion are three separate facts. None of them means the archive is malware-free.
 
 ## Download
 
@@ -84,7 +84,7 @@ Entitlement records the purchased `product_version_id` and `update_policy`. When
 
 ## Moderation gate
 
-`pending_moderation`, `scan_rejected`, and `rejected` are invisible to discovery and impossible to attach to a new offer activation. An offer cannot pin a version that is not `approved` with a `private_key`.
+`pending_moderation`, `scan_rejected`, `rejected`, and `approved` without `private_key` are invisible to discovery. An offer cannot pin a version that is not `approved` with a `private_key`. Offers are not implemented in Slice 5.
 
 ## Seller mistakes
 

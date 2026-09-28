@@ -19,7 +19,7 @@ export default async function ProductDraftsPage() {
     <main className="stack">
       <h1>Product drafts</h1>
       {session.roles.includes("seller") ? null : (
-        <p className="note">Save a <Link href="/account/seller">seller profile</Link> before creating a product. Publication remains closed.</p>
+        <p className="note">Save a <Link href="/account/seller">seller profile</Link> before creating a product. Publication also requires a verified seller and a promoted archive.</p>
       )}
       <p><Link href="/account/products/new">New draft</Link></p>
       {products.length === 0 ? <p className="note">No drafts yet.</p> : null}

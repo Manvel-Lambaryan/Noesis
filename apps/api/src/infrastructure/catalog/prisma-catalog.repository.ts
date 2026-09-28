@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { AuthFailure } from "../../auth/auth-failure";
 import { mediaUrl, type CategoryView, type IndexSource } from "../../modules/catalog/catalog.public-port";
 import type {
@@ -124,6 +125,19 @@ export class PrismaCatalogRepository implements CatalogRepository {
   async addPreview(id: string, productId: string, objectKey: string, contentType: PreviewType, byteSize: number): Promise<PreviewView> {
     const row = await this.prisma.previewImage.create({ data: { id, productId, objectKey, contentType, byteSize } });
     return { id: row.id, url: mediaUrl(row.objectKey), contentType: row.contentType, byteSize: row.byteSize };
+  }
+
+  async transitionListing(id: string, from: ("draft" | "unpublished")[], to: "published"): Promise<boolean> {
+    return this.prisma.$transaction(async (tx) => {
+      const updated = await tx.product.updateMany({ where: { id, listingState: { in: from } }, data: { listingState: to } });
+      if (updated.count !== 1) {
+        return false;
+      }
+      await tx.catalogOutbox.create({
+        data: { id: randomUUID(), type: "catalog.listing_published", subjectId: id, payload: JSON.stringify({ productId: id }) },
+      });
+      return true;
+    });
   }
 }
 

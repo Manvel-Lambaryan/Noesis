@@ -1,6 +1,6 @@
 # NOESIS progress
 
-**Phase:** Slice 4 artifact upload. **Production:** not deployed. **Live payments:** not configured.
+**Phase:** Slice 5 moderation and publication. **Production:** not deployed. **Live payments:** not configured.
 
 Gate A is **accepted for Slice 1**. Gate B and Gate C stay open. Approval of the database, seller-verification, and catalog decisions does not approve payment provider, refunds, commission, guest checkout, or hosting.
 
@@ -52,7 +52,8 @@ Sandbox code may later use fixtures. It must not embed an unapproved refund wind
 | 2. Identity | Accounts, sessions, roles, seller draft | Done locally on 2026-09-28. See Slice 2 results |
 | 3. Catalog | Draft products, three discovery lenses, preview images | Done locally on 2026-09-28. See Slice 3 results |
 | 4. Artifact upload | Quarantine upload, isolated scan, `pending_moderation` or `scan_rejected` | Done locally on 2026-09-28. See Slice 4 results. Q14 stays OPEN |
-| 5–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
+| 5. Moderation and publication | Queue, decision, private copy, publish, takedown, appeal | Done locally on 2026-09-28. See Slice 5 results. Q15 stays OPEN |
+| 6–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
 | Live payments | Real provider in production | Blocked on Gate B and ADR 0004 |
 | Production | Real users and seller funds | Blocked on Gate B, Gate C, and security tests for slices 4, 7, 8, 10 |
 
@@ -151,6 +152,31 @@ Recorded after a local run on 2026-09-28. PostgreSQL 18 and Redis were local pro
 The production build emits `/account/products/[id]` and the BFF upload routes. A signed-in `GET /account/products/{id}` on the local production server returned 200 and included the archive form and the quarantine note. No browser window was opened, so this was not a graphical viewport pass. The upload assertions above used real zip bytes over HTTP against the API.
 
 Slice 4 does not implement moderation, publication, pricing, checkout, payouts, or a public download. An expired upload intent is rejected, and the row is not moved back to `draft`. There is no durable event outbox; the scan handoff is a BullMQ job, and the audit row is `scan_reports`. The malware check is the structural fixture `structural-fixture`, not an antivirus engine.
+
+## Slice 5 results
+
+Recorded after a local run on 2026-09-28. Docker is not installed, so Compose was not executed. GitHub Actions was not executed. PostgreSQL and Redis were the existing local processes. No production data was changed.
+
+| Check | Result |
+| --- | --- |
+| `pnpm lint` | Exit 0. No warning lines |
+| `pnpm test` | 44 passed, 0 failed (42 package tests and 2 web tests). Secret scan exited 0. Includes the Slice 1–4 suites |
+| `pnpm run build` | Exit 0. Next.js 15.5.26 production build completed. The build log has no error or warning lines |
+| Migration `20260928200000_moderation_publication` | Applied with `prisma migrate deploy` on the local database |
+| Authorization | Anonymous decision is 401. Buyer and finance-only decision are 403. Buyer queue is 403. Finance version detail is 403 |
+| Self-approval | A moderator who owns the version receives 403. The version stays `pending_moderation` |
+| Rejection | A note shorter than 8 characters is 400. A longer note records `rejected`, `moderator_rejected`, one decision row, and one audit row in the same flow. The seller review JSON includes the note |
+| Promotion failure | Deleting the quarantine file, then approving, leaves `private_key` null. `promoteVersion` returns `failed`. Publish returns 409 `not_sellable` |
+| Promotion retry and duplicate | Restoring the same bytes returns `promoted`, then `duplicate`. One `artifacts.object_promoted` row |
+| Seller gates | Clearing `email_verified_at` returns 403. Setting verification back to `draft` returns 403. `verification_approved` plus a private copy can publish |
+| Discovery | `pending_moderation`, `rejected`, and `approved` without `private_key` are 404 by slug. After publish, the public version list includes `1.0.0` and omits an unscanned `0.9.0`. The public JSON does not contain `private/` |
+| Takedown | The slug becomes 404. The version stays `approved`. One `artifacts.version_withdrawn` row. Commerce tables remain `schema_anchor` only |
+| Appeals | The owner receives 201 and a second open appeal is 409. Another seller receives 404 |
+| Private storage | The promoted file is readable on disk under `PRIVATE_DIR`. `GET /media/{private_key}` is 404 |
+
+The production build emits `/admin/moderation` and the seller publish, review, and appeal BFF routes. An unsigned `GET /admin/moderation` on the local production server returned 200 and included the moderation-permission message. A BFF login returned 200 and set the `__Host-` session cookie. A later page request over plain HTTP did not establish that cookie, so the signed-in queue and publication panel were not rendered in this check. No browser window was opened. This was not a graphical viewport pass. The behavior assertions above used real zip bytes over HTTP against the API.
+
+Slice 5 writes outbox rows in the same transaction as the decision, listing change, or promotion claim. The row id is the dedupe key. There is no outbox poller and no Kafka. Discovery rebuild runs after the commit; `POST /v1/admin/discovery/rebuild` remains the retry. BullMQ retries a promotion job three times. The worker process also retries approved rows that still have a null `private_key` when it starts. A structural scan pass is not a malware-free result. Q14, Q15, Gate B, and Gate C stay OPEN. Seller withdrawal, expired-intent return to `draft`, and an admin screen that sets `verification_approved` are not in this slice. Q3 still defines what verification evidence means.
 
 ## Blockers
 

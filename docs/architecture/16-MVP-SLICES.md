@@ -82,7 +82,7 @@ Documentation. Acceptance is the checklist in [PROGRESS](../PROGRESS.md). Rollba
 
 **Build:** queue, approve, reject, takedown, appeal states, audit rows, promotion to private bucket on approve.
 
-**Acceptance:** rejected and unscanned versions absent from public API. Approve without copy does not mark sellable. Takedown removes discovery document. Audit row in the same test transaction.
+**Acceptance:** rejected and unscanned versions absent from public API. Approve without copy does not mark sellable. Takedown removes discovery document. Audit row in the same test transaction. Local results are in PROGRESS. Q15 stays OPEN. A structural scan pass is not a malware clearance.
 
 **Threats:** admin misuse, accidental public ACL (test bucket policy in staging).
 **Ops:** queue depth.

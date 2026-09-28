@@ -5,6 +5,7 @@ import { SESSION_COOKIE } from "./session-cookie";
 export type AccountView = {
   email: string;
   roles: string[];
+  permissions: string[];
   emailVerified: boolean;
   purchase: string;
   publish: string;
@@ -22,6 +23,7 @@ export async function currentSession(): Promise<AccountView | null> {
   return {
     email: text(result.body.email),
     roles: stringList(result.body.roles),
+    permissions: stringList(result.body.permissions),
     emailVerified: result.body.emailVerified === true,
     purchase: gateText(result.body.gates, "purchase"),
     publish: gateText(result.body.gates, "sellerPublish"),

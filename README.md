@@ -2,7 +2,7 @@
 
 NOESIS is one global developer marketplace. General code assets, a JavaScript/TypeScript discovery lens, and ready-to-launch business applications are three views over a single catalog.
 
-**Slice 4 artifact upload is in the repository.** Sellers can save private drafts, preview images, and upload an archive into quarantine for scanning. Public lenses read one discovery index. There is no checkout, moderation, publication, payout, or production deployment yet.
+**Slice 5 moderation and publication are in the repository.** A moderator can approve or reject a scanned archive, and the worker can copy an approved archive into private storage. A verified seller can then publish into the existing discovery index. Takedown removes that discovery document. There is no pricing, checkout, payout, or production deployment yet. A passed structural scan is not a malware-free certification.
 
 | Label | Meaning |
 | --- | --- |

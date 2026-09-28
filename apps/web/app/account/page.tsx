@@ -25,6 +25,7 @@ export default async function AccountPage() {
       <p>Seller publication: {session.publish}</p>
       <p><Link href="/account/seller">Seller profile draft</Link></p>
       <p><Link href="/account/products">Product drafts</Link></p>
+      {session.permissions.includes("moderation") ? <p><Link href="/admin/moderation">Moderation queue</Link></p> : null}
       {!session.emailVerified ? <p><Link href="/verify-email">Verify email</Link></p> : null}
       <SignOutButton />
     </main>

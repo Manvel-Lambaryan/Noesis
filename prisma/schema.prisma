@@ -347,6 +347,32 @@ model ScanReport {
   @@schema("catalog")
 }
 
+model ArtifactOutbox {
+  id          String    @id @db.Uuid
+  type        String    @db.VarChar(80)
+  subjectId   String    @map("subject_id") @db.Uuid
+  payload     String    @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+
+  @@index([subjectId, type])
+  @@map("artifact_outbox")
+  @@schema("catalog")
+}
+
+model CatalogOutbox {
+  id          String    @id @db.Uuid
+  type        String    @db.VarChar(80)
+  subjectId   String    @map("subject_id") @db.Uuid
+  payload     String    @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+
+  @@index([subjectId, type])
+  @@map("catalog_outbox")
+  @@schema("catalog")
+}
+
 model CommerceAnchor {
   id String @id @default("commerce")
 
@@ -358,5 +384,46 @@ model OpsAnchor {
   id String @id @default("ops")
 
   @@map("schema_anchor")
+  @@schema("ops")
+}
+
+model ModerationDecision {
+  id          String   @id @db.Uuid
+  actorId     String   @map("actor_id") @db.Uuid
+  action      String   @db.VarChar(40)
+  subjectType String   @map("subject_type") @db.VarChar(40)
+  subjectId   String   @map("subject_id") @db.Uuid
+  note        String   @default("") @db.VarChar(500)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([subjectType, subjectId, createdAt])
+  @@map("moderation_decisions")
+  @@schema("ops")
+}
+
+model Appeal {
+  id         String    @id @db.Uuid
+  productId  String    @map("product_id") @db.Uuid
+  sellerId   String    @map("seller_id") @db.Uuid
+  note       String    @db.VarChar(500)
+  state      String    @db.VarChar(16)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  decidedAt  DateTime? @map("decided_at") @db.Timestamptz(3)
+
+  @@index([productId, state])
+  @@map("appeals")
+  @@schema("ops")
+}
+
+model AuditEvent {
+  id          String   @id @db.Uuid
+  actorId     String   @map("actor_id") @db.Uuid
+  action      String   @db.VarChar(40)
+  subjectType String   @map("subject_type") @db.VarChar(40)
+  subjectId   String   @map("subject_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([subjectType, subjectId])
+  @@map("audit_events")
   @@schema("ops")
 }

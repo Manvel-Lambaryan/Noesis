@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, HttpCode, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Headers, HttpCode, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import type { Request } from "express";
 import type { Actor } from "../../auth/actor";
@@ -6,6 +6,7 @@ import { bodyRecord } from "../../auth/body";
 import { clientIp } from "../../auth/internal-token";
 import { actorFrom, SessionGuard } from "../../auth/session.guard";
 import { resolveCorrelationId } from "../../logging/correlation-id";
+import { DISCOVERY_ACCESS, type DiscoveryAccess } from "../discovery/discovery.public-port";
 import { CatalogPreviewService } from "./catalog-preview.service";
 import type { ProductRecord } from "./catalog.repository";
 import { CatalogService } from "./catalog.service";
@@ -28,6 +29,7 @@ export class SellerProductController {
   constructor(
     private readonly catalog: CatalogService,
     private readonly previews: CatalogPreviewService,
+    @Inject(DISCOVERY_ACCESS) private readonly discovery: DiscoveryAccess,
   ) {}
 
   @Get()
@@ -62,6 +64,13 @@ export class SellerProductController {
   @HttpCode(201)
   intent(@Req() request: Request & { actor?: Actor }, @Param("id") id: string, @Body() body: unknown) {
     return this.previews.createIntent(actorFrom(request), id, bodyRecord(body));
+  }
+
+  @Post(":id/publish")
+  async publish(@Req() request: Request & { actor?: Actor }, @Param("id") id: string) {
+    const product = await this.catalog.publish(actorFrom(request), id);
+    await this.discovery.rebuild();
+    return present(product);
   }
 
   @Post(":id/previews")

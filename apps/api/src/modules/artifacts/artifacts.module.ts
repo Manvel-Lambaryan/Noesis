@@ -4,7 +4,8 @@ import { PrismaArtifactsRepository } from "../../infrastructure/artifacts/prisma
 import { ArtifactQueue } from "../../infrastructure/queue/artifact-queue";
 import { PrismaService } from "../../infrastructure/prisma.service";
 import { RedisService } from "../../infrastructure/redis.service";
-import { NoSellableVersions, SELLABILITY } from "./artifacts.public-port";
+import { PrismaSellability } from "../../infrastructure/artifacts/prisma-sellability";
+import { SELLABILITY } from "./artifacts.public-port";
 import { ARTIFACTS_REPOSITORY } from "./artifacts.repository";
 import { ArtifactsService } from "./artifacts.service";
 import { SellerArtifactController } from "./artifacts.controller";
@@ -16,7 +17,11 @@ import { QuarantineUploadController } from "./upload.controller";
   providers: [
     ArtifactsService,
     ArtifactQueue,
-    { provide: SELLABILITY, useFactory: () => new NoSellableVersions() },
+    {
+      provide: SELLABILITY,
+      useFactory: (prisma: PrismaService) => new PrismaSellability(prisma),
+      inject: [PrismaService],
+    },
     {
       provide: ARTIFACTS_REPOSITORY,
       useFactory: (prisma: PrismaService) => new PrismaArtifactsRepository(prisma),

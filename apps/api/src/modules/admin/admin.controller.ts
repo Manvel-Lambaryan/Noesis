@@ -5,17 +5,20 @@ import type { Actor } from "../../auth/actor";
 import { AuthFailure } from "../../auth/auth-failure";
 import { actorFrom, SessionGuard } from "../../auth/session.guard";
 import { IAM_ACCESS, type IamAccess } from "../iam/iam.public-port";
+import { MODERATION_ACCESS, type ModerationAccess } from "../moderation/moderation.public-port";
 
 @ApiTags("admin")
 @Controller("v1/admin")
 @UseGuards(SessionGuard)
 export class AdminController {
-  constructor(@Inject(IAM_ACCESS) private readonly iam: IamAccess) {}
+  constructor(
+    @Inject(IAM_ACCESS) private readonly iam: IamAccess,
+    @Inject(MODERATION_ACCESS) private readonly moderation: ModerationAccess,
+  ) {}
 
   @Get("moderation/queue")
-  queue(@Req() request: Request & { actor?: Actor }): { items: [] } {
-    this.iam.requireModeration(actorFrom(request));
-    return { items: [] };
+  queue(@Req() request: Request & { actor?: Actor }) {
+    return this.moderation.queue(actorFrom(request));
   }
 
   @Post("payouts/:id/hold")

@@ -29,7 +29,7 @@ stateDiagram-v2
 | appeal_pending | published | admin | Audit. Does not auto-approve a rejected version |
 | appeal_pending | taken_down | admin | Audit |
 
-Public discovery index contains the product only when `listing_state = published` and a sellable approved version exists. Slice 3 rebuild enforces both conditions. It does not add the seller publish route. The artifacts port reports no sellable version until a later slice.
+Public discovery index contains the product only when `listing_state = published` and a sellable approved version exists. A version is sellable only when `state = approved` and `private_key` is set. Slice 5 publish, takedown, and appeal resolution call the existing discovery rebuild after the catalog transaction commits.
 
 Unpublish and takedown do not delete `orders` or ledger lines.
 
@@ -69,7 +69,7 @@ Replacing bytes is a new version row. There is no transition back to `upload_pen
 
 Rejected and scan_rejected versions are never promoted to the private bucket.
 
-Slice 4 implements the transitions from `draft` through `upload_pending`, `quarantined`, and `scanning` to `pending_moderation` or `scan_rejected`. The checksum is written once, on the move to `quarantined`. A second verdict does not change the row. Moderator transitions, withdrawal, and the expired-intent return to `draft` are not implemented. `pending_moderation` is not sellable.
+Slice 4 implements the transitions from `draft` through `upload_pending`, `quarantined`, and `scanning` to `pending_moderation` or `scan_rejected`. The checksum is written once, on the move to `quarantined`. A second verdict does not change the row. Slice 5 implements `pending_moderation` to `approved` or `rejected`. Approval does not set `private_key`; the promotion worker does, and only then is the version sellable. Takedown does not move an approved version to `withdrawn`. Seller withdrawal and the expired-intent return to `draft` are not implemented. Q15 stays OPEN.
 
 ## Seller verification
 

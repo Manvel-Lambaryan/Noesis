@@ -2,6 +2,7 @@ export { createLogger } from "./logger";
 export type { LogFields, Logger } from "./logger";
 
 export const ARTIFACT_PREPARE_QUEUE = "artifact-prepare";
+export const ARTIFACT_PROMOTE_QUEUE = "artifact-promote";
 export const SCAN_QUEUE = "scan";
 export const SCAN_VERDICT_QUEUE = "scan-verdicts";
 

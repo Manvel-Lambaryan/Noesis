@@ -1,4 +1,4 @@
-import { ARTIFACT_PREPARE_QUEUE, SCAN_QUEUE, SCAN_VERDICT_QUEUE, type ScanJob, type VerdictJob } from "@noesis/kernel";
+import { ARTIFACT_PREPARE_QUEUE, ARTIFACT_PROMOTE_QUEUE, SCAN_QUEUE, SCAN_VERDICT_QUEUE, type ScanJob, type VerdictJob } from "@noesis/kernel";
 import { Injectable } from "@nestjs/common";
 import { Queue } from "bullmq";
 
@@ -6,6 +6,10 @@ import { Queue } from "bullmq";
 export class ArtifactQueue {
   async enqueuePrepare(versionId: string): Promise<void> {
     await add(ARTIFACT_PREPARE_QUEUE, `prepare-${versionId}`, { versionId });
+  }
+
+  async enqueuePromote(versionId: string): Promise<void> {
+    await add(ARTIFACT_PROMOTE_QUEUE, `promote-${versionId}`, { versionId });
   }
 
   async enqueueScan(job: ScanJob): Promise<void> {

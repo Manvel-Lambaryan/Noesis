@@ -65,6 +65,7 @@ export type CatalogRepository = {
   createIntent(id: string, productId: string, contentType: PreviewType, byteSize: number, expiresAt: Date): Promise<void>;
   takeIntent(id: string, productId: string, now: Date): Promise<PreviewIntentRecord | null>;
   addPreview(id: string, productId: string, objectKey: string, contentType: PreviewType, byteSize: number): Promise<PreviewView>;
+  transitionListing(id: string, from: ("draft" | "unpublished")[], to: "published"): Promise<boolean>;
 };
 
 export const CATALOG_REPOSITORY = Symbol("CATALOG_REPOSITORY");

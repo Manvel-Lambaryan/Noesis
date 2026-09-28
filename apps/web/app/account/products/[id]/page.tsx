@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArchiveUpload } from "../../../components/archive-upload";
+import { PublicationPanel } from "../../../components/publication-panel";
 import { PreviewUpload, ProductDraftForm } from "../../../components/product-draft-form";
 import { currentSession } from "../../../../lib/current-session";
 import { loadCategories, loadOwnProduct } from "../../../../lib/marketplace";
@@ -44,6 +45,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       />
       <PreviewUpload productId={product.id} />
       <ArchiveUpload productId={product.id} />
+      <PublicationPanel productId={product.id} />
       {product.previews.map((preview) => (
         <img key={preview.id} src={preview.url} alt="" />
       ))}

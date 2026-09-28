@@ -17,6 +17,8 @@
 
 Consumers dedupe on `id`. Producers write the row in the same transaction as the state change.
 
+Slice 5 writes `catalog.artifact_outbox` and `catalog.catalog_outbox` in that same transaction for approval, rejection, promotion, publish, takedown, restore, and appeal. The row `id` is the dedupe key and `created_at` is the occurrence time. The stored payload is the event `data` plus `decisionId` when a person decided. `correlationId` and `causationId` are not copied onto these rows yet. There is no outbox poller and no Kafka. Discovery is updated in-process after the commit. If that rebuild fails, `POST /v1/admin/discovery/rebuild` is the retry. Promotion is a BullMQ job (`promote-{versionId}`) with three attempts. The worker claims `private_key` with a conditional update, so a retry does not write a second `artifacts.object_promoted` row. If the API dies after the approval commit and before enqueue, the version stays approved and unsellable until the worker process starts and runs `retryApprovedPromotions`. Listing publish is still a separate seller action; `artifacts.object_promoted` makes the version eligible and does not by itself set `listing_state`.
+
 ## Catalog
 
 | type | Producer | Consumers | Data |
