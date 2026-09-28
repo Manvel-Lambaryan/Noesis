@@ -33,6 +33,7 @@ export default async function SellerDraftPage() {
         }]}
       />
       <p className="note">Identity status: {profile?.verificationState ?? "no profile yet"}. {session.publish}</p>
+      <p><Link href="/account/products">Product drafts</Link></p>
     </main>
   );
 }

@@ -24,6 +24,7 @@ export default async function AccountPage() {
       <p>Purchase: {session.purchase}</p>
       <p>Seller publication: {session.publish}</p>
       <p><Link href="/account/seller">Seller profile draft</Link></p>
+      <p><Link href="/account/products">Product drafts</Link></p>
       {!session.emailVerified ? <p><Link href="/verify-email">Verify email</Link></p> : null}
       <SignOutButton />
     </main>

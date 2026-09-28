@@ -47,23 +47,29 @@ Passwords never appear in logs or events.
 | GET | `/v1/listings/{slug}` | 404 if not publicly visible |
 | GET | `/v1/listings/{slug}/versions` | Labels and states visible to the public: approved only |
 
-`view` is required on the collection route so a lens cannot accidentally query “everything” without a name. `general` is the unrestricted lens.
+`view` is required on the collection route so a lens cannot accidentally query “everything” without a name. `general` is the unrestricted lens. Slice 3 also accepts `kind` (`code_asset` or `business_application`) on that route.
 
-The detail payload includes public preview image URLs (public bucket), license summary, price of **active** offers, stacks, kind, and version labels. It does not include `quarantine_key` or `private_key`.
+Slice 3 implements `GET /v1/categories`, `GET /v1/discovery/listings`, `GET /v1/listings/{slug}`, and `GET /v1/listings/{slug}/versions`. Versions are an empty list until artifacts exist. The detail payload uses `summary` for the description. `licenseSummary` and `price` are null. Preview entries are public media URLs, not storage keys.
+
+The standing detail shape includes public preview image URLs, a license summary, the price of active offers, stacks, kind, and version labels. Slice 3 returns null for the license and the price. It does not include `quarantine_key` or `private_key`.
 
 ## Seller
 
 | Method | Path | Notes |
 | --- | --- | --- |
 | PUT | `/v1/seller/profile` | Self |
-| POST | `/v1/seller/products` | kind, title, category |
-| PATCH | `/v1/seller/products/{id}` | Not money snapshots |
-| POST | `/v1/seller/products/{id}/publish` | Guard in state machine |
+| GET | `/v1/seller/products` | Caller's drafts only. Slice 3 |
+| POST | `/v1/seller/products` | kind, title, category. Requires the seller role. Rate limited. Slice 3 |
+| GET | `/v1/seller/products/{id}` | Owner only. Another seller receives 404. Slice 3 |
+| PATCH | `/v1/seller/products/{id}` | Drafts only. Not money snapshots. Slice 3 |
+| POST | `/v1/seller/products/{id}/publish` | Not implemented. Guard in the state machine. Slice 5 |
 | POST | `/v1/seller/products/{id}/unpublish` | |
 | POST | `/v1/seller/products/{id}/versions` | version label |
 | POST | `/v1/seller/versions/{id}/upload-intents` | Returns presigned PUT, expiry |
 | POST | `/v1/seller/versions/{id}/complete-upload` | Body: declared size. The platform checksum is computed by the trusted worker (audit AF-3). A client hash is ignored |
-| POST | `/v1/seller/products/{id}/preview-intents` | Public image only. Not the quarantine archive presign |
+| POST | `/v1/seller/products/{id}/preview-intents` | PNG, JPEG, or WebP only. Returns an intent id, not a quarantine presign. Slice 3 |
+| POST | `/v1/seller/products/{id}/previews` | Consumes one intent and stores bytes under `previews/`. Slice 3 |
+| POST | `/v1/admin/discovery/rebuild` | Moderation permission. Indexes a product only when it is `published` and artifacts report a sellable version. Slice 3 |
 | POST | `/v1/seller/verification` | Submits the seller for review. Evidence fields follow Q3 |
 | POST | `/v1/seller/listings/{id}/appeals` | One open appeal |
 | POST | `/v1/seller/products/{id}/offers` | Creates a new offer. Does not edit an old one |

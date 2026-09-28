@@ -88,7 +88,20 @@ Options are product choices. The “system impact” column is there so a yes or
 
 ### Q6. First categories
 
-The architecture uses `category` and `tag` and `stack` as data, not as separate systems. The first category list is yours. Examples that are **not** a commitment: UI kits, boilerplates, CLI tools, SaaS starters.
+**ACCEPTED on 2026-09-28.** The first categories are data, not separate systems. Stable identifiers are seeded. Administrators can later rename, deactivate, reparent, and add categories without a migration. This slice does not add a category-management screen.
+
+| Slug | Name |
+| --- | --- |
+| `ui-components` | UI Components |
+| `authentication` | Authentication |
+| `dashboards` | Dashboards |
+| `backend-modules` | Backend Modules |
+| `api-integrations` | API & Integrations |
+| `website-templates` | Website Templates |
+| `e-commerce` | E-commerce |
+| `business-applications` | Business Applications |
+| `mobile-applications` | Mobile Applications |
+| `developer-tools` | Developer Tools |
 
 ### Q7. How deep is moderation, and who does it?
 
@@ -203,3 +216,4 @@ The JS/TS lens is a technology filter over the one catalog. It is not an editori
 | 2026-09-28 | One catalog. JS/TS view is a stack filter | ACCEPTED |
 | 2026-09-28 | Gate A closed for Slice 1. Gate B and Gate C remain open | ACCEPTED |
 | 2026-09-28 | Q19. Buyers browse without email verification. Purchase and seller publication require a verified email. Identity verification stays separate and remains required before publication and payouts | ACCEPTED |
+| 2026-09-28 | Q6. Ten initial categories, stable ids, later edits without a migration | ACCEPTED |

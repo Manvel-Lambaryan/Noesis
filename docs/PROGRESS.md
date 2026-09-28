@@ -1,6 +1,6 @@
 # NOESIS progress
 
-**Phase:** Slice 2 identity. **Production:** not deployed. **Live payments:** not configured.
+**Phase:** Slice 3 catalog. **Production:** not deployed. **Live payments:** not configured.
 
 Gate A is **accepted for Slice 1**. Gate B and Gate C stay open. Approval of the database, seller-verification, and catalog decisions does not approve payment provider, refunds, commission, guest checkout, or hosting.
 
@@ -50,7 +50,8 @@ Sandbox code may later use fixtures. It must not embed an unapproved refund wind
 | 0. Architecture pack | Documents in this repo | Drafted. Gate A accepted for Slice 1 |
 | 1. Skeleton | Apps, CI, health, OpenAPI stub, log/trace baseline | Done locally. GitHub Actions has not been executed |
 | 2. Identity | Accounts, sessions, roles, seller draft | Done locally on 2026-09-28. See Slice 2 results |
-| 3–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
+| 3. Catalog | Draft products, three discovery lenses, preview images | Done locally on 2026-09-28. See Slice 3 results |
+| 4–11. Vertical slices | [16-MVP-SLICES](architecture/16-MVP-SLICES.md) | Not started |
 | Live payments | Real provider in production | Blocked on Gate B and ADR 0004 |
 | Production | Real users and seller funds | Blocked on Gate B, Gate C, and security tests for slices 4, 7, 8, 10 |
 
@@ -102,6 +103,31 @@ Recorded after a local run on 2026-09-28. The same local PostgreSQL and Redis pr
 No browser window was resized. Responsive behavior is the viewport meta plus the CSS breakpoint at 720px, checked in the returned HTML and stylesheet, not by a graphical viewport pass.
 
 Slice 2 does not implement checkout, publication, payouts, or a production email provider. `EMAIL_PROVIDER=capture` is a local mailbox only.
+
+## Slice 3 results
+
+Recorded after a local run on 2026-09-28. PostgreSQL 18 and Redis were local processes. `docker compose` was not executed. GitHub Actions was not executed. Q6 is accepted: ten categories with stable ids.
+
+| Check | Result |
+| --- | --- |
+| `pnpm lint` | Exit 0. No errors or warnings |
+| `pnpm test` | 35 passed, 0 failed (33 package tests and 2 web tests). Secret scan exited 0. Includes the Slice 1 and Slice 2 suites |
+| `pnpm run build` | Exit 0. Next.js production build completed with no error or warning lines |
+| Migration `20260928180000_catalog_discovery` | Applied with `prisma migrate deploy` after replacing a non-immutable generated `tsvector` with a trigger |
+| Categories | `GET /v1/categories` returns 10, including `ui-components` and `developer-tools` |
+| One catalog | `catalog.javascript_products` does not exist. One `business_application` with stack `typescript` is returned by both `javascript` and `business_apps` with the same `productId` |
+| Draft privacy | Another seller receives 404. A buyer receives 403 on create. The public slug returns 404. The draft id is absent from `view=general` |
+| Filters | Category, product type, technology, and text query each return the matching indexed product and exclude the other fixture |
+| Preview upload | `application/zip` is 400. A PNG is stored. The public URL contains `/media/previews/` and does not contain `quarantine`. Reusing the intent is 400 |
+| Rebuild | `POST /v1/admin/discovery/rebuild` indexes 0 products while the artifacts port reports no sellable version, including after a row is marked `published` |
+| Create rate limit | Statuses 201, 201, 429 when the test limit is 2 |
+| OpenAPI | `GET /docs-json` includes `/v1/discovery/listings` |
+
+Public pages read that same discovery API. They stay empty until a later slice can mark a version sellable. Draft creation does not call the publication gate. The publication route is not implemented.
+
+Web check on the production server: `GET /marketplace`, `/marketplace/javascript`, `/marketplace/business-apps`, and `/marketplace/categories/ui-components` returned 200 with those titles, the viewport meta, and the filter form. The category title came from the API. Unsigned `/account/products` and `/account/products/new` returned 200. The stylesheet contains breakpoints at 720px and 1024px. No browser window was resized, so this was not a graphical viewport pass.
+
+Slice 3 does not implement archive upload, moderation, pricing, checkout, payouts, or reviews.
 
 ## Blockers
 

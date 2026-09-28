@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className="wrap">
             <Link className="brand" href="/">NOESIS</Link>
             <nav>
+              <Link href="/marketplace">Marketplace</Link>
               <Link href="/login">Sign in</Link>
               <Link href="/register">Register</Link>
               <Link href="/account">Account</Link>

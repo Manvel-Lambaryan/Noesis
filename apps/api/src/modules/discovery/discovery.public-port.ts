@@ -1,5 +1,5 @@
-﻿export type DiscoveryPort = {
-  readonly module: "discovery";
+﻿export type DiscoveryAccess = {
+  rebuild(): Promise<{ indexed: number; removed: number }>;
 };
 
-export const discoveryPort: DiscoveryPort = { module: "discovery" };
+export const DISCOVERY_ACCESS = Symbol("DISCOVERY_ACCESS");

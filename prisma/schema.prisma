@@ -141,6 +141,147 @@ model CatalogAnchor {
   @@schema("catalog")
 }
 
+enum ProductKind {
+  code_asset
+  business_application
+
+  @@schema("catalog")
+}
+
+enum ListingState {
+  draft
+  published
+  unpublished
+  taken_down
+  appeal_pending
+
+  @@schema("catalog")
+}
+
+/// catalog owns categories. Identifiers are stable. Later admin edits do not need a migration.
+model Category {
+  id        String     @id @db.Uuid
+  slug      String     @unique @db.VarChar(80)
+  name      String     @db.VarChar(80)
+  sortOrder Int        @map("sort_order")
+  active    Boolean    @default(true)
+  parentId  String?    @map("parent_id") @db.Uuid
+  createdAt DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children  Category[] @relation("CategoryTree")
+  products  Product[]
+
+  @@index([active, sortOrder])
+  @@map("categories")
+  @@schema("catalog")
+}
+
+/// seller_id has no foreign key. iam and catalog are different modules.
+model Product {
+  id           String         @id @db.Uuid
+  sellerId     String         @map("seller_id") @db.Uuid
+  slug         String         @unique @db.VarChar(120)
+  title        String         @db.VarChar(120)
+  summary      String         @default("") @db.VarChar(4000)
+  kind         ProductKind
+  categoryId   String         @map("category_id") @db.Uuid
+  listingState ListingState   @default(draft) @map("listing_state")
+  curated      Boolean        @default(false)
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+  category     Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  stacks       ProductStack[]
+  tags         ProductTag[]
+  previews     PreviewImage[]
+  intents      PreviewIntent[]
+
+  @@index([sellerId, updatedAt])
+  @@map("products")
+  @@schema("catalog")
+}
+
+model ProductStack {
+  productId String  @map("product_id") @db.Uuid
+  stackCode String  @map("stack_code") @db.VarChar(32)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([productId, stackCode])
+  @@map("product_stacks")
+  @@schema("catalog")
+}
+
+model ProductTag {
+  productId String  @map("product_id") @db.Uuid
+  tag       String  @db.VarChar(32)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tag])
+  @@map("product_tags")
+  @@schema("catalog")
+}
+
+model PreviewImage {
+  id          String   @id @db.Uuid
+  productId   String   @map("product_id") @db.Uuid
+  objectKey   String   @unique @map("object_key") @db.VarChar(200)
+  contentType String   @map("content_type") @db.VarChar(32)
+  byteSize    Int      @map("byte_size")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("preview_images")
+  @@schema("catalog")
+}
+
+model PreviewIntent {
+  id          String    @id @db.Uuid
+  productId   String    @map("product_id") @db.Uuid
+  contentType String    @map("content_type") @db.VarChar(32)
+  byteSize    Int       @map("byte_size")
+  expiresAt   DateTime  @map("expires_at") @db.Timestamptz(3)
+  consumedAt  DateTime? @map("consumed_at") @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("preview_intents")
+  @@schema("catalog")
+}
+
+/// discovery owns this configuration. javascript.mode "stack" is a technical default, not an owner decision.
+model DiscoveryView {
+  viewId  String  @id @map("view_id") @db.VarChar(40)
+  label   String  @db.VarChar(80)
+  enabled Boolean @default(true)
+  mode    String  @db.VarChar(40)
+
+  @@map("discovery_views")
+  @@schema("catalog")
+}
+
+/// One row per product. No foreign key to catalog.products. search_vector is added in SQL.
+model DiscoveryDocument {
+  productId    String   @id @map("product_id") @db.Uuid
+  slug         String   @unique @db.VarChar(120)
+  title        String   @db.VarChar(120)
+  summary      String   @db.VarChar(4000)
+  kind         String   @db.VarChar(40)
+  categoryId   String   @map("category_id") @db.Uuid
+  categorySlug String   @map("category_slug") @db.VarChar(80)
+  categoryName String   @map("category_name") @db.VarChar(80)
+  stacks       String[]
+  tags         String[]
+  previewUrls  String[] @map("preview_urls")
+  listingState String   @map("listing_state") @db.VarChar(40)
+  updatedAt    DateTime @map("updated_at") @db.Timestamptz(3)
+
+  @@index([listingState, updatedAt])
+  @@map("discovery_documents")
+  @@schema("catalog")
+}
+
 model CommerceAnchor {
   id String @id @default("commerce")
 

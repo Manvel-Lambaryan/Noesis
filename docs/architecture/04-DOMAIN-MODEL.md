@@ -19,7 +19,9 @@ There is no `JavascriptProduct` table and no `BusinessAppCatalog`.
 
 | Type | Fields that matter |
 | --- | --- |
-| `Product` | `id`, `seller_id`, `slug`, `kind` (`code_asset` or `business_application`), `category_id`, `listing_state`, `curated` boolean, `title`, `summary` |
+| `Product` | `id`, `seller_id`, `slug`, `kind` (`code_asset` or `business_application`), `category_id`, `listing_state`, `curated` boolean, `title`, `summary` (the description), `created_at`, `updated_at` |
+| `Category` | Stable `id`, `slug`, `name`, `sort_order`, `active`, optional `parent_id`. Q6 seed is data, not a migration for every later edit |
+| `PreviewImage` | Public marketing image. `object_key` is under `previews/`, never `quarantine/` |
 | `ProductStack` | `product_id`, `stack_code` (`javascript`, `typescript`, others as data) |
 | `DiscoveryView` | `view_id`, human label, enabled |
 | `DiscoveryDocument` | `product_id` primary key, denormalized public fields, `listing_state`, search vector |

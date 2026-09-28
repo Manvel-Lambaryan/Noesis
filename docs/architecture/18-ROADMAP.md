@@ -70,8 +70,8 @@ A slice is done when all of the following are true:
 | Tasks | Product CRUD for the owner. Public GET. SSR pages. Rebuild command for the index. Preview upload allowlist (`image/png`, `image/jpeg`, `image/webp`) and a size cap. |
 | Security | Another seller’s draft is 404. Rate limit creates. Preview upload cannot target the quarantine prefix. |
 | Tests | One `business_application` with stack `typescript` returns in both relevant views and has one id. Anonymous draft is 404. |
-| Acceptance | Those tests pass. No `javascript_products` table exists. |
-| Done | Global definition. |
+| Acceptance | Those tests pass. No `javascript_products` table exists. Q6 was accepted on 2026-09-28. |
+| Done | Global definition. The publish route stays in slice 5 and must call the seller publication gate. |
 
 ### Slice 4 — Upload and scan
 

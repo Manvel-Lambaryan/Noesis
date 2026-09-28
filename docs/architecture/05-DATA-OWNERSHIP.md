@@ -17,6 +17,8 @@ A foreign key from `orders` to `catalog.products` would let one module’s migra
 
 Sharing a schema does not allow one module to write another module’s tables. Slice 1 creates the schemas. Slice 2 adds `identity.users`, `identity.sessions`, `identity.role_assignments`, `identity.admin_permissions`, `identity.auth_tokens` (iam) and `identity.seller_profiles` (seller). `seller_profiles.user_id` has no foreign key because iam and seller are different modules. Session and token rows may reference `users` because those tables belong to iam.
 
+Slice 3 adds catalog-owned `categories`, `products`, `product_stacks`, `product_tags`, `preview_images`, and `preview_intents`. `products.seller_id` has no foreign key to `users`. Preview object keys must start with `previews/` and must not contain `quarantine`. Discovery owns `discovery_views` and `discovery_documents` in the same PostgreSQL schema, with no foreign key to `products`. `discovery_documents.product_id` is the primary key. A trigger maintains `search_vector` because `to_tsvector` is not immutable and cannot be a generated column. Rebuild reads the catalog port and the artifacts sellability port, then upserts or deletes discovery rows.
+
 Audit append may be a port implemented as a same-transaction write into `admin.audit_events`. That is a **deliberate exception**: the audit port is shared infrastructure, like the outbox helper. It is not a general “write another module’s tables” permission. The port accepts an already-built audit record and inserts one row. It does not update business tables.
 
 ### Capture transaction

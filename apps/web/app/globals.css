@@ -58,18 +58,27 @@ form { display: grid; gap: 0.9rem; }
 
 label { display: grid; gap: 0.35rem; font-weight: 600; }
 
-input, button {
+input, button, select, textarea {
   font: inherit;
   min-height: 44px;
   border-radius: 8px;
 }
 
-input {
+input, select, textarea {
   width: 100%;
   border: 1px solid var(--line);
   padding: 0.55rem 0.7rem;
   font-size: 1rem;
+  background: white;
 }
+
+textarea { min-height: 7rem; resize: vertical; }
+
+img { max-width: 100%; height: auto; }
+
+.catalog-grid { display: grid; gap: 0.75rem; }
+
+.filters { display: grid; gap: 0.75rem; }
 
 button {
   border: 0;
@@ -92,4 +101,16 @@ button:disabled { opacity: 0.7; cursor: wait; }
 @media (min-width: 720px) {
   .wrap { width: min(100% - 4rem, 46rem); }
   .card { padding: 1.75rem; }
+  .catalog-grid { grid-template-columns: 1fr 1fr; }
+  .filters { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .catalog-page {
+    width: min(72rem, calc(100vw - 4rem));
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .catalog-grid { grid-template-columns: 1fr 1fr 1fr; }
 }

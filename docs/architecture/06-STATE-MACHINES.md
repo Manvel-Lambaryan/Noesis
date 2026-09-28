@@ -29,7 +29,7 @@ stateDiagram-v2
 | appeal_pending | published | admin | Audit. Does not auto-approve a rejected version |
 | appeal_pending | taken_down | admin | Audit |
 
-Public discovery index contains the product only when `listing_state = published` and a sellable approved version exists.
+Public discovery index contains the product only when `listing_state = published` and a sellable approved version exists. Slice 3 rebuild enforces both conditions. It does not add the seller publish route. The artifacts port reports no sellable version until a later slice.
 
 Unpublish and takedown do not delete `orders` or ledger lines.
 
