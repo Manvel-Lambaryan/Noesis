@@ -31,17 +31,17 @@ Use factories. Do not depend on a shared manual seed for correctness. A demo see
 
 ## Slice mapping
 
-Detailed acceptance is in [16-MVP-SLICES](16-MVP-SLICES.md). Minimum bar:
+Detailed acceptance is in [18-ROADMAP](18-ROADMAP.md). Dependency order is in [16-MVP-SLICES](16-MVP-SLICES.md). Minimum bar:
 
 | Slice | Must fail the build if broken |
 | --- | --- |
 | 1 | Health ok, lint boundaries, secret scan clean, OpenAPI publishes |
 | 2 | Cannot use admin route as buyer; session revoke works |
 | 3 | One product id appears in two views; draft slug 404 for anonymous |
-| 4 | Traversal fixture rejected; API process has no “extract and run” path |
+| 4 | Traversal fixture rejected; checksum is the worker’s, not the client’s; API process has no “extract and run” path |
 | 5 | Rejected version absent from public GET |
 | 6 | Archived offer price does not change an old snapshot |
-| 7 | Duplicate webhook → one journal; unbalanced journal impossible; bad signature → no row |
+| 7 | Duplicate webhook → one journal and one order; a second consumer must not create another order; bad signature → no row |
 | 8 | Revoked entitlement → no new URL; grant checks listing takedown guard |
 | 9 | Review without entitlement → forbidden |
 | 10 | Payout retry same key; reconciliation detects a forced mismatch in test |

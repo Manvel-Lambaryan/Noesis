@@ -24,7 +24,10 @@ Buyer, seller, moderator, finance admin, anonymous internet, malicious seller, s
 
 | Threat | Impact | Control | Slice |
 | --- | --- | --- | --- |
-| Malicious archive (malware, zip bomb, path traversal in entry names) | Host compromise if executed or extracted naively | Do not execute. Scan process with no payment credentials. Caps on entries, uncompressed size, ratio. Reject absolute paths and `..`. Timeout | 4 |
+| Malicious archive (malware, zip bomb, path traversal in entry names) | Host compromise if executed or extracted naively | Do not execute. Scan process with no database credentials. Caps on entries, uncompressed size, ratio. Reject absolute paths and `..`. Timeout | 4 |
+| Seller-supplied checksum | A different file than the one reviewed | Worker computes sha256. Client hash is not stored as the record | 4 |
+| Preview upload used as a paid archive | Public malware or leaked source | Separate image presign, type and size cap, different bucket prefix | 3 |
+| Payment event applied twice | Double order, double revoke | One consumer path per outcome (audit AF-2) | 7 |
 | Supply chain inside seller code | Buyer compromise after download | Out of platform execution. Document that scan is not an audit. Optional future reputation | — |
 | License abuse / link sharing | Revenue loss | Short-lived URLs, entitlement recheck, no permanent public object | 8 |
 | Leaked signed URL | Unauthorized download until TTL | Short TTL proposal, no URL in email, object keys unguessable | 8 |

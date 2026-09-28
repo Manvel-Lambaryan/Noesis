@@ -27,18 +27,22 @@ Consumers dedupe on `id`. Producers write the row in the same transaction as the
 | `catalog.listing_unpublished` | catalog | discovery | `productId` |
 | `catalog.listing_taken_down` | catalog | discovery, entitlements | `productId`, `decisionId` |
 | `catalog.listing_restored` | catalog | discovery | `productId` |
-| `artifacts.version_quarantined` | artifacts | scan worker | `versionId`, `productId` |
+| `artifacts.version_quarantined` | artifacts | scan queue (the scan process has no database credentials) | `versionId`, `productId` |
 | `artifacts.scan_completed` | artifacts | notifications, moderation queue | `versionId`, `verdict` |
-| `artifacts.version_approved` | artifacts | catalog (sellable flag), discovery, notifications | `versionId`, `productId`, `sha256` |
+| `artifacts.version_approved` | artifacts | notifications | `versionId`, `productId`. Not sellable until `artifacts.object_promoted` |
+| `artifacts.object_promoted` | artifacts | catalog, discovery, notifications | `versionId`, `productId`, `sha256` |
 | `artifacts.version_rejected` | artifacts | notifications | `versionId`, `reasonCode` |
+| `artifacts.version_withdrawn` | artifacts | discovery, catalog | `versionId`, `productId` |
 | `pricing.offer_activated` | pricing | discovery | `offerId`, `productId`, `amountMinor`, `currency` |
 | `pricing.offer_archived` | pricing | discovery | `offerId` |
 | `checkout.session_created` | checkout | analytics | `checkoutId`, `offerId`, `amountMinor`, `currency` |
-| `payments.charge_captured` | payments | orders, analytics | `checkoutId`, `providerEventId`, `amountMinor`, `currency`, `commissionBps` |
+| `payments.charge_captured` | payments | analytics | `checkoutId`, `providerEventId`, `amountMinor`, `currency`, `commissionBps`. Does not create the order |
 | `payments.charge_failed` | payments | checkout, notifications | `checkoutId` |
-| `payments.refund_captured` | payments | orders, entitlements | `orderId`, `amountMinor`, `currency` |
-| `payments.dispute_opened` | payments | entitlements, notifications | `orderId` |
-| `payments.dispute_closed` | payments | entitlements | `orderId`, `outcome` |
+| `payments.refund_captured` | payments | analytics | `orderId`, `amountMinor`, `currency`. Does not revoke entitlements |
+| `payments.dispute_opened` | payments | analytics | `orderId` |
+| `payments.dispute_closed` | payments | analytics | `orderId`, `outcome` |
+| `orders.dispute_opened` | orders | entitlements, notifications | `orderId` |
+| `orders.dispute_closed` | orders | entitlements | `orderId`, `outcome` |
 | `payments.payout_settled` | payments | notifications, analytics | `payoutId`, `sellerId`, `amountMinor`, `currency` |
 | `orders.order_paid` | orders | entitlements, notifications, analytics | `orderId`, `buyerUserId`, `productId`, `versionId`, `updatePolicy` |
 | `orders.order_refunded` | orders | entitlements, notifications | `orderId` |
@@ -50,6 +54,20 @@ Consumers dedupe on `id`. Producers write the row in the same transaction as the
 | `notifications.requested` | any via port | notifications | `template`, `userId`, `data` refs |
 
 `notifications.requested` is optional if each domain event is already consumed by notifications. **PROPOSED:** notifications subscribe to domain events directly and do not require a second command event. The row stays as a permitted alternative, not a second source of truth.
+
+## One side effect, one consumer
+
+Audit AF-2. The capture composition root writes the payments journal, the order, and the checkout session in one transaction. It also writes `orders.order_paid`. Entitlements, email, and discovery react to the order, catalog, or artifact event. They do not also react to the payment event for the same outcome.
+
+| Outcome | Single consumer path |
+| --- | --- |
+| Order created | Composition root writes the order. `payments.charge_captured` is a record for analytics |
+| Entitlement issued | `orders.order_paid` |
+| Entitlement revoked | `orders.order_refunded` |
+| Entitlement frozen or restored | `orders.dispute_opened` and `orders.dispute_closed` |
+| Listing becomes sellable in search | `artifacts.object_promoted` |
+
+A second consumer that repeats the write is a defect, even if the unique key would hide it.
 
 ## Ordering
 

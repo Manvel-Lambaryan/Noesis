@@ -2,6 +2,8 @@
 
 **Phase:** Architecture and documentation. **Code:** none. **Cloud resources:** none. **Migrations:** none.
 
+Second review: [architecture audit](architecture/17-AUDIT.md) and [roadmap](architecture/18-ROADMAP.md), 2026-09-28. Gate A is still unaccepted. Implementation is still blocked.
+
 ## Evidence
 
 | Fact | Evidence | Date |

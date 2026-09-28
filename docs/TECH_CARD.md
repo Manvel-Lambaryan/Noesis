@@ -45,7 +45,7 @@ Authoritative decisions: [ADR 0001](architecture/ADR/0001-modular-monolith.md) t
 | `web` | SSR, SEO, BFF to the API, UX session cookie | Decide authorization, sign private downloads, write the ledger |
 | `api` | Modules, transactions, OpenAPI | Unpack or execute seller archives; trust webhook bodies without verification |
 | `worker` | Outbox relay, email, payout scheduling, reconciliation | Serve public HTTP |
-| `scan` | Read quarantine objects, archive safety checks, malware scan | Hold payment DB credentials; run seller entrypoints |
+| `scan` | Read quarantine objects, archive safety checks, malware scan, publish a verdict to the queue | Hold any database credentials; run seller entrypoints |
 
 `scan` is a separate deployable from the same codebase (**PROPOSED**), with its own identity for object storage: read quarantine, write a scan result. It has no route to the payments schema.
 
@@ -75,7 +75,7 @@ Reason: the likely split (web host vs API host) makes a shared parent-domain coo
 ## Data plane (proposed)
 
 - One PostgreSQL instance, many schemas. No cross-schema foreign keys.
-- Each module writes only its schema, including its outbox, in one transaction.
+- Each module writes only its schema, including its outbox, in one transaction. The capture composition root may call several module ports in that same transaction. See data ownership.
 - Cross-module references are identifiers plus events.
 - Strong consistency inside a module; eventual consistency across modules, except a synchronous read through a **port** when a checkout must snapshot price (the snapshot is then copied, not referenced live).
 

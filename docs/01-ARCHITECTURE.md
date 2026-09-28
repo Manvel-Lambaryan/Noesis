@@ -38,11 +38,11 @@ People never receive a long-lived URL to a paid archive. The payment provider is
 2. **Version bytes are immutable** after the upload completes. A change is a new version.
 3. **Money is integer minor units** plus an ISO 4217 currency. Ledger lines are insert-only. Reversals are new lines.
 4. **Every paid download rechecks** an active entitlement on the server that issues the link. Signed links expire.
-5. **Moderation gates public visibility.** A rejected, quarantined, or taken-down asset is not downloadable to someone without an entitlement. Effect on existing buyers after takedown is **OPEN**.
+5. **Moderation gates public visibility.** A rejected or quarantined version is not downloadable. A taken-down listing blocks new download grants. Existing entitlements are not mass-revoked unless the owner chooses that (**OPEN**, Q15).
 6. **Archives stay quarantined** until checks pass. Seller code is not executed on the API or on any privileged host.
 7. **Authorization is default-deny** and resource-scoped. Admin mutations write an audit row in the same transaction.
 8. **Critical writes are idempotent** and durable. Process memory is not a source of truth.
-9. **No cross-module table writes.** Cross-module foreign keys are not used. Integrate by port or by event.
+9. **No cross-module repository imports and no cross-schema foreign keys.** Integrate by port or by event. The payment-capture composition root may call the payments, orders, and checkout ports in one database transaction ([data ownership](architecture/05-DATA-OWNERSHIP.md)).
 10. **Policy knobs stay named and unset** until the owner approves them. Examples in documents use the word ILLUSTRATIVE.
 
 ## Module map
@@ -55,7 +55,7 @@ People never receive a long-lived URL to a paid archive. The payment provider is
 | `artifacts` | Versions, object pointers, scan reports | Events; storage port |
 | `discovery` | Search documents and view definitions | Reads catalog/artifacts events into its own tables |
 | `pricing` | License offers | Sync port: quote used by checkout |
-| `checkout` | Cart, checkout session, idempotency keys | Sync ports to pricing, catalog, payments |
+| `checkout` | Checkout session and its idempotency keys. A persistent cart is **FUTURE** | Sync ports to pricing, catalog, payments |
 | `orders` | Orders after capture | Consumes payment events |
 | `payments` | Provider refs, webhook inbox, ledger, payouts | Provider port; emits events |
 | `entitlements` | Rights to a version and download grants | Consumes order events |
@@ -138,4 +138,4 @@ If two documents disagree, use this order:
 
 ## Implementation
 
-Vertical slices, acceptance, and rollback: [16-MVP-SLICES](architecture/16-MVP-SLICES.md). No slice is authorized to start until the owner accepts Gate A in [PROGRESS](PROGRESS.md).
+Vertical slices and rollback: [16-MVP-SLICES](architecture/16-MVP-SLICES.md). Tasks and definition of done: [18-ROADMAP](architecture/18-ROADMAP.md). Audit: [17-AUDIT](architecture/17-AUDIT.md). No slice is authorized to start until the owner accepts Gate A in [PROGRESS](PROGRESS.md).

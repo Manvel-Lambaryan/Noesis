@@ -170,6 +170,25 @@ Platform, seller, or shared. Posting rules are in the payments doc as alternativ
 
 What you owe after purchase (install help, bugfix window, nothing beyond the license) changes seller obligations and review expectations. **OPEN.** MVP can store a free-text support URL without an SLA.
 
+### Q19. Must a buyer or seller prove they control the email address?
+
+| Option | Tradeoff |
+| --- | --- |
+| Verify email before seller publish and before payout. Buyers verify before purchase (recommended) | Stops easy fake accounts. One extra step at signup |
+| Verify sellers only | Faster buyer checkout. More fake buyer accounts and review abuse |
+| No verification | Fastest. Weak account recovery and more fraud |
+
+Password reset is included in the roadmap either way. It is a security function, not a commercial policy.
+
+### Q20. Can a listing go public before the seller is verified?
+
+| Option | Tradeoff |
+| --- | --- |
+| No. Drafts are allowed. Publish and payouts both wait for verification (recommended) | You do not take a buyer’s money for a seller you cannot pay |
+| Publish first, hold payouts | The catalog fills sooner. Refunds are harder if the seller never verifies |
+
+Audit AF-1. The documents no longer force both answers at once.
+
 ## Decision log
 
 | Date | Decision | Status |

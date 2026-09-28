@@ -37,13 +37,13 @@ State names in [06-STATE-MACHINES](06-STATE-MACHINES.md) remain authoritative (`
 - Declared size ≤ configured maximum.
 - Key is server-generated, unguessable, prefixed by `quarantine/{sellerId}/{versionId}/`.
 - Presign expiry **PROPOSED** 15 minutes.
-- Complete-upload sets sha256 and byte size. A second complete with a different checksum is `conflict`.
+- Complete-upload records that the object exists and checks the declared size. The trusted worker computes `sha256` and stores it. A client-supplied checksum is not the system record (audit AF-3).
 
 The API does not proxy the bytes.
 
 ## Scanner duties
 
-Isolated process. Credentials: `GetObject` on quarantine prefix, and a queue credential. No database role on `payments`.
+Isolated process. Credentials: `GetObject` on the quarantine prefix, and a queue credential. No database credentials of any kind (audit AF-4). The process publishes a verdict. The worker, which may write the artifacts schema, applies `scan_rejected` or `pending_moderation`.
 
 Checks, all must pass:
 

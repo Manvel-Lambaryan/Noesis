@@ -1,6 +1,6 @@
 # Modules
 
-**Status:** PROPOSED boundaries inside one deployable API, plus a scan process that loads only the artifact application service.
+**Status:** PROPOSED boundaries inside one deployable API. The scan process has object-storage and queue credentials only. The worker applies scan verdicts through the artifacts port (audit AF-4).
 
 ## How a module is shaped
 
@@ -65,7 +65,7 @@ Invariants: an offer used by a checkout is immutable. A price change inserts a n
 
 ### checkout
 
-Invariants: session pinned to one seller (A2). Snapshot copies money, offer id, version id, commission basis points, and currency. Idempotency key scoped to the user. Expired sessions cannot capture.
+Invariants: session pinned to one seller (A2). One offer per session in MVP. A persistent cart is FUTURE. Snapshot copies money, offer id, version id, commission basis points, and currency. Checkout idempotency keys live here, scoped to the user. Refund and payout keys live in `payments`. Expired sessions cannot capture.
 
 ### orders
 

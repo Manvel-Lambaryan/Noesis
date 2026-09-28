@@ -16,9 +16,9 @@ A foreign key from `orders` to `catalog.products` would let one module’s migra
 | `artifacts` | artifacts | versions, scan_reports, outbox | Read version state via port |
 | `discovery` | discovery | documents, view_definitions | Nobody else writes |
 | `pricing` | pricing | offers, license_texts, outbox | Quote via port |
-| `checkout` | checkout | sessions, idempotency_keys, outbox | — |
+| `checkout` | checkout | sessions, checkout idempotency keys, outbox | — |
 | `orders` | orders | orders, order_lines, inbox, outbox | — |
-| `payments` | payments | ledger_entries, accounts, webhook_inbox, payout_instructions, provider_events | No other writer |
+| `payments` | payments | ledger_entries, accounts, webhook_inbox, payout_instructions, provider_events, refund and payout idempotency keys | No other writer |
 | `entitlements` | entitlements | entitlements, download_grants, inbox | Check via port |
 | `reviews` | reviews | reviews, inbox | — |
 | `moderation` | moderation | decisions, appeals, outbox | — |

@@ -17,7 +17,9 @@ NOESIS is one global developer marketplace. General code assets, a JavaScript/Ty
 1. [Product brief](docs/BRIEF.md) — personas, journeys, MVP boundary
 2. [Architecture map](docs/01-ARCHITECTURE.md) — traceability and rules
 3. [Open decisions](docs/architecture/00-ASSUMPTIONS-QUESTIONS.md) — what still needs a yes or no
-4. [Progress and review](docs/PROGRESS.md) — gates, evidence, consistency review
+4. [Architecture audit](docs/architecture/17-AUDIT.md) — validation, contradictions, risks
+5. [Development roadmap](docs/architecture/18-ROADMAP.md) — slices, tasks, definition of done
+6. [Progress and review](docs/PROGRESS.md) — gates, evidence, consistency review
 
 ## Documents
 
@@ -50,6 +52,8 @@ NOESIS is one global developer marketplace. General code assets, a JavaScript/Ty
 | 14 | [NFR, SLO, capacity](docs/architecture/14-NFR-SLO-CAPACITY.md) |
 | 15 | [Test strategy](docs/architecture/15-TEST-STRATEGY.md) |
 | 16 | [MVP slices](docs/architecture/16-MVP-SLICES.md) |
+| 17 | [Architecture audit](docs/architecture/17-AUDIT.md) |
+| 18 | [Development roadmap](docs/architecture/18-ROADMAP.md) |
 
 ## Decision records
 

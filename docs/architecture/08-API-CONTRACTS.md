@@ -27,6 +27,8 @@ Public GET routes are cacheable only when the body contains no entitlement-speci
 | POST | `/v1/auth/register` | no | Create user, role buyer. Seller role added when profile is created |
 | POST | `/v1/auth/login` | no | Session. Rate limited |
 | POST | `/v1/auth/logout` | session | Revoke session |
+| POST | `/v1/auth/email-verifications` | no | Consume a single-use token |
+| POST | `/v1/auth/password-resets` | no | Request and, with a second call, set a new password. Rate limited |
 | GET | `/v1/auth/session` | session | User id and roles |
 
 Passwords never appear in logs or events.
@@ -54,7 +56,10 @@ The detail payload includes public preview image URLs (public bucket), license s
 | POST | `/v1/seller/products/{id}/unpublish` | |
 | POST | `/v1/seller/products/{id}/versions` | version label |
 | POST | `/v1/seller/versions/{id}/upload-intents` | Returns presigned PUT, expiry |
-| POST | `/v1/seller/versions/{id}/complete-upload` | Body: size, sha256 |
+| POST | `/v1/seller/versions/{id}/complete-upload` | Body: declared size. The platform checksum is computed by the trusted worker (audit AF-3). A client hash is ignored |
+| POST | `/v1/seller/products/{id}/preview-intents` | Public image only. Not the quarantine archive presign |
+| POST | `/v1/seller/verification` | Submits the seller for review. Evidence fields follow Q3 |
+| POST | `/v1/seller/listings/{id}/appeals` | One open appeal |
 | POST | `/v1/seller/products/{id}/offers` | Creates a new offer. Does not edit an old one |
 | POST | `/v1/seller/offers/{id}/archive` | |
 | GET | `/v1/seller/balance` | Projection per currency |
@@ -80,7 +85,7 @@ Resource check: `product.seller_id` matches session seller.
 | --- | --- | --- |
 | POST | `/v1/payments/webhooks/{provider}` | Provider signature. No session |
 
-Always store the raw body for verification. Respond 2xx only after the inbox row is committed or the duplicate is recognized. Do not wait for email or scan.
+Always store the raw body for verification. Respond 2xx only after the capture transaction commits (inbox, journal, order, checkout session) or the provider event id is already stored. Do not return 2xx for a bare inbox insert that has not posted the journal. Do not wait for email, scan, or entitlement issuance.
 
 ## Admin
 

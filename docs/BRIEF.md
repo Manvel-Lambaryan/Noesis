@@ -71,7 +71,7 @@ Support obligations (response time, what “support” includes) are **OPEN**. A
 
 ## Admin journey
 
-1. Open a moderation queue item. Decide: approve, reject, or request changes.
+1. Open a moderation queue item. Decide: approve, or reject with a note. A rejection does not reopen the same file. The seller uploads a new version.
 2. Escalate or take down a live listing. Record a reason. The action is audited.
 3. Hear an appeal. Restore or keep the takedown.
 4. Place a seller payout on hold. Release it only when eligibility says so.

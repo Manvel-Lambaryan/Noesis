@@ -2,6 +2,8 @@
 
 **Status:** Proposed order. Not scheduled. Not permission to start. Gate A in [PROGRESS](../PROGRESS.md) comes first. Live money needs Gate B. Production hosting needs Gate C.
 
+Tasks, security checks, and the definition of done for each slice are in [18-ROADMAP](18-ROADMAP.md). This file remains the dependency order. The audit that produced that roadmap is [17-AUDIT](17-AUDIT.md).
+
 Staffing is unknown. Durations are omitted on purpose.
 
 ## Dependency order
