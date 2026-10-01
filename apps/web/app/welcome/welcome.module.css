@@ -1,10 +1,10 @@
 .shell {
-  --ink: #1c1915;
-  --muted: #5e584f;
-  --gold: #a8833d;
-  --gold-deep: #7c5a28;
-  --line: #e7dfd3;
-  --card: #fffcf8;
+  --ink: #5e3023;
+  --muted: #895737;
+  --gold: #c08552;
+  --gold-deep: #5e3023;
+  --line: #e6d5c4;
+  --card: #fbf6ef;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -15,11 +15,7 @@
   max-height: 100dvh;
   color: var(--ink);
   color-scheme: light;
-  background-color: #fbf7f2;
-  background-image: url("/brand/welcome-bg.jpg?v=next");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  background: transparent;
   font-family: "Segoe UI Variable Display", "Segoe UI", "Avenir Next", "Trebuchet MS", sans-serif;
   overflow: hidden;
 }
@@ -43,12 +39,12 @@
   width: min(100%, 40rem);
   max-width: 100%;
   min-width: 0;
-  background: rgba(255, 252, 248, 0.94);
-  border: 1px solid rgba(196, 161, 90, 0.45);
+  background: rgba(243, 233, 220, 0.94);
+  border: 1px solid rgba(192, 133, 82, 0.45);
   max-height: 100%;
   overflow: auto;
   border-radius: 28px;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 30px 80px rgba(88, 64, 24, 0.08);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 30px 80px rgba(94, 48, 35, 0.08);
   padding: clamp(0.7rem, 1.6vh, 1.45rem) clamp(0.9rem, 2vw, 2rem) clamp(0.45rem, 1vh, 0.85rem);
   animation: enter 0.55s ease;
   display: flex;
@@ -81,10 +77,10 @@
   left: calc(50% + 18px);
   right: calc(-50% + 18px);
   height: 1px;
-  background: #e6dfd4;
+  background: #e6d5c4;
 }
 
-.step[data-state="complete"]:not(:last-child)::after { background: #c4a15a; }
+.step[data-state="complete"]:not(:last-child)::after { background: #c08552; }
 
 .bubble {
   width: 32px;
@@ -92,9 +88,9 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  border: 1.5px solid #ddd4c8;
-  background: #fff;
-  color: #8a8178;
+  border: 1.5px solid #e6d5c4;
+  background: #fbf6ef;
+  color: #895737;
   font-size: 0.82rem;
   font-weight: 700;
   position: relative;
@@ -104,13 +100,13 @@
 
 .step[data-state="current"] .bubble {
   border-color: transparent;
-  background: #7a5822;
-  color: #fffaf3;
-  box-shadow: 0 6px 16px rgba(122, 88, 34, 0.28);
+  background: #5e3023;
+  color: #f3e9dc;
+  box-shadow: 0 6px 16px rgba(94, 48, 35, 0.28);
 }
 
 .step[data-state="complete"] .bubble {
-  border-color: #c4a15a;
+  border-color: #c08552;
   color: var(--gold-deep);
 }
 
@@ -120,7 +116,7 @@
   font-size: 0.78rem;
   font-weight: 600;
   line-height: 1.25;
-  color: #5c564e;
+  color: #895737;
 }
 .step[data-state="current"] .stepLabel { color: var(--ink); }
 .step[data-state="complete"] .stepLabel { color: var(--gold-deep); }
@@ -159,7 +155,7 @@
 
 @supports (background-clip: text) {
   .goldWord {
-    background-image: linear-gradient(180deg, #9a7433 0%, #6a4a18 100%);
+    background-image: linear-gradient(180deg, #c08552 0%, #5e3023 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -195,40 +191,9 @@
 .actions[data-ready="false"] { display: none; }
 
 .back, .quiet, .primary { font: inherit; cursor: pointer; }
-.back, .quiet {
-  min-height: 44px;
-  padding: 0 0.25rem;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 600;
-  box-shadow: none;
-}
-
 .back { margin-right: auto; }
-
-.quiet { color: var(--gold-deep); text-decoration: underline; text-underline-offset: 3px; }
-
-.primary {
-  min-height: 46px;
-  margin-left: auto;
-  padding: 0 1.4rem;
-  border: 1px solid #6e5120;
-  border-radius: 8px;
-  background: #7c5a28;
-  color: #fffaf3;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  box-shadow: 0 1px 0 rgba(255, 248, 236, 0.28) inset;
-}
-
-.primary:hover {
-  background: #6a4b1e;
-  box-shadow: 0 1px 0 rgba(255, 248, 236, 0.22) inset, 0 8px 18px rgba(90, 60, 20, 0.14);
-}
-
-.back:hover, .quiet:hover, .stepButton:hover { background: transparent; box-shadow: none; }
+.primary { min-height: 46px; margin-left: auto; padding: 0 1.4rem; }
+.stepButton:hover { background: transparent; box-shadow: none; filter: none; }
 .primary:disabled, .back:disabled, .quiet:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
 .footer {
@@ -238,7 +203,7 @@
   gap: 0.35rem 0.75rem;
   margin-top: clamp(0.4rem, 1.1vh, 0.8rem);
   padding-top: clamp(0.4rem, 1vh, 0.7rem);
-  border-top: 1px solid #eee6da;
+  border-top: 1px solid #e6d5c4;
   color: var(--muted);
   font-size: 0.95rem;
 }

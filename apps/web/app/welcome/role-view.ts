@@ -99,10 +99,10 @@ function animate(stage: Stage, object: Group, spinning: { current: boolean }): (
 }
 
 function lightScene(renderer: WebGLRenderer, scene: Scene): Texture {
-  scene.add(new HemisphereLight(0xfff7ec, 0xd7b36a, 0.45));
-  const key = new DirectionalLight(0xfffaf2, 1.35);
+  scene.add(new HemisphereLight(0xf3e9dc, 0xc08552, 0.45));
+  const key = new DirectionalLight(0xf3e9dc, 1.35);
   key.position.set(3.2, 4.8, 3.4);
-  const rim = new DirectionalLight(0xffe1a4, 0.65);
+  const rim = new DirectionalLight(0xc08552, 0.65);
   rim.position.set(-3.5, 1.6, -2.4);
   scene.add(key, rim);
   const pmrem = new PMREMGenerator(renderer);

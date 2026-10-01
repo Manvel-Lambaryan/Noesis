@@ -1,13 +1,17 @@
 :root {
   color-scheme: light;
-  --ink: #172033;
-  --muted: #526074;
-  --line: #d5dbe6;
-  --paper: #f6f7fb;
-  --card: #ffffff;
-  --accent: #1f4b99;
+  --cream: #f3e9dc;
+  --caramel: #c08552;
+  --brownie: #5e3023;
+  --coffee: #895737;
+  --ink: #5e3023;
+  --muted: #895737;
+  --line: #e6d5c4;
+  --paper: #f3e9dc;
+  --card: #fbf6ef;
+  --accent: #c08552;
   --danger: #8d1d2c;
-  --ok: #0f6b45;
+  --ok: #3d6b45;
 }
 
 * { box-sizing: border-box; }
@@ -15,8 +19,13 @@
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  color: var(--ink);
-  background: var(--paper);
+  color: #f3e9dc;
+  background-color: #c08552;
+  background-image: url("/brand/caramel-brush.jpg?v=brush");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   line-height: 1.5;
 }
 
@@ -31,6 +40,7 @@ a { color: var(--accent); }
 .site-header {
   background: var(--card);
   border-bottom: 1px solid var(--line);
+  color: var(--ink);
 }
 
 .site-header .wrap {
@@ -53,6 +63,7 @@ nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; }
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 1.25rem;
+  color: var(--ink);
 }
 
 form { display: grid; gap: 0.9rem; }
@@ -62,15 +73,15 @@ label { display: grid; gap: 0.35rem; font-weight: 600; }
 input, button, select, textarea {
   font: inherit;
   min-height: 44px;
-  border-radius: 8px;
 }
 
 input, select, textarea {
   width: 100%;
   border: 1px solid var(--line);
+  border-radius: 8px;
   padding: 0.55rem 0.7rem;
   font-size: 1rem;
-  background: white;
+  background: var(--card);
 }
 
 textarea { min-height: 7rem; resize: vertical; }
@@ -82,27 +93,37 @@ img { max-width: 100%; height: auto; }
 .filters { display: grid; gap: 0.75rem; }
 
 button {
-  border: 1px solid #6e5120;
+  border: 1px solid #895737;
   border-radius: 8px;
-  background: #7c5a28;
-  color: #fffaf3;
+  background-color: #c08552;
+  background-image:
+    linear-gradient(180deg, rgba(243, 233, 220, 0.38), rgba(243, 233, 220, 0) 42%, rgba(94, 48, 35, 0.18)),
+    linear-gradient(180deg, #d4a574 0%, #c08552 52%, #895737 100%);
+  color: #f3e9dc;
   padding: 0.55rem 1.4rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  box-shadow: 0 1px 0 rgba(255, 248, 236, 0.28) inset;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(94, 48, 35, 0.16), inset 0 1px 0 rgba(243, 233, 220, 0.4);
   cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
-  background: #6a4b1e;
-  box-shadow: 0 1px 0 rgba(255, 248, 236, 0.22) inset, 0 8px 18px rgba(90, 60, 20, 0.14);
+  filter: brightness(1.04);
+  box-shadow: 0 6px 14px rgba(94, 48, 35, 0.2), inset 0 1px 0 rgba(243, 233, 220, 0.5);
 }
 
-button:disabled {
+button:focus-visible {
+  outline: 2px solid #5e3023;
+  outline-offset: 3px;
+}
+
+button:disabled,
+button:disabled:hover {
   opacity: 0.5;
   cursor: not-allowed;
-  background: #7c5a28;
+  filter: none;
   box-shadow: none;
 }
 
@@ -132,7 +153,6 @@ button:disabled {
 }
 
 body:has(.welcome-shell) {
-  background: #f6f1e8;
   height: 100dvh;
   overflow: hidden;
 }
@@ -151,7 +171,6 @@ body:has(.welcome-shell) > .wrap {
 }
 
 body:has(.auth-shell) {
-  background: #f6f1e8;
   min-height: 100dvh;
 }
 
