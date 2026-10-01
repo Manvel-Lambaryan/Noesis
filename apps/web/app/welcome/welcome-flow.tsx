@@ -20,6 +20,12 @@ export function WelcomeFlow({ initial, signedIn }: { initial: OnboardingState; s
 
   return (
     <div className={`${styles.shell} welcome-shell`}>
+      <div className={styles.ghosts} aria-hidden="true">
+        <span className={`${styles.ghost} ${styles.ghostOne}`} />
+        <span className={`${styles.ghost} ${styles.ghostTwo}`} />
+        <span className={`${styles.ghost} ${styles.ghostThree}`} />
+        <span className={`${styles.ghost} ${styles.ghostFour}`} />
+      </div>
       <header className={chrome.header}>
         <Brand />
         <LanguageSelect />

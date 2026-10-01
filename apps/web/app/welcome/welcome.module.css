@@ -6,6 +6,7 @@
   --line: #e7dfd3;
   --card: #fffcf8;
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -22,6 +23,58 @@
   background-repeat: no-repeat;
   font-family: "Segoe UI Variable Display", "Segoe UI", "Avenir Next", "Trebuchet MS", sans-serif;
   overflow: hidden;
+}
+
+.ghosts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  filter: saturate(1.15) blur(0.2px);
+}
+
+.ghost {
+  position: absolute;
+  display: block;
+  border: 1px solid rgba(187, 147, 87, 0.68);
+  border-radius: 34px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(247, 222, 172, 0.42), rgba(255, 255, 255, 0.42));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 24px 80px rgba(122, 87, 41, 0.12), 0 0 30px rgba(220, 175, 96, 0.26);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 1;
+}
+
+.ghostOne {
+  left: -8%;
+  bottom: 0%;
+  width: min(24vw, 350px);
+  height: min(30vw, 390px);
+  transform: rotate(16deg);
+}
+
+.ghostTwo {
+  left: 6%;
+  top: 12%;
+  width: min(18vw, 270px);
+  height: min(22vw, 310px);
+  transform: rotate(-17deg);
+}
+
+.ghostThree {
+  right: 7%;
+  top: 17%;
+  width: min(19vw, 290px);
+  height: min(23vw, 330px);
+  transform: rotate(18deg);
+}
+
+.ghostFour {
+  right: -6%;
+  bottom: 3%;
+  width: min(24vw, 350px);
+  height: min(29vw, 380px);
+  transform: rotate(-15deg);
 }
 
 .main {

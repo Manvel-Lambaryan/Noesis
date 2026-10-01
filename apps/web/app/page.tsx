@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { loadCategories } from "../lib/marketplace";
 import { onboardingRedirect } from "../lib/onboarding";
 import { SESSION_COOKIE } from "../lib/session-cookie";
 
@@ -12,6 +13,8 @@ export default async function HomePage() {
   if (target !== null) {
     redirect(target);
   }
+
+  const categories = (await loadCategories()).slice(0, 6);
 
   return (
     <main className="stack">
@@ -30,6 +33,22 @@ export default async function HomePage() {
         {" · "}
         <Link href="/login">Sign in</Link>
       </p>
+
+      <section className="stack">
+        <h2>Browse by category</h2>
+        {categories.length === 0 ? (
+          <p className="note">Categories will appear here once products are published.</p>
+        ) : (
+          <div className="catalog-grid">
+            {categories.map((category) => (
+              <Link key={category.id} href={`/marketplace/categories/${category.slug}`} className="card stack">
+                <h3>{category.name}</h3>
+                <p className="note">Explore this catalog section</p>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
     </main>
   );
 }
