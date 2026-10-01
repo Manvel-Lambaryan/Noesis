@@ -28,19 +28,14 @@ button.signIn {
   min-height: 42px;
   margin: 0;
   padding: 0 1.15rem 0 1.3rem;
-  border: 1px solid transparent;
+  border: 1px solid #c08552;
   border-radius: 999px;
-  background-color: #c08552;
-  background-image:
-    linear-gradient(180deg, rgba(243, 233, 220, 0.38), rgba(243, 233, 220, 0) 42%, rgba(94, 48, 35, 0.18)),
-    linear-gradient(180deg, #d4a574 0%, #c08552 52%, #895737 100%);
-  background-origin: border-box;
-  background-clip: padding-box, padding-box;
+  background: #c08552;
   color: #f3e9dc;
   font-size: 0.86rem;
   font-weight: 650;
   letter-spacing: 0.04em;
-  text-shadow: 0 1px 0 rgba(94, 48, 35, 0.2);
+  text-shadow: none;
   box-shadow: 0 8px 16px rgba(94, 48, 35, 0.22), inset 0 1px 0 rgba(243, 233, 220, 0.35);
   filter: none;
 }
