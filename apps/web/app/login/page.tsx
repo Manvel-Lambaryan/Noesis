@@ -1,11 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import { AuthForm } from "../components/auth-form";
+import { AuthScreen } from "../components/auth-screen";
 
 export default function LoginPage() {
   return (
-    <main className="stack">
+    <AuthScreen
+      links={[
+        { href: "/forgot-password", label: "Forgot password" },
+        { href: "/register", label: "Create an account" },
+      ]}
+    >
       <AuthForm
         action="/api/auth/login"
         title="Sign in"
@@ -17,11 +22,6 @@ export default function LoginPage() {
           { name: "password", label: "Password", type: "password", autoComplete: "current-password" },
         ]}
       />
-      <p className="note">
-        <Link href="/forgot-password">Forgot password</Link>
-        {" · "}
-        <Link href="/register">Create an account</Link>
-      </p>
-    </main>
+    </AuthScreen>
   );
 }
