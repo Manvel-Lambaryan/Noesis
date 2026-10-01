@@ -1,9 +1,14 @@
-import Link from "next/link";
 import { AuthForm } from "../components/auth-form";
+import { AuthScreen } from "../components/auth-screen";
 
 export default function RegisterPage() {
   return (
-    <main className="stack">
+    <AuthScreen
+      links={[
+        { href: "/login", label: "Already registered? Sign in" },
+        { href: "/dev/mailbox", label: "Local mailbox" },
+      ]}
+    >
       <AuthForm
         action="/api/auth/register"
         title="Create an account"
@@ -14,11 +19,6 @@ export default function RegisterPage() {
           { name: "password", label: "Password", type: "password", autoComplete: "new-password" },
         ]}
       />
-      <p className="note">
-        <Link href="/login">Already registered? Sign in</Link>
-        {" · "}
-        <Link href="/dev/mailbox">Local mailbox</Link>
-      </p>
-    </main>
+    </AuthScreen>
   );
 }

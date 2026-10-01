@@ -7,6 +7,7 @@ const SUPPORT: Record<OnboardingRole, string> = {
   developer: "Choose the kinds of products you want to find first. You can browse the rest of NOESIS at any time.",
   business: "Choose the business solutions you want to see first. You can browse the rest of NOESIS at any time.",
   creator: "Choose what you want to learn before you publish. This step does not open a seller account.",
+  guest: "Choose what you want to see first. Looking around does not create an account.",
 };
 
 export function GoalsStep({
@@ -34,14 +35,21 @@ export function GoalsStep({
   return (
     <>
       <div className={styles.intro}>
-        <h1 id="goals-heading">Your goals</h1>
+        <h1 id="goals-heading">Your <span className={styles.goldWord}>goals</span></h1>
         <p id="goals-support" className={styles.support}>{SUPPORT[role]}</p>
       </div>
       <form onSubmit={onSubmit}>
         <fieldset className={styles.group} aria-labelledby="goals-heading" aria-describedby="goals-support">
           <div className={choices.goals}>
-            {GOAL_COPY[role].map((goal) => (
-              <GoalCard key={goal.id} id={goal.id} label={goal.label} selected={goals.includes(goal.id)} onToggle={onToggle} />
+            {GOAL_COPY[role].map((goal, index) => (
+              <GoalCard
+                key={goal.id}
+                id={goal.id}
+                index={index + 1}
+                label={goal.label}
+                selected={goals.includes(goal.id)}
+                onToggle={onToggle}
+              />
             ))}
           </div>
         </fieldset>
@@ -56,11 +64,13 @@ export function GoalsStep({
 
 function GoalCard({
   id,
+  index,
   label,
   selected,
   onToggle,
 }: {
   id: string;
+  index: number;
   label: string;
   selected: boolean;
   onToggle: (goal: string) => void;
@@ -75,10 +85,11 @@ function GoalCard({
         checked={selected}
         onChange={() => onToggle(id)}
       />
-      <span>{label}</span>
+      <span className={choices.goalMark} aria-hidden="true">{String(index).padStart(2, "0")}</span>
+      <span className={choices.goalLabel}>{label}</span>
       <span className={choices.check} aria-hidden="true">
-        <svg width="12" height="12" viewBox="0 0 12 12">
-          <path d="M2.5 6.2 4.8 8.5 9.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        <svg width="13" height="13" viewBox="0 0 12 12">
+          <path d="M2.2 6.2 4.7 8.7 9.8 3.2" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>
     </label>
