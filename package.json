@@ -1,0 +1,29 @@
+{
+  "name": "noesis",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.14.0",
+  "scripts": {
+    "dev": "pnpm --filter @noesis/web dev",
+    "server": "pnpm --filter @noesis/api run build && node --env-file=.env apps/api/dist/main.js",
+    "build": "pnpm -r --filter \"!noesis\" run build",
+    "lint": "eslint .",
+    "test": "pnpm --filter @noesis/kernel --filter @noesis/boundaries --filter @noesis/api --filter @noesis/scan --filter @noesis/worker run build && node --test --test-reporter=spec \"packages/kernel/dist/**/*.test.js\" \"packages/boundaries/dist/**/*.test.js\" \"apps/api/dist/**/*.test.js\" \"apps/scan/dist/**/*.test.js\" \"apps/worker/dist/**/*.test.js\" && node --experimental-strip-types --test --test-reporter=spec \"apps/web/lib/*.test.ts\" && node scripts/secret-scan.mjs",
+    "prisma:generate": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
+    "postinstall": "prisma generate"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@next/eslint-plugin-next": "15.5.26",
+    "eslint": "^10.0.1",
+    "prisma": "^6.16.2",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.44.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.2"
+  }
+}
