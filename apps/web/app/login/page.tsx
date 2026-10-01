@@ -1,11 +1,12 @@
 "use client";
 
 import { AuthForm } from "../components/auth-form";
-import { AuthScreen } from "../components/auth-screen";
+import { AuthGate } from "../components/auth-gate";
 
 export default function LoginPage() {
   return (
-    <AuthScreen
+    <AuthGate
+      kicker="Welcome back"
       links={[
         { href: "/forgot-password", label: "Forgot password" },
         { href: "/register", label: "Create an account" },
@@ -22,6 +23,6 @@ export default function LoginPage() {
           { name: "password", label: "Password", type: "password", autoComplete: "current-password" },
         ]}
       />
-    </AuthScreen>
+    </AuthGate>
   );
 }

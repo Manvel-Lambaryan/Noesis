@@ -103,7 +103,7 @@ function block(
 
 function gold(): MeshPhysicalMaterial {
   return new MeshPhysicalMaterial({
-    color: 0xf3d48a,
+    color: 0xc08552,
     metalness: 1,
     roughness: 0.14,
     clearcoat: 0.55,
@@ -115,10 +115,10 @@ function gold(): MeshPhysicalMaterial {
 
 function glow(): MeshPhysicalMaterial {
   return new MeshPhysicalMaterial({
-    color: 0xfff4e2,
+    color: 0xf3e9dc,
     metalness: 0.02,
     roughness: 0.32,
-    emissive: 0xffe3b0,
+    emissive: 0xc08552,
     emissiveIntensity: 0.45,
   });
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { OnboardingState, OnboardingStep } from "../../lib/onboarding";
+import { AccountLine } from "./account-line";
 import chrome from "./chrome.module.css";
 import { GoalsStep } from "./goals-step";
 import { Monogram } from "./mark";
@@ -128,26 +129,5 @@ function Globe() {
       <circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" strokeWidth="1.4" />
       <path d="M2 9h14M9 2c2 2.2 2 11.8 0 14M9 2c-2 2.2-2 11.8 0 14" fill="none" stroke="currentColor" strokeWidth="1.2" />
     </svg>
-  );
-}
-
-function AccountLine({
-  signedIn,
-  pending,
-  onSignIn,
-}: {
-  signedIn: boolean;
-  pending: boolean;
-  onSignIn: () => void;
-}) {
-  return (
-    <div className={styles.footer}>
-      {signedIn ? <p>You&apos;re signed in.</p> : (
-        <p>
-          Already have an account?{" "}
-          <button className={styles.quiet} type="button" onClick={onSignIn} disabled={pending}>Sign in</button>
-        </p>
-      )}
-    </div>
   );
 }

@@ -1,9 +1,10 @@
 import { AuthForm } from "../components/auth-form";
-import { AuthScreen } from "../components/auth-screen";
+import { AuthGate } from "../components/auth-gate";
 
 export default function RegisterPage() {
   return (
-    <AuthScreen
+    <AuthGate
+      kicker="Join in"
       links={[
         { href: "/login", label: "Already registered? Sign in" },
         { href: "/dev/mailbox", label: "Local mailbox" },
@@ -19,6 +20,6 @@ export default function RegisterPage() {
           { name: "password", label: "Password", type: "password", autoComplete: "new-password" },
         ]}
       />
-    </AuthScreen>
+    </AuthGate>
   );
 }
