@@ -1,6 +1,18 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { onboardingRedirect } from "../lib/onboarding";
+import { SESSION_COOKIE } from "../lib/session-cookie";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  const target = onboardingRedirect("/", typeof token === "string" && token.length > 0);
+  if (target !== null) {
+    redirect(target);
+  }
+
   return (
     <main className="stack">
       <h1>NOESIS</h1>

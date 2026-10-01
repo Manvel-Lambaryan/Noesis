@@ -18,7 +18,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <header className="site-header">
           <div className="wrap">
-            <Link className="brand" href="/">NOESIS</Link>
+            <Link className="brand" href="/">
+              <img src="/brand/noesis-mark.png" width={32} height={32} alt="" />
+              NOESIS
+            </Link>
             <nav>
               <Link href="/marketplace">Marketplace</Link>
               <Link href="/login">Sign in</Link>

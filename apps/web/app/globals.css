@@ -43,7 +43,8 @@ a { color: var(--accent); }
   padding-bottom: 0.9rem;
 }
 
-.brand { font-weight: 700; text-decoration: none; color: var(--ink); }
+.brand { display: inline-flex; align-items: center; gap: 0.55rem; font-weight: 700; text-decoration: none; color: var(--ink); }
+.brand img { width: 32px; height: 32px; flex: none; }
 
 nav { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; }
 
@@ -113,4 +114,23 @@ button:disabled { opacity: 0.7; cursor: wait; }
     transform: translateX(-50%);
   }
   .catalog-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+body:has(.welcome-shell) {
+  background: #f6f1e8;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body:has(.welcome-shell) > .site-header {
+  display: none;
+}
+
+body:has(.welcome-shell) > .wrap {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
