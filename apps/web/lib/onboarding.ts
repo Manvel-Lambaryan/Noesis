@@ -3,7 +3,7 @@ export const ONBOARDING_VERSION = 1;
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 400;
 const MAX_COOKIE_LENGTH = 240;
 
-export const ONBOARDING_ROLES = ["developer", "business", "creator"] as const;
+export const ONBOARDING_ROLES = ["developer", "business", "creator", "guest"] as const;
 export type OnboardingRole = (typeof ONBOARDING_ROLES)[number];
 export type OnboardingStatus = "draft" | "complete" | "skipped";
 export type OnboardingStep = 1 | 2 | 3;
@@ -28,6 +28,10 @@ export const ROLE_COPY: Record<OnboardingRole, { title: string; description: str
     title: "Creator / Seller",
     description: "I want to publish and sell my own code, components or applications.",
   },
+  guest: {
+    title: "Guest",
+    description: "I want to look around the marketplace before I decide.",
+  },
 };
 
 export const GOAL_COPY: Record<OnboardingRole, readonly { id: string; label: string }[]> = {
@@ -48,6 +52,12 @@ export const GOAL_COPY: Record<OnboardingRole, readonly { id: string; label: str
     { id: "publishing", label: "Learn about publishing products." },
     { id: "seller-profile", label: "Prepare to create a seller profile." },
     { id: "creator-market", label: "Discover the creator marketplace." },
+  ],
+  guest: [
+    { id: "catalog", label: "Browse the full catalog." },
+    { id: "categories", label: "Explore categories." },
+    { id: "new", label: "See what's new." },
+    { id: "decide", label: "Look around before I choose a role." },
   ],
 };
 

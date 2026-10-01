@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { ONBOARDING_ROLES, ROLE_COPY, WELCOME_QUESTION, WELCOME_SUPPORT, type OnboardingRole } from "../../lib/onboarding";
-import { Chevron, RoleArt } from "./mark";
+import { Chevron } from "./mark";
+import { RoleArt } from "./role-stage";
 import choices from "./choices.module.css";
 import styles from "./welcome.module.css";
 
@@ -65,7 +66,7 @@ function RoleCard({
         checked={selected}
         onChange={() => onSelect(item)}
       />
-      <span className={choices.art}><RoleArt role={item} /></span>
+      <span className={choices.art}><RoleArt role={item} spinning={selected} /></span>
       <span className={choices.copy}>
         <span className={choices.cardTitle}>{copy.title}</span>
         <span className={choices.cardText}>{copy.description}</span>

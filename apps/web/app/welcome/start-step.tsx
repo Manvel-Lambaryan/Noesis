@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import type { FormEvent, ReactNode } from "react";
 import {
   GOAL_COPY,
   ROLE_COPY,
@@ -42,7 +42,7 @@ export function StartStep({
   return (
     <>
       <div className={styles.intro}>
-        <h1>Get started</h1>
+        <h1>Get <span className={styles.goldWord}>started</span></h1>
         <p className={styles.support}>Your choices personalize the first page we open. They do not limit the marketplace.</p>
       </div>
       <form onSubmit={onSubmit}>
@@ -66,15 +66,28 @@ function SelectionSummary({ state }: { state: OnboardingState }) {
   const chosen = GOAL_COPY[role].filter((goal) => state.goals.includes(goal.id));
   return (
     <div className={choices.summary}>
-      <h2>Your selection</h2>
-      <p>Role: {ROLE_COPY[role].title}</p>
-      {chosen.length > 0 ? (
-        <ul>
-          {chosen.map((goal) => <li key={goal.id}>{goal.label}</li>)}
-        </ul>
-      ) : <p>No interests selected.</p>}
-      <p>First stop: {destinationLabel(destinationFor(state))}</p>
+      <h2>Your <span className={styles.goldWord}>selection</span></h2>
+      <dl className={choices.facts}>
+        <Fact label="Role">{ROLE_COPY[role].title}</Fact>
+        <Fact label="Interests">
+          {chosen.length > 0 ? (
+            <ul className={choices.picks}>
+              {chosen.map((goal) => <li key={goal.id}>{goal.label}</li>)}
+            </ul>
+          ) : "No interests selected."}
+        </Fact>
+        <Fact label="First stop">{destinationLabel(destinationFor(state))}</Fact>
+      </dl>
       <p className={choices.note}>{permissionNote(role)}</p>
+    </div>
+  );
+}
+
+function Fact({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className={choices.fact}>
+      <dt>{label}</dt>
+      <dd>{children}</dd>
     </div>
   );
 }
@@ -110,6 +123,9 @@ function StepActions({
 function permissionNote(role: OnboardingState["role"]): string {
   if (role === "creator") {
     return "Choosing Creator / Seller does not grant seller access. You can prepare a profile later, and you can still buy from the full catalog.";
+  }
+  if (role === "guest") {
+    return "Choosing Guest does not create an account or change permissions. You can browse the full catalog and sign in whenever you want.";
   }
   return "This preference does not change account permissions. You can browse, buy, and later sell across the whole catalog.";
 }

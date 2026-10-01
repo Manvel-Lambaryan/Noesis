@@ -16,9 +16,9 @@
   color: var(--ink);
   color-scheme: light;
   background-color: #fbf7f2;
-  background-image: url("/brand/welcome-bg.jpg?v=clear");
+  background-image: url("/brand/welcome-bg.jpg?v=next");
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   font-family: "Segoe UI Variable Display", "Segoe UI", "Avenir Next", "Trebuchet MS", sans-serif;
   overflow: hidden;
@@ -46,14 +46,14 @@
   background: rgba(255, 252, 248, 0.94);
   border: 1px solid rgba(196, 161, 90, 0.45);
   max-height: 100%;
-  overflow: hidden;
+  overflow: auto;
   border-radius: 28px;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 30px 80px rgba(88, 64, 24, 0.08);
   padding: clamp(0.7rem, 1.6vh, 1.45rem) clamp(0.9rem, 2vw, 2rem) clamp(0.45rem, 1vh, 0.85rem);
   animation: enter 0.55s ease;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: safe center;
 }
 
 .track {
@@ -137,6 +137,7 @@
   border-radius: 12px;
   background: transparent;
   color: inherit;
+  box-shadow: none;
   cursor: pointer;
 }
 
@@ -198,9 +199,11 @@
   min-height: 44px;
   padding: 0 0.25rem;
   border: 0;
+  border-radius: 0;
   background: transparent;
   color: var(--muted);
   font-weight: 600;
+  box-shadow: none;
 }
 
 .back { margin-right: auto; }
@@ -208,19 +211,25 @@
 .quiet { color: var(--gold-deep); text-decoration: underline; text-underline-offset: 3px; }
 
 .primary {
-  min-height: 48px;
+  min-height: 46px;
   margin-left: auto;
-  padding: 0 1.35rem;
-  border: 0;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #8d6a32, #6b4d1b);
+  padding: 0 1.4rem;
+  border: 1px solid #6e5120;
+  border-radius: 8px;
+  background: #7c5a28;
   color: #fffaf3;
-  font-weight: 700;
-  box-shadow: 0 8px 20px rgba(124, 90, 40, 0.22);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  box-shadow: 0 1px 0 rgba(255, 248, 236, 0.28) inset;
 }
 
-.primary:hover { filter: brightness(1.06); }
-.primary:disabled, .back:disabled, .quiet:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+.primary:hover {
+  background: #6a4b1e;
+  box-shadow: 0 1px 0 rgba(255, 248, 236, 0.22) inset, 0 8px 18px rgba(90, 60, 20, 0.14);
+}
+
+.back:hover, .quiet:hover, .stepButton:hover { background: transparent; box-shadow: none; }
+.primary:disabled, .back:disabled, .quiet:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
 .footer {
   display: flex;
@@ -265,7 +274,7 @@
 
 @media (min-width: 1024px) {
   .panel {
-    width: min(100%, calc(100dvh - 6.5rem), 820px);
+    width: min(100%, calc(100dvh - 6.5rem), 980px);
     aspect-ratio: 1;
   }
 }

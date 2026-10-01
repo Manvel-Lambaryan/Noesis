@@ -21,6 +21,7 @@
   padding: clamp(0.7rem, 1.4vh, 1rem) clamp(0.75rem, 1.2vw, 1rem) clamp(0.55rem, 1vh, 0.85rem);
   text-align: left;
   font-weight: 400;
+  transform-style: preserve-3d;
 }
 
 .card:hover, .goal:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(90, 68, 30, 0.08); }
@@ -36,8 +37,9 @@
   outline-offset: 3px;
 }
 
-.art { display: grid; place-items: center; width: 100%; height: clamp(3.4rem, 10vh, 5.6rem); }
-.art svg { width: clamp(3.2rem, 9vh, 5.2rem); height: clamp(2.8rem, 8vh, 4.6rem); }
+.art { display: grid; place-items: center; width: 100%; height: clamp(4.2rem, 12vh, 6.4rem); }
+.stage { width: 100%; height: 100%; }
+.stage canvas { display: block; width: 100%; height: 100%; }
 .copy { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; width: 100%; }
 .cardTitle { font-size: 1.12rem; font-weight: 700; letter-spacing: -0.02em; }
 .cardText { color: var(--muted, #5e584f); font-size: clamp(0.78rem, 1.45vh, 0.9rem); line-height: 1.35; overflow-wrap: break-word; }
@@ -61,48 +63,139 @@
   color: #fffaf3;
 }
 
+.goals { gap: 0.8rem; }
+
 .goal {
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  min-height: 4.75rem;
-  padding: 0.95rem 1rem;
+  min-height: 5.15rem;
+  padding: 0.9rem 1rem 0.9rem 0.85rem;
   text-align: left;
   font-weight: 600;
+  letter-spacing: -0.02em;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent 42%) ,
+    linear-gradient(180deg, #fff 0%, #fffcf7 100%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 10px 24px rgba(90, 68, 30, 0.045);
+}
+
+.goal[data-selected="true"] {
+  border-color: #c9a35a;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 46%),
+    linear-gradient(165deg, #fff8ec 0%, #fff 68%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.85) inset, 0 16px 34px rgba(176, 137, 62, 0.18);
+}
+
+.goalMark {
+  width: 2.15rem;
+  height: 2.15rem;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ead9b4;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fffaf3 0%, #f4e4c4 100%);
+  color: var(--gold-deep, #7c5a28);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.goal[data-selected="true"] .goalMark {
+  border-color: transparent;
+  background: linear-gradient(180deg, #9a7433 0%, #6b4d1b 100%);
+  color: #fffaf3;
+  box-shadow: 0 6px 14px rgba(124, 90, 40, 0.24);
+}
+
+.goalLabel {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink, #1c1915);
+  font-size: 0.98rem;
+  line-height: 1.35;
 }
 
 .check {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.55rem;
+  height: 1.55rem;
   margin-left: auto;
   flex: none;
   display: grid;
   place-items: center;
-  border: 1.5px solid #e0d8cc;
+  border: 1.5px solid #e4d8c4;
   border-radius: 50%;
+  background: #fff;
   color: transparent;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .goal[data-selected="true"] .check {
-  border-color: #7a5822;
+  border-color: transparent;
   background: #7a5822;
   color: #fffaf3;
+  box-shadow: 0 6px 14px rgba(122, 88, 34, 0.22);
 }
 
 .summary {
   max-width: 36rem;
-  margin: 0 auto 0.5rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid #eee4d4;
-  border-radius: 18px;
-  background: #fffaf3;
+  margin: 0 auto 0.35rem;
+  padding: 1.05rem 1.1rem 0.9rem;
+  border: 1.5px solid #eadcc4;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), transparent 42%),
+    linear-gradient(180deg, #fff 0%, #fffaf3 100%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 14px 30px rgba(90, 68, 30, 0.06);
   text-align: left;
 }
 
-.summary h2 { margin: 0 0 0.45rem; font-size: 1rem; }
-.summary p, .note { margin: 0.35rem 0 0; color: var(--muted, #5e584f); }
-.summary ul { margin: 0.35rem 0 0; padding-left: 1.1rem; }
-.note { font-size: 0.92rem; }
+.summary h2 { margin: 0 0 0.75rem; font-size: 1.05rem; letter-spacing: -0.03em; }
+.facts { display: grid; gap: 0.5rem; margin: 0; }
+.fact {
+  display: grid;
+  grid-template-columns: 6.4rem minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: center;
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #f0e4d0;
+  border-radius: 14px;
+  background: rgba(255, 250, 243, 0.85);
+}
+.fact dt {
+  margin: 0;
+  color: var(--gold-deep, #7c5a28);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.fact dd { margin: 0; font-weight: 600; letter-spacing: -0.02em; line-height: 1.35; }
+.picks { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
+.picks li {
+  padding: 0.18rem 0.55rem;
+  border: 1px solid #ead9b4;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.note {
+  margin: 0.75rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid #f0e4d0;
+  color: var(--muted, #5e584f);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 720px) {
+  .fact { grid-template-columns: 1fr; gap: 0.15rem; align-items: start; }
+}
 
 @media (max-width: 1023px) {
   .card {
@@ -113,8 +206,7 @@
     width: 100%;
     padding: 0.55rem 0.75rem;
   }
-  .art { height: clamp(2.8rem, 8vh, 4.2rem); }
-  .art svg { width: clamp(2.6rem, 7vh, 3.8rem); height: clamp(2.3rem, 6.5vh, 3.4rem); }
+  .art { height: clamp(3.2rem, 9vh, 4.6rem); }
   .copy { align-items: flex-start; text-align: left; }
   .arrow { margin-top: 0; align-self: center; width: 2.1rem; height: 2.1rem; }
 }
@@ -124,15 +216,16 @@
 }
 
 @media (min-width: 1024px) {
-  .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+  .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
+  .cardTitle { font-size: 1rem; }
+  .cardText { font-size: 0.78rem; }
   .card { align-items: center; text-align: center; }
   .copy { align-items: center; }
   .arrow { align-self: center; margin-top: auto; }
 }
 
 @media (max-height: 760px) {
-  .art { height: 3.1rem; }
-  .art svg { width: 2.9rem; height: 2.6rem; }
+  .art { height: 3.4rem; }
   .card { padding: 0.55rem 0.7rem 0.45rem; }
 }
 
