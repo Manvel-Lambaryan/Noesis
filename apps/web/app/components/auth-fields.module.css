@@ -1,0 +1,46 @@
+.field {
+  position: relative;
+  display: block;
+}
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  width: 1.38rem;
+  height: 1.38rem;
+  color: #8d7360;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.eye {
+  position: absolute;
+  top: 50%;
+  right: 0.45rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #a08a74;
+  box-shadow: none;
+  transform: translateY(-50%);
+}
+
+.eye svg { width: 1.26rem; height: 1.26rem; }
+.eye:hover { filter: none; background: transparent; box-shadow: none; }

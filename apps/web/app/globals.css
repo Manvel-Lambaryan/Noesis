@@ -16,6 +16,8 @@
 
 * { box-sizing: border-box; }
 
+html { touch-action: pan-x pan-y; }
+
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
@@ -152,6 +154,11 @@ button:disabled:hover {
 body:has(.welcome-shell) {
   height: 100dvh;
   overflow: hidden;
+  background-color: #f4e6d4;
+  background-image: url("/brand/welcome-bg.jpg?v=interior");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 body:has(.welcome-shell) > .site-header {
@@ -169,6 +176,11 @@ body:has(.welcome-shell) > .wrap {
 
 body:has(.auth-shell) {
   min-height: 100dvh;
+  background-color: #e7d3b8;
+  background-image: url("/brand/auth-bg.jpg?v=interior");
+  background-position: 62% center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 body:has(.auth-shell) > .site-header { display: none; }

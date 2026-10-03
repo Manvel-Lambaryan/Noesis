@@ -1,24 +1,17 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-
-type Field = {
-  name: string;
-  label: string;
-  type: "email" | "password" | "text";
-  autoComplete: string;
-  defaultValue?: string;
-  minLength?: number;
-};
+import { AuthFields, type AuthField } from "./auth-fields";
 
 export function AuthForm(props: {
   action: string;
   method?: "POST" | "PUT";
   title: string;
   submitLabel: string;
-  fields: Field[];
+  fields: AuthField[];
   successMessage: string;
   onSuccess?: () => void;
+  appearance?: "plain" | "gate";
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
@@ -53,19 +46,7 @@ export function AuthForm(props: {
   return (
     <form onSubmit={(event) => void onSubmit(event)} className="card" aria-busy={status === "loading"}>
       <h1>{props.title}</h1>
-      {props.fields.map((field) => (
-        <label key={field.name}>
-          {field.label}
-          <input
-            name={field.name}
-            type={field.type}
-            autoComplete={field.autoComplete}
-            defaultValue={field.defaultValue}
-            required
-            minLength={field.minLength ?? (field.type === "password" ? 12 : undefined)}
-          />
-        </label>
-      ))}
+      <AuthFields fields={props.fields} gate={props.appearance === "gate"} />
       <button type="submit" disabled={status === "loading"}>
         {status === "loading" ? "Please wait" : props.submitLabel}
       </button>
