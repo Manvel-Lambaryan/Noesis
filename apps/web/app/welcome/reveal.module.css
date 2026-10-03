@@ -1,0 +1,10 @@
+.mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.mask > span {
+  display: block;
+  white-space: nowrap;
+}

@@ -1,5 +1,6 @@
 import type { FormEvent } from "react";
 import { GOAL_COPY, type OnboardingRole } from "../../lib/onboarding";
+import { display } from "./display-font";
 import choices from "./choices.module.css";
 import styles from "./welcome.module.css";
 
@@ -35,7 +36,7 @@ export function GoalsStep({
   return (
     <>
       <div className={styles.intro}>
-        <h1 id="goals-heading">Your <span className={styles.goldWord}>goals</span></h1>
+        <h1 id="goals-heading" className={display.className}>Your <span className={styles.goldWord}>goals</span></h1>
         <p id="goals-support" className={styles.support}>{SUPPORT[role]}</p>
       </div>
       <form onSubmit={onSubmit}>

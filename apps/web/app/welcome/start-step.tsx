@@ -8,6 +8,7 @@ import {
   type OnboardingExit,
   type OnboardingState,
 } from "../../lib/onboarding";
+import { display } from "./display-font";
 import styles from "./welcome.module.css";
 import choices from "./choices.module.css";
 
@@ -42,7 +43,7 @@ export function StartStep({
   return (
     <>
       <div className={styles.intro}>
-        <h1>Get <span className={styles.goldWord}>started</span></h1>
+        <h1 className={display.className}>Get <span className={styles.goldWord}>started</span></h1>
         <p className={styles.support}>Your choices personalize the first page we open. They do not limit the marketplace.</p>
       </div>
       <form onSubmit={onSubmit}>

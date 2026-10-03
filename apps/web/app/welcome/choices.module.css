@@ -1,13 +1,13 @@
-.cards, .goals { display: grid; gap: 0.9rem; min-width: 0; width: 100%; }
+.cards, .goals { display: grid; gap: 0.7rem; min-width: 0; width: 100%; }
 
 .card, .goal {
   position: relative;
   border: 1.5px solid var(--line, #e6d5c4);
-  border-radius: 22px;
+  border-radius: 16px;
   background: #fbf6ef;
   box-shadow: 0 1px 2px rgba(60, 40, 10, 0.03);
   cursor: pointer;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .card {
@@ -24,12 +24,12 @@
   transform-style: preserve-3d;
 }
 
-.card:hover, .goal:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(94, 48, 35, 0.08); }
+.card:hover, .goal:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(94, 48, 35, 0.06); }
 
 .card[data-selected="true"], .goal[data-selected="true"] {
   border-color: #c08552;
-  background: linear-gradient(180deg, #f3e9dc 0%, #fbf6ef 72%);
-  box-shadow: 0 12px 32px rgba(192, 133, 82, 0.16);
+  background: #f8f1e7;
+  box-shadow: none;
 }
 
 .card:has(input:focus-visible), .goal:has(input:focus-visible) {
@@ -37,9 +37,9 @@
   outline-offset: 3px;
 }
 
-.art { display: grid; place-items: center; width: 100%; height: clamp(4.2rem, 12vh, 6.4rem); }
+.art { display: flex; align-items: center; justify-content: center; width: 100%; height: 5.1rem; }
 .stage { width: 100%; height: 100%; }
-.stage canvas { display: block; width: 100%; height: 100%; }
+.stage canvas { display: block; width: 100%; height: 100%; object-fit: contain; }
 .copy { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; width: 100%; }
 .cardTitle { font-size: 1.12rem; font-weight: 700; letter-spacing: -0.02em; }
 .cardText { color: var(--muted, #895737); font-size: clamp(0.78rem, 1.45vh, 0.9rem); line-height: 1.35; overflow-wrap: break-word; }
@@ -197,7 +197,7 @@
   .fact { grid-template-columns: 1fr; gap: 0.15rem; align-items: start; }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 599px) {
   .card {
     display: grid;
     grid-template-columns: 4.5rem minmax(0, 1fr) auto;
@@ -206,7 +206,7 @@
     width: 100%;
     padding: 0.55rem 0.75rem;
   }
-  .art { height: clamp(3.2rem, 9vh, 4.6rem); }
+  .art { height: 3.6rem; }
   .copy { align-items: flex-start; text-align: left; }
   .arrow { margin-top: 0; align-self: center; width: 2.1rem; height: 2.1rem; }
 }
@@ -215,16 +215,20 @@
   .goals { grid-template-columns: 1fr 1fr; }
 }
 
-@media (min-width: 1024px) {
-  .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
-  .cardTitle { font-size: 1rem; }
-  .cardText { font-size: 0.78rem; }
+@media (min-width: 600px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
   .card { align-items: center; text-align: center; }
   .copy { align-items: center; }
   .arrow { align-self: center; margin-top: auto; }
 }
 
-@media (max-height: 760px) {
+@media (min-width: 1200px) {
+  .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .cardTitle { font-size: 0.98rem; }
+  .cardText { font-size: 0.76rem; }
+}
+
+@media (max-height: 760px) and (max-width: 899px) {
   .art { height: 3.4rem; }
   .card { padding: 0.55rem 0.7rem 0.45rem; }
 }

@@ -10,7 +10,7 @@
   border: 1px solid rgba(192, 133, 82, 0.72);
   border-radius: 999px;
   background: #fbf6ef;
-  box-shadow: 0 12px 28px rgba(94, 48, 35, 0.08);
+  box-shadow: none;
 }
 
 .prompt {

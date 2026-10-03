@@ -1,9 +1,15 @@
+"use client";
+
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { FormEvent } from "react";
 import { ONBOARDING_ROLES, ROLE_COPY, WELCOME_QUESTION, WELCOME_SUPPORT, type OnboardingRole } from "../../lib/onboarding";
+import { display } from "./display-font";
 import { Chevron } from "./mark";
 import { RoleArt } from "./role-stage";
 import choices from "./choices.module.css";
 import styles from "./welcome.module.css";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function RoleStep({
   role,
@@ -26,7 +32,7 @@ export function RoleStep({
   return (
     <>
       <div className={styles.intro}>
-        <h1>Welcome to <span className={styles.goldWord}>NOESIS</span></h1>
+        <h1 className={display.className}>Welcome to <span className={styles.goldWord}>NOESIS</span></h1>
         <h2 id="role-heading" className={styles.question}>{WELCOME_QUESTION}</h2>
         <p id="role-support" className={styles.support}>{WELCOME_SUPPORT}</p>
       </div>
@@ -38,11 +44,28 @@ export function RoleStep({
             ))}
           </div>
         </fieldset>
-        <div className={styles.actions} data-ready={role !== null}>
-          <button className={styles.primary} type="submit" disabled={role === null || pending}>Continue</button>
-        </div>
+        <AnimatePresence initial={false}>
+          {role !== null ? <ContinueAction key="continue" pending={pending} /> : null}
+        </AnimatePresence>
       </form>
     </>
+  );
+}
+
+function ContinueAction({ pending }: { pending: boolean }) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      className={styles.actions}
+      initial={reduce ? false : { opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 4 }}
+      transition={{ duration: 0.28, ease: EASE }}
+    >
+      <button className={styles.primary} type="submit" disabled={pending}>
+        Continue <Chevron />
+      </button>
+    </motion.div>
   );
 }
 
@@ -57,7 +80,7 @@ function RoleCard({
 }) {
   const copy = ROLE_COPY[item];
   return (
-    <label className={choices.card} data-selected={selected}>
+    <label className={choices.card} data-selected={selected} data-reveal="card">
       <input
         className={styles.srOnly}
         type="radio"

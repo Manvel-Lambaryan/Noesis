@@ -5,28 +5,34 @@ import type { OnboardingState, OnboardingStep } from "../../lib/onboarding";
 import { AccountLine } from "./account-line";
 import chrome from "./chrome.module.css";
 import { GoalsStep } from "./goals-step";
+import { Hero } from "./hero";
 import { Monogram } from "./mark";
 import { Progress } from "./progress";
 import { RoleStep } from "./role-step";
 import { StartStep } from "./start-step";
 import { useOnboardingDraft, useOnboardingFinish } from "./use-onboarding";
+import { useStageReveal } from "./use-stage-reveal";
 import styles from "./welcome.module.css";
 
 export function WelcomeFlow({ initial, signedIn }: { initial: OnboardingState; signedIn: boolean }) {
   const draft = useOnboardingDraft(initial);
   const finish = useOnboardingFinish(draft.state);
   const shown: OnboardingStep = draft.state.role === null ? 1 : draft.state.step;
+  const shellRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  useStageReveal(shellRef);
   useStepFocus(panelRef, shown);
 
   return (
-    <div className={`${styles.shell} welcome-shell`}>
-      <header className={chrome.header}>
+    <div ref={shellRef} className={`${styles.shell} welcome-shell`}>
+      <header className={chrome.header} data-reveal="header">
         <Brand />
+        <Wordmark />
         <LanguageSelect />
       </header>
       <main className={styles.main}>
-        <section className={styles.panel} aria-busy={finish.pending}>
+        <Hero />
+        <section className={styles.panel} data-reveal="panel" aria-busy={finish.pending}>
           <Progress step={shown} onBack={draft.move} />
           <p className={styles.srOnly} aria-live="polite">{stepLive(shown)}</p>
           <div key={shown} ref={panelRef} tabIndex={-1} className={styles.stepBody}>
@@ -97,6 +103,18 @@ function stepLive(step: OnboardingStep): string {
     return "Step 2 of 3: Your goals";
   }
   return "Step 3 of 3: Get started";
+}
+
+function Wordmark() {
+  return (
+    <nav className={chrome.nav} aria-label="NOESIS">
+      <span>Build</span>
+      <span className={chrome.navRule} aria-hidden="true" />
+      <span>Share</span>
+      <span className={chrome.navRule} aria-hidden="true" />
+      <span>Grow</span>
+    </nav>
+  );
 }
 
 function Brand() {
