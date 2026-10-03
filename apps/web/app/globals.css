@@ -173,6 +173,22 @@ body:has(.welcome-shell) > .wrap {
   padding: 0;
 }
 
+body:has(.welcome-stage) {
+  background-color: #3a2218;
+  background-image: none;
+}
+
+body:has(.welcome-stage[data-open="false"]) {
+  overflow: hidden;
+}
+
+body:has(.welcome-stage[data-home]) > .site-header {
+  display: block;
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 30;
+}
+
 body:has(.auth-shell) {
   min-height: 100dvh;
   background-color: #e7d3b8;

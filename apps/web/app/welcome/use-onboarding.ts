@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import type { OnboardingExit, OnboardingRole, OnboardingState, OnboardingStep } from "../../lib/onboarding";
-import { finishOnboarding, leaveOnboarding, saveOnboardingDraft } from "./actions";
+import { leaveOnboarding, saveOnboardingDraft } from "./actions";
 
 export function useOnboardingDraft(initial: OnboardingState) {
   const [state, setState] = useState(initial);
@@ -24,42 +24,17 @@ export function useOnboardingDraft(initial: OnboardingState) {
       });
   }
 
-  function selectRole(role: OnboardingRole): void {
-    const goals = state.role === role ? state.goals : [];
-    persist({ ...state, role, goals, step: 1 });
+  function selectRole(role: OnboardingRole, step: OnboardingStep = 1): void {
+    const current = latest.current;
+    const goals = current.role === role ? current.goals : [];
+    persist({ ...current, role, goals, step });
   }
 
-  function toggleGoal(goal: string): void {
-    if (state.role === null) {
-      return;
-    }
-    const goals = state.goals.includes(goal)
-      ? state.goals.filter((item) => item !== goal)
-      : [...state.goals, goal];
-    persist({ ...state, goals });
-  }
-
-  function move(step: OnboardingStep): void {
-    if (step > 1 && state.role === null) {
-      return;
-    }
-    persist({ ...state, step });
-  }
-
-  return { state, saveError, selectRole, toggleGoal, move };
+  return { state, saveError, selectRole };
 }
 
 export function useOnboardingFinish(state: OnboardingState) {
   const [pending, startTransition] = useTransition();
-
-  function explore(): void {
-    if (state.role === null) {
-      return;
-    }
-    startTransition(() => {
-      void finishOnboarding({ ...state, status: "complete", step: 3 });
-    });
-  }
 
   function exitTo(href: OnboardingExit): void {
     startTransition(() => {
@@ -67,5 +42,5 @@ export function useOnboardingFinish(state: OnboardingState) {
     });
   }
 
-  return { pending, explore, exitTo };
+  return { pending, exitTo };
 }

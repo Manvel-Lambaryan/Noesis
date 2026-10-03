@@ -31,7 +31,7 @@ describe("onboarding marker", () => {
     const state = {
       ...initialOnboardingState(),
       step: 2 as const,
-      role: "creator" as const,
+      role: "developer" as const,
       goals: ["selling", "publishing"],
     };
     assert.equal(parseOnboarding(serializeOnboarding(state)).status, "draft");
@@ -54,7 +54,7 @@ describe("onboarding marker", () => {
       status: "draft",
       step: 1,
       role: "creator",
-      goals: ["selling", "javascript"],
+      goals: ["selling", "crm"],
       permissions: ["seller"],
       roles: ["seller"],
     });
@@ -62,9 +62,10 @@ describe("onboarding marker", () => {
       version: 1,
       status: "draft",
       step: 1,
-      role: "creator",
+      role: "developer",
       goals: ["selling"],
     });
+    assert.equal(parseOnboarding("v1|draft|2|creator|selling,publishing").role, "developer");
   });
 
   it("rejects malformed input", () => {
@@ -88,14 +89,13 @@ describe("onboarding routing", () => {
     assert.equal(destinationFor({ ...developer, goals: ["applications"] }), "/marketplace/business-apps");
     assert.equal(destinationFor({ ...developer, goals: [] }), "/marketplace/javascript");
     assert.equal(destinationFor({ ...developer, role: "business", goals: ["crm"] }), "/marketplace/business-apps");
-    assert.equal(destinationFor({ ...developer, role: "creator", goals: ["selling", "seller-profile"] }), "/marketplace");
+    assert.equal(destinationFor({ ...developer, goals: ["selling", "seller-profile"] }), "/marketplace/javascript");
     assert.equal(destinationFor({ ...developer, role: "guest", goals: ["catalog", "decide"] }), "/marketplace");
     assert.equal(destinationFor(initialOnboardingState()), "/marketplace");
     assert.equal(secondaryAction("guest", false)?.href, "/login");
     assert.equal(secondaryAction("guest", true), null);
-    assert.equal(secondaryAction("creator", true)?.href, "/account/seller");
-    assert.equal(secondaryAction("creator", false)?.href, "/register");
-    assert.equal(secondaryAction("developer", true), null);
+    assert.equal(secondaryAction("developer", true)?.href, "/account/seller");
+    assert.equal(secondaryAction("developer", false)?.href, "/register");
     assert.equal(secondaryAction("business", false)?.href, "/login");
     for (const role of ONBOARDING_ROLES) {
       for (const signedIn of [true, false]) {
@@ -114,16 +114,14 @@ describe("onboarding copy", () => {
   it("keeps the role and goal sentences from the welcome brief", () => {
     assert.equal(WELCOME_QUESTION, "What best describes you?");
     assert.match(WELCOME_SUPPORT, /personalize your experience/);
-    assert.equal(ROLE_COPY.developer.description, "I want to buy ready-to-use code, components and templates to build faster.");
+    assert.equal(ROLE_COPY.developer.description, "I want to buy ready-to-use code and publish my own components, templates, and applications.");
     assert.equal(ROLE_COPY.business.description, "I want to find complete business applications and solutions for my company.");
-    assert.equal(ROLE_COPY.creator.description, "I want to publish and sell my own code, components or applications.");
     assert.equal(ROLE_COPY.guest.description, "I want to look around the marketplace before I decide.");
-    assert.equal(GOAL_COPY.developer.length, 4);
+    assert.equal(GOAL_COPY.developer.length, 8);
     assert.equal(GOAL_COPY.business.length, 4);
-    assert.equal(GOAL_COPY.creator.length, 4);
     assert.equal(GOAL_COPY.guest.length, 4);
     assert.equal(GOAL_COPY.guest[3]?.label, "Look around before I choose a role.");
-    assert.equal(GOAL_COPY.creator[2]?.label, "Prepare to create a seller profile.");
+    assert.equal(GOAL_COPY.developer[6]?.label, "Prepare to create a seller profile.");
   });
 
   it("stores a persistent httpOnly preference cookie", () => {
