@@ -19,7 +19,7 @@ export default function LoginPage() {
         title="Sign in"
         submitLabel="Sign in →"
         successMessage="Signed in."
-        onSuccess={() => { window.location.assign("/account"); }}
+        onSuccess={() => { window.location.assign("/opening"); }}
         fields={[
           { name: "email", label: "Email", placeholder: "Enter your email", type: "email", autoComplete: "email" },
           { name: "password", label: "Password", placeholder: "Enter your password", type: "password", autoComplete: "current-password" },

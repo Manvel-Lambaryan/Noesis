@@ -20,6 +20,11 @@ export function AuthForm(props: {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const body = Object.fromEntries(form.entries());
+    if (typeof body.password === "string" && typeof body.confirmPassword === "string" && body.password !== body.confirmPassword) {
+      setStatus("error");
+      setMessage("Passwords do not match.");
+      return;
+    }
     setStatus("loading");
     setMessage("");
     try {

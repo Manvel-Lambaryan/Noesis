@@ -1,3 +1,13 @@
+.fit {
+  zoom: 0.8;
+  min-height: 125dvh;
+  grid-template-columns: minmax(0, 1fr) minmax(24rem, 56rem);
+}
+
+.fit .panel { width: min(100%, 51.5rem); }
+
+.fit .surface { width: min(100% - 3rem, 33rem); }
+
 .stage {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(24rem, 50.4rem);
@@ -139,6 +149,20 @@
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
+}
+
+.form :global(.name-row) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.form :global(.phone-row input) {
+  width: auto;
+  flex: 1;
+  min-width: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .form :global(input) {

@@ -27,16 +27,33 @@ export class AuthRateLimit {
   }
 
   private async assertUnder(key: string, limit: number): Promise<void> {
-    const current = Number((await this.redis.get(key)) ?? "0");
-    if (current >= limit) {
+    const current = await this.count(key);
+    if (current !== null && current >= limit) {
       throw new AuthFailure(429, "rate_limited", "Too many attempts. Try again later.");
     }
   }
 
+  private async count(key: string): Promise<number | null> {
+    try {
+      return Number((await this.redis.get(key)) ?? "0");
+    } catch (error) {
+      if (limiterUnavailable(error)) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
   private async record(key: string, windowSeconds: number): Promise<void> {
-    const count = await this.redis.incr(key);
-    if (count === 1 || (await this.redis.ttl(key)) < 0) {
-      await this.redis.expire(key, windowSeconds);
+    try {
+      const count = await this.redis.incr(key);
+      if (count === 1 || (await this.redis.ttl(key)) < 0) {
+        await this.redis.expire(key, windowSeconds);
+      }
+    } catch (error) {
+      if (!limiterUnavailable(error)) {
+        throw error;
+      }
     }
   }
 
@@ -56,6 +73,18 @@ function ipKey(kind: string, ip: string): string {
 
 function sha(value: string): string {
   return createHash("sha256").update(value).digest("hex");
+}
+
+function limiterUnavailable(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) {
+    return false;
+  }
+  const code = "code" in error ? error.code : undefined;
+  if (code === "ECONNREFUSED" || code === "ENOTFOUND" || code === "ECONNRESET" || code === "ETIMEDOUT") {
+    return true;
+  }
+  const message = "message" in error && typeof error.message === "string" ? error.message : "";
+  return message.includes("max retries") || message.includes("Connection is closed") || message.includes("ECONNREFUSED");
 }
 
 function max(name: string, fallback: number): number {

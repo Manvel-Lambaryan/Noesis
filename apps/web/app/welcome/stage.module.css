@@ -10,9 +10,6 @@
   font-family: "Segoe UI Variable Display", "Segoe UI", "Avenir Next", sans-serif;
 }
 
-.journey[data-open="false"] { overflow: hidden; touch-action: none; overscroll-behavior: none; }
-.journey[data-home] { overflow: hidden; scroll-snap-type: none; }
-
 .frame { height: 100cqh; padding: 0; scroll-snap-align: start; scroll-snap-stop: always; }
 
 .board {

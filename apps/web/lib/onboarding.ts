@@ -1,4 +1,6 @@
 export const ONBOARDING_COOKIE = "noesis_onboarding";
+export const ENTERED_COOKIE = "noesis_entered";
+export const JOINED_COOKIE = "noesis_joined";
 export const ONBOARDING_VERSION = 1;
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 400;
 const MAX_COOKIE_LENGTH = 240;
@@ -73,9 +75,16 @@ export function isOnboardingFinished(state: OnboardingState): boolean {
   return state.status === "complete" || state.status === "skipped";
 }
 
-export function onboardingRedirect(pathname: "/" | "/welcome", registered: boolean): "/" | "/welcome" | null {
-  if (registered) {
-    return pathname === "/welcome" ? "/" : null;
+export type VisitFlags = { registered: boolean; entered: boolean; joined: boolean };
+export type EntryPath = "/" | "/welcome" | "/opening" | "/register" | "/login";
+
+export function onboardingRedirect(pathname: "/" | "/welcome" | "/opening", flags: VisitFlags): EntryPath | null {
+  if (pathname === "/opening") {
+    if (flags.entered) return "/";
+    return flags.registered ? null : "/login";
+  }
+  if (flags.registered || flags.entered) {
+    return pathname === "/" ? null : "/";
   }
   return pathname === "/" ? "/welcome" : null;
 }

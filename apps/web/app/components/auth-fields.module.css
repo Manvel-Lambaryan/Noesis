@@ -3,6 +3,18 @@
   display: block;
 }
 
+.names {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.phone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .hidden {
   position: absolute;
   width: 1px;

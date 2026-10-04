@@ -1,5 +1,4 @@
 import { WELCOME_SUPPORT, type OnboardingRole } from "../../lib/onboarding";
-import { display } from "./display-font";
 import { Chevron } from "./mark";
 import { RoleGlyph, UserMark } from "./stage-icons";
 import cards from "./stage-cards.module.css";
@@ -9,20 +8,18 @@ export function StageNotes({
   title,
   body,
   pending,
-  ready,
   onContinue,
 }: {
   role: OnboardingRole;
   title: string;
   body: string;
   pending: boolean;
-  ready: boolean;
   onContinue: () => void;
 }) {
   return (
     <div className={cards.row}>
       <RolePanel role={role} title={title} body={body} />
-      {ready ? <ScrollCue /> : <ContinueCard title={title} pending={pending} onContinue={onContinue} />}
+      <ContinueCard title={title} pending={pending} onContinue={onContinue} />
     </div>
   );
 }
@@ -54,15 +51,3 @@ function ContinueCard({ title, pending, onContinue }: { title: string; pending: 
   );
 }
 
-function ScrollCue() {
-  return (
-    <aside className={`${cards.panel} ${cards.wide} ${cards.cue}`} role="status">
-      <span className={cards.track} aria-hidden="true"><span className={cards.pearl} /></span>
-      <div className={cards.cueCopy}>
-        <p className={cards.kicker}>The home page</p>
-        <h2 className={display.className}>Scroll down</h2>
-      </div>
-      <span className={`${cards.whisper} ${display.className}`} aria-hidden="true">↓</span>
-    </aside>
-  );
-}

@@ -77,11 +77,17 @@ describe("onboarding marker", () => {
 });
 
 describe("onboarding routing", () => {
-  it("shows welcome until the visitor is registered", () => {
-    assert.equal(onboardingRedirect("/", false), "/welcome");
-    assert.equal(onboardingRedirect("/welcome", false), null);
-    assert.equal(onboardingRedirect("/", true), null);
-    assert.equal(onboardingRedirect("/welcome", true), "/");
+  it("starts at role choice, then sign-in, then the film, then home", () => {
+    const fresh = { registered: false, entered: false, joined: false };
+    assert.equal(onboardingRedirect("/", fresh), "/welcome");
+    assert.equal(onboardingRedirect("/welcome", fresh), null);
+    assert.equal(onboardingRedirect("/opening", fresh), "/login");
+    assert.equal(onboardingRedirect("/opening", { ...fresh, joined: true }), "/login");
+    assert.equal(onboardingRedirect("/opening", { ...fresh, registered: true }), null);
+    assert.equal(onboardingRedirect("/", { ...fresh, entered: true }), null);
+    assert.equal(onboardingRedirect("/welcome", { ...fresh, registered: true }), "/");
+    assert.equal(onboardingRedirect("/opening", { ...fresh, entered: true }), "/");
+    assert.equal(onboardingRedirect("/opening", { registered: true, entered: true, joined: false }), "/");
   });
 
   it("personalizes the first marketplace stop without granting seller access", () => {

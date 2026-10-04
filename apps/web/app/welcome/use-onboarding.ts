@@ -36,9 +36,9 @@ export function useOnboardingDraft(initial: OnboardingState) {
 export function useOnboardingFinish(state: OnboardingState) {
   const [pending, startTransition] = useTransition();
 
-  function exitTo(href: OnboardingExit): void {
+  function exitTo(href: OnboardingExit, next: OnboardingState = state): void {
     startTransition(() => {
-      void leaveOnboarding({ ...state, status: "draft" }, href);
+      void leaveOnboarding({ ...next, status: "draft" }, href);
     });
   }
 

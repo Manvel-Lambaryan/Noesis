@@ -10,7 +10,7 @@ import { NOTIFICATIONS_PORT, type NotificationsPort } from "../notifications/not
 import { requirePermission } from "../../auth/authorization";
 import type { IamAccess, LoginResult } from "./iam.public-port";
 import { IAM_REPOSITORY, type IamRepository, type TokenPurpose, type UserRecord } from "./iam.repository";
-import { parseEmail, parsePassword } from "../../auth/password-policy";
+import { assertConfirmed, parseEmail, parsePassword, parsePersonName, parsePhone } from "../../auth/password-policy";
 
 const INVALID_LINK = "This link is invalid or has already been used.";
 
@@ -23,11 +23,31 @@ export class IamService implements IamAccess {
     @Inject(API_LOGGER) private readonly logger: Logger,
   ) {}
 
-  async register(input: { email: unknown; password: unknown; correlationId: string }): Promise<{ userId: string }> {
+  async register(input: {
+    email: unknown;
+    password: unknown;
+    confirmPassword: unknown;
+    givenName: unknown;
+    familyName: unknown;
+    phone: unknown;
+    dial: unknown;
+    correlationId: string;
+  }): Promise<{ userId: string }> {
     const email = parseEmail(input.email);
     const password = parsePassword(input.password, email);
+    assertConfirmed(password, input.confirmPassword);
+    const givenName = parsePersonName(input.givenName, "first");
+    const familyName = parsePersonName(input.familyName, "last");
+    const phone = parsePhone(input.phone, input.dial);
     const userId = crypto.randomUUID();
-    await this.users.createUser({ id: userId, email, passwordHash: await hashPassword(password) });
+    await this.users.createUser({
+      id: userId,
+      email,
+      passwordHash: await hashPassword(password),
+      givenName,
+      familyName,
+      phone,
+    });
     await this.issue(userId, email, "email_verification");
     this.logger.info({ message: "register", correlationId: input.correlationId, status: "ok" });
     return { userId };

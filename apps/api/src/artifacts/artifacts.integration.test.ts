@@ -189,8 +189,20 @@ async function seller(baseUrl: string, email: string) {
   return session;
 }
 
+function signup(email: string, password: string): Record<string, string> {
+  return {
+    email,
+    password,
+    confirmPassword: password,
+    givenName: "Nora",
+    familyName: "Petrosyan",
+    dial: "374",
+    phone: `${Math.floor(10_000_000 + Math.random() * 90_000_000)}`,
+  };
+}
+
 async function account(baseUrl: string, email: string) {
-  assert.equal((await api(baseUrl, "POST", "/v1/auth/register", { email, password: "correct-horse-1" })).status, 201);
+  assert.equal((await api(baseUrl, "POST", "/v1/auth/register", signup(email, "correct-horse-1"))).status, 201);
   const session = await api(baseUrl, "POST", "/v1/auth/login", { email, password: "correct-horse-1" });
   assert.equal(session.status, 200);
   return { headers: { "x-session-id": text(session.body, "sessionToken") } };

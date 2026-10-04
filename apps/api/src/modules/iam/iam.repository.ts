@@ -27,7 +27,14 @@ export type NewSession = {
 };
 
 export interface IamRepository {
-  createUser(input: { id: string; email: string; passwordHash: string }): Promise<void>;
+  createUser(input: {
+    id: string;
+    email: string;
+    passwordHash: string;
+    givenName: string;
+    familyName: string;
+    phone: string;
+  }): Promise<void>;
   findUserByEmail(email: string): Promise<UserRecord | null>;
   findUserById(id: string): Promise<UserRecord | null>;
   assignRole(userId: string, role: RoleName): Promise<void>;

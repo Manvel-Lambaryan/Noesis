@@ -18,24 +18,18 @@ const SLIDE = {
 };
 
 export function RoleStep({
-  stageRef,
   role,
   pending,
   signedIn,
   saveError,
-  locked,
-  ready,
   onSelect,
   onContinue,
   onSignIn,
 }: {
-  stageRef: { current: HTMLDivElement | null };
   role: OnboardingRole | null;
   pending: boolean;
   signedIn: boolean;
   saveError: string;
-  locked: boolean;
-  ready: boolean;
   onSelect: SelectRole;
   onContinue: (role: OnboardingRole) => void;
   onSignIn: () => void;
@@ -43,16 +37,16 @@ export function RoleStep({
   const index = focusIndex(role);
   const item = ONBOARDING_ROLES[index] ?? "developer";
   const copy = ROLE_COPY[item];
-  useRoleKeys(index, pending, locked, onSelect);
+  useRoleKeys(index, pending, onSelect);
 
   return (
-    <div ref={stageRef} className={styles.frame} inert={locked} aria-hidden={locked}>
+    <div className={styles.frame}>
       <article className={styles.board} aria-labelledby="stage-title">
         <StageScene />
         <Brand />
         <MenuMark />
         <AnimatePresence>
-          <StageSlide key={item} item={item} title={copy.title} body={copy.description} pending={pending} ready={ready} onContinue={onContinue} />
+          <StageSlide key={item} item={item} title={copy.title} body={copy.description} pending={pending} onContinue={onContinue} />
         </AnimatePresence>
         <NextRole index={index} pending={pending} onSelect={onSelect} />
         <Meter index={index} />
@@ -64,12 +58,12 @@ export function RoleStep({
   );
 }
 
-function useRoleKeys(index: number, pending: boolean, locked: boolean, onSelect: SelectRole): void {
+function useRoleKeys(index: number, pending: boolean, onSelect: SelectRole): void {
   const select = useRef(onSelect);
   select.current = onSelect;
   useEffect(() => {
     function onKey(event: KeyboardEvent): void {
-      if (pending || locked || (event.key !== "ArrowRight" && event.key !== "ArrowLeft")) return;
+      if (pending || (event.key !== "ArrowRight" && event.key !== "ArrowLeft")) return;
       event.preventDefault();
       const count = ONBOARDING_ROLES.length;
       const delta = event.key === "ArrowRight" ? 1 : -1;
@@ -78,7 +72,7 @@ function useRoleKeys(index: number, pending: boolean, locked: boolean, onSelect:
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [index, locked, pending]);
+  }, [index, pending]);
 }
 
 function focusIndex(role: OnboardingRole | null): number {
@@ -98,14 +92,12 @@ function StageSlide({
   title,
   body,
   pending,
-  ready,
   onContinue,
 }: {
   item: OnboardingRole;
   title: string;
   body: string;
   pending: boolean;
-  ready: boolean;
   onContinue: (role: OnboardingRole) => void;
 }) {
   const reduce = useReducedMotion();
@@ -121,7 +113,7 @@ function StageSlide({
       <StageIntro lines={lines} eyebrow={ROLE_EYEBROW[item]} body={body} />
       <StageGhost lines={lines} />
       <StagePortrait role={item} />
-      <StageNotes role={item} title={title} body={body} pending={pending} ready={ready} onContinue={() => onContinue(item)} />
+      <StageNotes role={item} title={title} body={body} pending={pending} onContinue={() => onContinue(item)} />
     </motion.div>
   );
 }

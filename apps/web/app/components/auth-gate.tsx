@@ -16,18 +16,20 @@ export function AuthGate({
   kicker,
   accent,
   links,
+  fit = false,
   children,
 }: {
   kicker: string;
   accent: string;
   links: GateLink[];
+  fit?: boolean;
   children: ReactNode;
 }) {
   const reduce = useReducedMotion();
   const hidden = reduce ? false : { opacity: 0, y: 16 };
 
   return (
-    <div className={`${styles.stage} ${display.className} auth-shell`}>
+    <div className={`${styles.stage}${fit ? ` ${styles.fit} auth-fit` : ""} ${display.className} auth-shell`}>
       <motion.aside
         className={styles.aside}
         initial={hidden}
