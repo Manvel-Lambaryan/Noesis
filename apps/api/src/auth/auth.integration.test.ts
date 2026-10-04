@@ -31,7 +31,7 @@ describe("identity", () => {
 
   it("registers, verifies once, and applies the purchase gate", async () => {
     const email = uniqueEmail("buyer");
-    const created = await api(baseUrl, "POST", "/v1/auth/register", { email, password: PASSWORD });
+    const created = await api(baseUrl, "POST", "/v1/auth/register", registration(email, PASSWORD));
     assert.equal(created.status, 201);
     const sessionBefore = await sessionOf(email, PASSWORD);
     assert.equal(gate(sessionBefore, "purchase"), "email_unverified");
@@ -47,7 +47,7 @@ describe("identity", () => {
   it("rejects invalid credentials without a different message", async () => {
     const email = uniqueEmail("missing");
     const unknown = await api(baseUrl, "POST", "/v1/auth/login", { email, password: PASSWORD });
-    const known = await api(baseUrl, "POST", "/v1/auth/register", { email, password: PASSWORD });
+    const known = await api(baseUrl, "POST", "/v1/auth/register", registration(email, PASSWORD));
     assert.equal(known.status, 201);
     const wrong = await api(baseUrl, "POST", "/v1/auth/login", { email, password: "not-the-password" });
     assert.equal(unknown.status, 401);
@@ -57,7 +57,7 @@ describe("identity", () => {
 
   it("resets a password once and revokes the old session", async () => {
     const email = uniqueEmail("reset");
-    await api(baseUrl, "POST", "/v1/auth/register", { email, password: PASSWORD });
+    await api(baseUrl, "POST", "/v1/auth/register", registration(email, PASSWORD));
     const first = await login(email, PASSWORD);
     const token = first.sessionToken;
     assert.equal((await api(baseUrl, "POST", "/v1/auth/password-resets", { email })).status, 202);
@@ -71,7 +71,7 @@ describe("identity", () => {
 
   it("expires and revokes sessions", async () => {
     const email = uniqueEmail("session");
-    await api(baseUrl, "POST", "/v1/auth/register", { email, password: PASSWORD });
+    await api(baseUrl, "POST", "/v1/auth/register", registration(email, PASSWORD));
     const opened = await login(email, PASSWORD);
     await prisma.session.updateMany({
       where: { tokenHash: hashToken(opened.sessionToken) },
@@ -153,6 +153,18 @@ function uniqueEmail(label: string): string {
   return `${label}-${crypto.randomUUID()}@example.com`;
 }
 
+function registration(email: string, password: string): Record<string, string> {
+  return {
+    email,
+    password,
+    confirmPassword: password,
+    givenName: "Nora",
+    familyName: "Petrosyan",
+    dial: "374",
+    phone: `${Math.floor(10_000_000 + Math.random() * 90_000_000)}`,
+  };
+}
+
 async function login(email: string, password: string): Promise<{ status: number; sessionToken: string; userId: string; email: string }> {
   const result = await api(baseUrl, "POST", "/v1/auth/login", { email, password });
   const actor = isRecord(result.body) && isRecord(result.body.actor) ? result.body.actor : {};
@@ -176,7 +188,7 @@ async function latestToken(purpose: string): Promise<string> {
 
 async function account(label: string): Promise<{ userId: string; email: string; sessionToken: string }> {
   const email = uniqueEmail(label);
-  const created = await api(baseUrl, "POST", "/v1/auth/register", { email, password: PASSWORD });
+  const created = await api(baseUrl, "POST", "/v1/auth/register", registration(email, PASSWORD));
   const userId = isRecord(created.body) && typeof created.body.userId === "string" ? created.body.userId : "";
   const opened = await login(email, PASSWORD);
   return { userId, email, sessionToken: opened.sessionToken };

@@ -11,19 +11,31 @@ type UserRow = Prisma.UserGetPayload<{ include: typeof userInclude }>;
 export class PrismaIamRepository implements IamRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(input: { id: string; email: string; passwordHash: string }): Promise<void> {
+  async createUser(input: {
+    id: string;
+    email: string;
+    passwordHash: string;
+    givenName: string;
+    familyName: string;
+    phone: string;
+  }): Promise<void> {
     try {
       await this.prisma.user.create({
         data: {
           id: input.id,
           email: input.email,
           passwordHash: input.passwordHash,
+          givenName: input.givenName,
+          familyName: input.familyName,
+          phone: input.phone,
           roles: { create: { role: "buyer" } },
         },
       });
     } catch (error) {
       if (isUniqueConflict(error)) {
-        throw new AuthFailure(409, "conflict", "An account with this email already exists.");
+        const phoneTaken = uniqueTarget(error).includes("phone");
+        const message = phoneTaken ? "An account with this phone number already exists." : "An account with this email already exists.";
+        throw new AuthFailure(409, "conflict", message);
       }
       throw error;
     }
@@ -140,4 +152,13 @@ function toUser(row: UserRow): UserRecord {
 
 function isUniqueConflict(error: unknown): boolean {
   return typeof error === "object" && error !== null && "code" in error && error.code === "P2002";
+}
+
+function uniqueTarget(error: unknown): string {
+  if (typeof error !== "object" || error === null || !("meta" in error)) return "";
+  const meta = error.meta;
+  if (typeof meta !== "object" || meta === null || !("target" in meta)) return "";
+  const target = meta.target;
+  if (Array.isArray(target)) return target.join(",");
+  return typeof target === "string" ? target : "";
 }

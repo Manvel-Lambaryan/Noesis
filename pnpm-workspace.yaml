@@ -2,6 +2,11 @@ packages:
   - "apps/*"
   - "packages/*"
 
+packageExtensions:
+  "@node-rs/argon2":
+    dependencies:
+      "@node-rs/argon2-wasm32-wasi": "2.2.1"
+
 allowBuilds:
   "@prisma/client": true
   "@prisma/engines": true

@@ -1,9 +1,11 @@
 export const ONBOARDING_COOKIE = "noesis_onboarding";
+export const ENTERED_COOKIE = "noesis_entered";
+export const JOINED_COOKIE = "noesis_joined";
 export const ONBOARDING_VERSION = 1;
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 400;
 const MAX_COOKIE_LENGTH = 240;
 
-export const ONBOARDING_ROLES = ["developer", "business", "creator", "guest"] as const;
+export const ONBOARDING_ROLES = ["developer", "business", "guest"] as const;
 export type OnboardingRole = (typeof ONBOARDING_ROLES)[number];
 export type OnboardingStatus = "draft" | "complete" | "skipped";
 export type OnboardingStep = 1 | 2 | 3;
@@ -18,15 +20,11 @@ export const WELCOME_SUPPORT =
 export const ROLE_COPY: Record<OnboardingRole, { title: string; description: string }> = {
   developer: {
     title: "Developer",
-    description: "I want to buy ready-to-use code, components and templates to build faster.",
+    description: "I want to buy ready-to-use code and publish my own components, templates, and applications.",
   },
   business: {
     title: "Business Professional",
     description: "I want to find complete business applications and solutions for my company.",
-  },
-  creator: {
-    title: "Creator / Seller",
-    description: "I want to publish and sell my own code, components or applications.",
   },
   guest: {
     title: "Guest",
@@ -40,18 +38,16 @@ export const GOAL_COPY: Record<OnboardingRole, readonly { id: string; label: str
     { id: "templates", label: "Discover website templates." },
     { id: "javascript", label: "Find JavaScript / TypeScript products." },
     { id: "applications", label: "Browse complete applications." },
+    { id: "selling", label: "Explore selling opportunities." },
+    { id: "publishing", label: "Learn about publishing products." },
+    { id: "seller-profile", label: "Prepare to create a seller profile." },
+    { id: "creator-market", label: "Discover the creator marketplace." },
   ],
   business: [
     { id: "launch", label: "Find ready-to-launch applications." },
     { id: "crm", label: "Explore CRM and business solutions." },
     { id: "ecommerce", label: "Discover e-commerce solutions." },
     { id: "software", label: "Browse business software." },
-  ],
-  creator: [
-    { id: "selling", label: "Explore selling opportunities." },
-    { id: "publishing", label: "Learn about publishing products." },
-    { id: "seller-profile", label: "Prepare to create a seller profile." },
-    { id: "creator-market", label: "Discover the creator marketplace." },
   ],
   guest: [
     { id: "catalog", label: "Browse the full catalog." },
@@ -79,9 +75,16 @@ export function isOnboardingFinished(state: OnboardingState): boolean {
   return state.status === "complete" || state.status === "skipped";
 }
 
-export function onboardingRedirect(pathname: "/" | "/welcome", registered: boolean): "/" | "/welcome" | null {
-  if (registered) {
-    return pathname === "/welcome" ? "/" : null;
+export type VisitFlags = { registered: boolean; entered: boolean; joined: boolean };
+export type EntryPath = "/" | "/welcome" | "/opening" | "/register" | "/login";
+
+export function onboardingRedirect(pathname: "/" | "/welcome" | "/opening", flags: VisitFlags): EntryPath | null {
+  if (pathname === "/opening") {
+    if (flags.entered) return "/";
+    return flags.registered ? null : "/login";
+  }
+  if (flags.registered || flags.entered) {
+    return pathname === "/" ? null : "/";
   }
   return pathname === "/" ? "/welcome" : null;
 }
@@ -103,8 +106,8 @@ export function parseOnboarding(value: string | undefined): OnboardingState {
   }
   const status = parts[1];
   const step = Number(parts[2]);
-  const role = parts[3] === "_" ? null : parts[3];
-  if (!isStatus(status) || !isStep(step) || !isRole(role)) {
+  const role = storedRole(parts[3]);
+  if (role === undefined || !isStatus(status) || !isStep(step)) {
     return empty;
   }
   return {
@@ -117,13 +120,16 @@ export function parseOnboarding(value: string | undefined): OnboardingState {
 }
 
 export function parseOnboardingInput(input: unknown): OnboardingState | null {
-  if (!isRecord(input) || !isStatus(input.status) || !isStep(input.step) || !isRole(input.role)) {
+  if (!isRecord(input) || !isStatus(input.status) || !isStep(input.step)) {
+    return null;
+  }
+  const role = input.role === "creator" ? "developer" : input.role;
+  if (!isRole(role)) {
     return null;
   }
   if (!Array.isArray(input.goals) || input.goals.some((goal) => typeof goal !== "string")) {
     return null;
   }
-  const role = input.role;
   return {
     version: ONBOARDING_VERSION,
     status: input.status,
@@ -155,7 +161,7 @@ export function destinationLabel(href: string): string {
 }
 
 export function secondaryAction(role: OnboardingRole, signedIn: boolean): SecondaryAction | null {
-  if (role === "creator") {
+  if (role === "developer") {
     return signedIn
       ? { href: "/account/seller", label: "Prepare a seller profile" }
       : { href: "/register", label: "Create an account" };
@@ -207,6 +213,12 @@ function isStatus(value: unknown): value is OnboardingStatus {
 
 function isStep(value: unknown): value is OnboardingStep {
   return value === 1 || value === 2 || value === 3;
+}
+
+function storedRole(value: string | undefined): OnboardingRole | null | undefined {
+  if (value === undefined || value === "_") return null;
+  if (value === "creator") return "developer";
+  return isRole(value) ? value : undefined;
 }
 
 function isRole(value: unknown): value is OnboardingRole | null {

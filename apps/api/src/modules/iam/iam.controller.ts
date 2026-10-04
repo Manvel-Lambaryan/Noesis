@@ -27,6 +27,11 @@ export class IamController {
     return this.iam.register({
       email: payload.email,
       password: payload.password,
+      confirmPassword: payload.confirmPassword,
+      givenName: payload.givenName,
+      familyName: payload.familyName,
+      phone: payload.phone,
+      dial: payload.dial,
       correlationId: resolveCorrelationId(correlationId),
     });
   }

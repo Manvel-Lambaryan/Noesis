@@ -14,13 +14,50 @@ export function parseEmail(value: unknown): string {
 }
 
 export function parsePassword(value: unknown, email: string): string {
-  if (typeof value !== "string" || value.length < 12 || value.length > 128) {
-    throw invalid("Use a password between 12 and 128 characters.");
+  if (typeof value !== "string" || value.length < 8 || value.length > 128) {
+    throw invalid("Use a password between 8 and 128 characters.");
   }
   if (value.toLowerCase() === email) {
     throw invalid("Use a password that is not your email address.");
   }
   return value;
+}
+
+const PERSON_NAME = /^[\p{L}][\p{L}'’ -]{1,39}$/u;
+
+export function assertConfirmed(password: string, confirmation: unknown): void {
+  if (typeof confirmation !== "string" || confirmation !== password) {
+    throw invalid("Passwords do not match.");
+  }
+}
+
+export function parsePersonName(value: unknown, kind: "first" | "last"): string {
+  const label = kind === "first" ? "first name" : "last name";
+  if (typeof value !== "string") {
+    throw invalid(`Enter your ${label}.`);
+  }
+  const name = value.trim().replace(/\s+/g, " ");
+  if (name.length < 2 || name.length > 40 || hasControlCharacter(name) || !PERSON_NAME.test(name)) {
+    throw invalid(`Use a ${label} of 2 to 40 letters.`);
+  }
+  return name;
+}
+
+export function parsePhone(value: unknown, dial: unknown): string {
+  if (typeof dial !== "string" || !/^\d{1,4}$/.test(dial)) {
+    throw invalid("Choose a country for your phone number.");
+  }
+  if (typeof value !== "string") {
+    throw invalid("Enter a phone number.");
+  }
+  const national = value.trim().replace(/[\s().-]/g, "").replace(/^0/, "");
+  if (!/^\d{4,14}$/.test(national)) {
+    throw invalid("Enter the phone number without the country code.");
+  }
+  if (dial.length + national.length < 8 || dial.length + national.length > 15) {
+    throw invalid("Enter a phone number with 8 to 15 digits.");
+  }
+  return `+${dial}${national}`;
 }
 
 export function parseDisplayName(value: unknown): string {

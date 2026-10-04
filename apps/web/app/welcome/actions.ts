@@ -3,6 +3,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import {
+  ENTERED_COOKIE,
+  JOINED_COOKIE,
   ONBOARDING_COOKIE,
   destinationFor,
   isOnboardingExit,
@@ -32,6 +34,13 @@ export async function finishOnboarding(input: unknown): Promise<void> {
   const done: OnboardingState = { ...state, status: "complete", step: 3 };
   await writeOnboarding(done);
   redirect(destinationFor(done));
+}
+
+export async function finishIntro(): Promise<void> {
+  const jar = await cookies();
+  jar.set(ENTERED_COOKIE, "1", onboardingCookieOptions());
+  jar.delete(JOINED_COOKIE);
+  redirect("/");
 }
 
 export async function leaveOnboarding(input: unknown, href: unknown): Promise<void> {

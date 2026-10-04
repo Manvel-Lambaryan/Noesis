@@ -165,8 +165,20 @@ async function seller(baseUrl: string, email: string) {
   return session;
 }
 
+function signup(email: string, password: string): Record<string, string> {
+  return {
+    email,
+    password,
+    confirmPassword: password,
+    givenName: "Nora",
+    familyName: "Petrosyan",
+    dial: "374",
+    phone: `${Math.floor(10_000_000 + Math.random() * 90_000_000)}`,
+  };
+}
+
 async function account(baseUrl: string, email: string) {
-  const registered = await api(baseUrl, "POST", "/v1/auth/register", { email, password: "correct-horse-1" });
+  const registered = await api(baseUrl, "POST", "/v1/auth/register", signup(email, "correct-horse-1"));
   assert.equal(registered.status === 201 || registered.status === 409, true);
   const session = await login(baseUrl, email);
   const user = await prisma.user.findUnique({ where: { email } });

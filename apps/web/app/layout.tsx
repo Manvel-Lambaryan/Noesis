@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
+import type { Viewport } from "next";
 import Link from "next/link";
+import { ZoomLock } from "./components/zoom-lock";
 import "./globals.css";
 
 export const metadata = {
@@ -7,15 +9,18 @@ export const metadata = {
   description: "Developer marketplace",
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
+        <ZoomLock />
         <header className="site-header">
           <div className="wrap">
             <Link className="brand" href="/">

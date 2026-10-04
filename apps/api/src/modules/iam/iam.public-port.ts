@@ -7,7 +7,16 @@ export type LoginResult = {
 };
 
 export interface IamAccess {
-  register(input: { email: unknown; password: unknown; correlationId: string }): Promise<{ userId: string }>;
+  register(input: {
+    email: unknown;
+    password: unknown;
+    confirmPassword: unknown;
+    givenName: unknown;
+    familyName: unknown;
+    phone: unknown;
+    dial: unknown;
+    correlationId: string;
+  }): Promise<{ userId: string }>;
   login(input: { email: unknown; password: unknown; ip: string; correlationId: string }): Promise<LoginResult>;
   logout(token: string | undefined): Promise<void>;
   authenticate(token: string | undefined): Promise<Actor>;

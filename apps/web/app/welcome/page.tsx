@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { ONBOARDING_COOKIE, onboardingRedirect, parseOnboarding } from "../../lib/onboarding";
+import { ENTERED_COOKIE, ONBOARDING_COOKIE, onboardingRedirect, parseOnboarding } from "../../lib/onboarding";
 import { SESSION_COOKIE } from "../../lib/session-cookie";
 import { WelcomeFlow } from "./welcome-flow";
 
@@ -17,7 +17,11 @@ export default async function WelcomePage() {
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
   const registered = typeof token === "string" && token.length > 0;
-  const target = onboardingRedirect("/welcome", registered);
+  const target = onboardingRedirect("/welcome", {
+    registered,
+    entered: jar.get(ENTERED_COOKIE)?.value === "1",
+    joined: false,
+  });
   if (target !== null) {
     redirect(target);
   }

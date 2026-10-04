@@ -13,7 +13,7 @@ import {
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 
 export function buildRole(role: OnboardingRole): Group {
-  const group = role === "developer" ? laptop() : role === "business" ? briefcase() : role === "creator" ? shop() : guest();
+  const group = role === "developer" ? laptop() : role === "business" ? briefcase() : guest();
   return place(group);
 }
 
@@ -55,20 +55,6 @@ function briefcase(): Group {
   return group;
 }
 
-function shop(): Group {
-  const group = new Group();
-  const metal = gold();
-  const window = glow();
-  group.add(block([1.38, 0.92, 0.78], [0, -0.12, 0], metal, 0.05));
-  group.add(block([1.58, 0.08, 0.92], [0, 0.4, 0.04], metal, 0.02));
-  addAwning(group, metal);
-  group.add(block([0.26, 0.46, 0.05], [0, -0.28, 0.4], window, 0.06));
-  group.add(block([0.2, 0.18, 0.04], [-0.4, -0.1, 0.4], window, 0.03));
-  group.add(block([0.2, 0.18, 0.04], [0.4, -0.1, 0.4], window, 0.03));
-  group.add(block([0.62, 0.05, 0.26], [0, -0.62, 0.42], metal, 0.02));
-  return group;
-}
-
 function guest(): Group {
   const group = new Group();
   const metal = gold();
@@ -79,15 +65,6 @@ function guest(): Group {
   shoulders.position.y = -0.2;
   group.add(head, shoulders);
   return group;
-}
-
-function addAwning(group: Group, metal: Material): void {
-  for (const x of [-0.48, -0.16, 0.16, 0.48]) {
-    const scallop = new Mesh(new SphereGeometry(0.2, 28, 18), metal);
-    scallop.scale.set(1.05, 0.36, 0.42);
-    scallop.position.set(x, 0.3, 0.48);
-    group.add(scallop);
-  }
 }
 
 function block(
