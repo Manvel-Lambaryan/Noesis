@@ -189,6 +189,20 @@ body:has(.auth-shell) {
 
 body:has(.auth-shell) > .site-header { display: none; }
 
+body:has(.home-hero) {
+  background-color: #140e0b;
+  background-image: none;
+}
+
+body:has(.home-hero) > .site-header { display: none; }
+
+body:has(.home-hero) > .wrap {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 body:has(.auth-shell) > .wrap {
   width: 100%;
   max-width: none;

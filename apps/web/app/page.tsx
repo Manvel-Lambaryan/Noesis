@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { HomeHero } from "./home/home-hero";
+import { FEATURED_FALLBACK, fromListings } from "./home/featured-products";
+import { loadListings } from "../lib/marketplace";
 import { ENTERED_COOKIE, onboardingRedirect } from "../lib/onboarding";
 import { SESSION_COOKIE } from "../lib/session-cookie";
 
@@ -16,27 +18,10 @@ export default async function HomePage() {
     redirect(target);
   }
 
-  return (
-    <main className="stack">
-      <h1>NOESIS</h1>
-      <p>One catalog for code, JavaScript and TypeScript, and ready-to-launch business apps.</p>
-      <p className="note">
-        {entered && !registered
-          ? "Account created. Check your email before a purchase or a seller publication, then sign in."
-          : "Create an account to continue. Email verification is required before a purchase or a seller publication."}
-      </p>
-      <p>
-        <Link href="/marketplace">General marketplace</Link>
-        {" · "}
-        <Link href="/marketplace/javascript">JavaScript and TypeScript</Link>
-        {" · "}
-        <Link href="/marketplace/business-apps">Business applications</Link>
-      </p>
-      <p>
-        <Link href="/register">Create an account</Link>
-        {" · "}
-        <Link href="/login">Sign in</Link>
-      </p>
-    </main>
-  );
+  const listings = await loadListings(new URLSearchParams({ view: "general" }));
+  const products = listings.items.length > 0 ? fromListings(listings.items) : FEATURED_FALLBACK;
+  const note = entered && !registered
+    ? "Account created. Check your email before a purchase or a seller publication, then sign in."
+    : "Email verification is required before a purchase or a seller publication.";
+  return <HomeHero products={products} note={note} />;
 }
