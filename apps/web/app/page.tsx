@@ -2,7 +2,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { HomeHero } from "./home/home-hero";
 import { FEATURED_FALLBACK, fromListings } from "./home/featured-products";
-import { loadListings } from "../lib/marketplace";
+import { ExploreCategories } from "./home/explore-categories";
+import { loadCategories, loadListings } from "../lib/marketplace";
 import { ENTERED_COOKIE, onboardingRedirect } from "../lib/onboarding";
 import { SESSION_COOKIE } from "../lib/session-cookie";
 
@@ -18,10 +19,15 @@ export default async function HomePage() {
     redirect(target);
   }
 
-  const listings = await loadListings(new URLSearchParams({ view: "general" }));
+  const [listings, categories] = await Promise.all([
+    loadListings(new URLSearchParams({ view: "general" })),
+    loadCategories(),
+  ]);
   const products = listings.items.length > 0 ? fromListings(listings.items) : FEATURED_FALLBACK;
-  const note = entered && !registered
-    ? "Account created. Check your email before a purchase or a seller publication, then sign in."
-    : "Email verification is required before a purchase or a seller publication.";
-  return <HomeHero products={products} note={note} />;
+  return (
+    <>
+      <HomeHero products={products} />
+      <ExploreCategories categories={categories} />
+    </>
+  );
 }
