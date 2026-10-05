@@ -1,9 +1,7 @@
-import { Fraunces } from "next/font/google";
 import type { FeaturedProduct } from "./featured-products";
+import { display } from "../fonts";
 import { ProductCarousel } from "./product-carousel";
 import styles from "./home-hero.module.css";
-
-const display = Fraunces({ subsets: ["latin"], axes: ["SOFT", "WONK", "opsz"], variable: "--font-display" });
 
 export function HomeHero({ products }: { products: FeaturedProduct[] }) {
   return (

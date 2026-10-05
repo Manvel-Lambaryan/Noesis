@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Fraunces } from "next/font/google";
+import { display } from "./fonts";
 import { HomeHero } from "./home/home-hero";
 import { FEATURED_FALLBACK, fromListings, heroProducts, launchProducts, trendingProducts } from "./home/featured-products";
 import { ExploreCategories } from "./home/explore-categories";
@@ -13,8 +13,6 @@ import { HomeScroll } from "./home/home-scroll";
 import { loadCategories, loadListings } from "../lib/marketplace";
 import { ENTERED_COOKIE, onboardingRedirect } from "../lib/onboarding";
 import { SESSION_COOKIE } from "../lib/session-cookie";
-
-const display = Fraunces({ subsets: ["latin"], axes: ["SOFT", "WONK", "opsz"], variable: "--font-display" });
 
 export const dynamic = "force-dynamic";
 

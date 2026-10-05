@@ -2,12 +2,9 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { Fraunces } from "next/font/google";
 import { motion, useReducedMotion } from "motion/react";
+import { display, displayItalic } from "../fonts";
 import styles from "./auth-gate.module.css";
-
-const display = Fraunces({ subsets: ["latin"], weight: ["500", "600"] });
-const italic = Fraunces({ subsets: ["latin"], style: "italic", weight: "500" });
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 type GateLink = { href: string; label: string; tone?: "accent" };
@@ -39,7 +36,7 @@ export function AuthGate({
         <Brand />
         <h1 className={styles.kicker}>
           {kicker}
-          <span className={`${styles.accent} ${italic.className}`}>{accent}</span>
+          <span className={`${styles.accent} ${displayItalic.className}`}>{accent}</span>
         </h1>
         <span className={styles.rule} aria-hidden="true" />
         <p className={styles.lede}>Code, components, and business apps in one catalog.</p>

@@ -1,13 +1,10 @@
-import { Caveat, Fraunces } from "next/font/google";
 import type { CategoryOption } from "../../lib/marketplace";
+import { display, script } from "../fonts";
 import { exploreCategories } from "./category-faces";
 import { CategoryCard } from "./category-card";
 import { ExploreDecor } from "./explore-decor";
 import { ExploreReveal } from "./explore-reveal";
 import styles from "./explore-categories.module.css";
-
-const display = Fraunces({ subsets: ["latin"], axes: ["SOFT", "WONK", "opsz"], variable: "--font-display" });
-const script = Caveat({ subsets: ["latin"], weight: "500" });
 
 export function ExploreCategories({ categories }: { categories: CategoryOption[] }) {
   const cards = exploreCategories(categories);
