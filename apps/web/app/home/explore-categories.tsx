@@ -31,6 +31,7 @@ export function ExploreCategories({ categories }: { categories: CategoryOption[]
           <div className={styles.grid}>
             {cards.map((category) => <CategoryCard key={category.id} category={category} />)}
           </div>
+          <p className={styles.motto} aria-hidden="true">Better tools build brighter ideas</p>
         </div>
       </section>
     </ExploreReveal>

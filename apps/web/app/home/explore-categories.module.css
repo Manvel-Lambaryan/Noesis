@@ -12,7 +12,7 @@
   margin-top: 0;
   transform: translateY(0);
   padding: calc(var(--section-lip) + 4.25rem) 1.25rem 4.2rem;
-  border-radius: 50% 50% 0 0 / var(--lip) var(--lip) 0 0;
+  border-radius: 50% 50% var(--radius-section) var(--radius-section) / var(--lip) var(--lip) var(--radius-section) var(--radius-section);
   box-shadow: 0 -1px 0 #2a1c16;
   background:
     radial-gradient(ellipse at 0% 100%, rgba(192, 133, 82, 0.18), transparent 32%),
@@ -229,6 +229,24 @@
 }
 
 .card:hover .arrow { transform: translateX(3px); border-color: #c08552; }
+
+.motto {
+  position: absolute;
+  top: 62%;
+  right: -2.6rem;
+  margin: 0;
+  color: #c08552;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.16em;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  pointer-events: none;
+}
+
+@media (max-width: 1400px) {
+  .motto { display: none; }
+}
 
 @media (max-width: 1100px) {
   .script { display: none; }

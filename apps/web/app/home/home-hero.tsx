@@ -5,11 +5,10 @@ import { ProductCarousel } from "./product-carousel";
 import styles from "./home-hero.module.css";
 
 const display = Fraunces({ subsets: ["latin"], axes: ["SOFT", "WONK", "opsz"], variable: "--font-display" });
-const displayItalic = Fraunces({ subsets: ["latin"], style: "italic", axes: ["SOFT", "WONK", "opsz"] });
 
 export function HomeHero({ products }: { products: FeaturedProduct[] }) {
   return (
-    <section id="about" className={`${styles.page} ${display.variable} home-hero`}>
+    <section className={`${styles.page} ${display.variable} home-hero`}>
       <div className={styles.shell}>
         <img className={styles.scene} src="/brand/home-hero-scene-4x.webp" alt="" />
         <div className={styles.vignette} />
@@ -30,7 +29,7 @@ function HeroHeader() {
       </Link>
       <nav className={styles.nav} aria-label="Primary">
         <Link className={styles.lead} href="/marketplace">Marketplace</Link>
-        <Link href="/marketplace/javascript">Explore</Link>
+        <Link href="#explore-categories">Explore</Link>
         <Link href="/account/seller">Sell</Link>
         <a href="#about">About</a>
       </nav>
@@ -51,7 +50,7 @@ function HeroBrand() {
       <h1>NOESIS</h1>
       <span className={styles.rule} />
       <p className={styles.kicker}>Code & projects marketplace</p>
-      <p className={`${styles.copy} ${displayItalic.className}`}>Buy and sell high-quality code, templates, plugins and complete projects.</p>
+      <p className={styles.copy}>Buy and sell high-quality code, templates, plugins and complete projects.</p>
     </div>
   );
 }

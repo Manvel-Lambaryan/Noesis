@@ -7,7 +7,7 @@ export function CategoryCard({ category }: { category: ExploreCategory }) {
   const span = category.span === "feature" ? styles.feature : category.span === "wide" ? styles.wide : styles.regular;
   return (
     <Link className={`${styles.card} ${tone} ${span}`} href={category.href}>
-      <img className={styles.media} src={category.image} alt="" />
+      <img className={styles.media} src={category.image} alt="" loading="lazy" />
       <span className={styles.shade} aria-hidden="true" />
       <span className={styles.copy}>
         <CategoryIcon slug={category.slug} />

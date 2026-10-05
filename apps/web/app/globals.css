@@ -192,9 +192,29 @@ body:has(.auth-shell) > .site-header { display: none; }
 html:has(.home-hero),
 body:has(.home-hero) {
   --section-lip: clamp(2.4rem, 3.6vw, 3.4rem);
+  --bg-dark: #1a100c;
+  --bg-darker: #120c09;
+  --surface-cream: #f3e9dc;
+  --surface-light: #fbf6ef;
+  --text-cream: #f6efe6;
+  --text-dark: #3a2218;
+  --muted-brown: #895737;
+  --accent-caramel: #c08552;
+  --accent-bronze: #a56b3c;
+  --border-warm: rgba(192, 133, 82, 0.42);
+  --home-max: 76rem;
+  --home-pad: clamp(3.4rem, 6vw, 5.25rem);
+  --home-gap: clamp(0.8rem, 1.3vw, 1.05rem);
+  --radius-card: 1.15rem;
+  --radius-section: clamp(1.35rem, 2vw, 1.85rem);
   background-color: #140e0b;
   background-image: none;
   scrollbar-width: none;
+}
+
+.home-stage {
+  background: var(--bg-darker);
+  color: var(--text-cream);
 }
 
 html:has(.home-hero)::-webkit-scrollbar,

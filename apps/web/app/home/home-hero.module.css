@@ -2,6 +2,8 @@
   position: relative;
   z-index: 2;
   height: 100dvh;
+  overflow: hidden;
+  border-radius: 0 0 var(--radius-section) var(--radius-section);
   background: #140e0b;
   color: #f3e9dc;
 }
@@ -152,13 +154,14 @@
 }
 
 .copy {
-  max-width: 30rem;
+  max-width: 34rem;
   margin: 0.85rem 0 0;
   color: #f3e6d8;
-  font-size: 1.28rem;
-  font-weight: 460;
-  font-variation-settings: "opsz" 48, "SOFT" 40, "WONK" 1;
-  line-height: 1.35;
+  font-family: "Segoe UI", sans-serif;
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  font-weight: 450;
+  font-variation-settings: normal;
+  line-height: 1.55;
 }
 
 .nav a:focus-visible, .register:focus-visible, .search:focus-visible {
@@ -174,7 +177,7 @@
   .shell { height: 100%; }
   .header { grid-template-columns: 1fr auto; column-gap: 0.45rem; }
   .brand { letter-spacing: 0.12em; }
-  .nav { display: none; }
+  .nav { grid-column: 1 / -1; justify-content: flex-start; gap: 0.85rem; font-size: 0.78rem; }
   .brandBlock { padding-bottom: 1rem; }
   .brandBlock h1 { font-size: 3.4rem; }
   .scene { object-position: 30% center; }
