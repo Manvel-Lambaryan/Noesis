@@ -192,6 +192,8 @@ span.shot::after {
   place-items: center;
   width: 1.65rem;
   height: 1.65rem;
+  min-width: 1.65rem;
+  min-height: 1.65rem;
   padding: 0;
   border: 1px solid rgba(243, 233, 220, 0.28);
   border-radius: 999px;
@@ -209,6 +211,8 @@ button.cart:hover { filter: none; }
 .card[data-rank="0"] .cart {
   width: 1.85rem;
   height: 1.85rem;
+  min-width: 1.85rem;
+  min-height: 1.85rem;
   border-color: transparent;
   background: #f4e6d4;
   color: #3a2218;

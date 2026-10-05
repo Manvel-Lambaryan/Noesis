@@ -149,7 +149,12 @@
 
 button.cart {
   position: relative;
+  width: 2.15rem;
+  height: 2.15rem;
+  min-width: 2.15rem;
+  min-height: 2.15rem;
   padding: 0;
+  border-radius: 999px;
   box-shadow: none;
   letter-spacing: 0;
   font-weight: 500;
