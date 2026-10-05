@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Fraunces } from "next/font/google";
 import { HomeHero } from "./home/home-hero";
-import { FEATURED_FALLBACK, fromListings, launchProducts, trendingProducts } from "./home/featured-products";
+import { FEATURED_FALLBACK, fromListings, heroProducts, launchProducts, trendingProducts } from "./home/featured-products";
 import { ExploreCategories } from "./home/explore-categories";
 import { ReadyToLaunch } from "./home/ready-to-launch";
 import { TrendingProducts } from "./home/trending-products";
@@ -36,7 +36,7 @@ export default async function HomePage() {
   return (
     <main className={`home-stage ${display.variable}`}>
       <HomeScroll />
-      <HomeHero products={products} />
+      <HomeHero products={heroProducts(products)} />
       <ExploreCategories categories={categories} />
       <ReadyToLaunch products={launchProducts(products)} />
       <TrendingProducts products={trendingProducts(products)} />

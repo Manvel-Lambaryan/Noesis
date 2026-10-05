@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type Dispatch, type KeyboardEvent, type MouseEvent, type SetStateAction } from "react";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { AddToCart } from "./add-to-cart";
 import type { FeaturedProduct, ProductTone } from "./featured-products";
 import styles from "./product-carousel.module.css";
 
@@ -88,9 +90,9 @@ function ProductCard({ product, offset, onSelect }: { product: FeaturedProduct; 
         <p>{product.meta}</p>
         <div className={styles.cardFoot}>
           <span>{product.price}</span>
-          <Link className={styles.cart} href={product.href} tabIndex={quiet ? -1 : undefined} aria-label={`View ${product.title}`} onClick={(event) => holdSide(event, quiet, onSelect)}>
+          <AddToCart className={styles.cart} product={product} quiet={quiet} onQuiet={onSelect}>
             <CartIcon />
-          </Link>
+          </AddToCart>
         </div>
       </div>
     </article>
@@ -128,20 +130,10 @@ function shotTone(tone: ProductTone): string | undefined {
 }
 
 function CartIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M6.5 7h13l-1.4 8.2H8L6.5 7Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      <path d="M6.5 7 5.2 4H2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="9.2" cy="19.2" r="1.25" fill="currentColor" />
-      <circle cx="16.8" cy="19.2" r="1.25" fill="currentColor" />
-    </svg>
-  );
+  return <ShoppingCart strokeWidth={1.5} aria-hidden="true" />;
 }
 
 function Arrow({ direction }: { direction: "left" | "right" }) {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden="true">
-      <path d={direction === "left" ? "M10 3 5 8l5 5" : "M6 3l5 5-5 5"} fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  const Icon = direction === "left" ? ChevronLeft : ChevronRight;
+  return <Icon strokeWidth={1.75} aria-hidden="true" />;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Eye, EyeOff, Lock, Mail, Phone, UserRound } from "lucide-react";
 import { CountrySelect } from "./country-select";
 import styles from "./auth-fields.module.css";
 
@@ -73,7 +74,7 @@ function TextField({ field, gate }: { field: AuthField; gate: boolean }) {
           aria-label={visible ? "Hide password" : "Show password"}
           onClick={() => setVisible((current) => !current)}
         >
-          <Eye open={visible} />
+          <EyeMark open={visible} />
         </button>
       ) : null}
     </label>
@@ -101,53 +102,13 @@ function PhoneField({ field, gate }: { field: AuthField; gate: boolean }) {
 }
 
 function FieldIcon({ name }: { name: string }) {
-  if (name.includes("password")) return <LockIcon />;
-  if (name === "phone") return <PhoneIcon />;
-  if (name === "givenName" || name === "familyName") return <PersonIcon />;
-  return <MailIcon />;
+  if (name.includes("password")) return <Lock className={styles.icon} strokeWidth={1.5} aria-hidden="true" />;
+  if (name === "phone") return <Phone className={styles.icon} strokeWidth={1.5} aria-hidden="true" />;
+  if (name === "givenName" || name === "familyName") return <UserRound className={styles.icon} strokeWidth={1.5} aria-hidden="true" />;
+  return <Mail className={styles.icon} strokeWidth={1.5} aria-hidden="true" />;
 }
 
-function LockIcon() {
-  return (
-    <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function PhoneIcon() {
-  return (
-    <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M8 4.5h2.2l1.1 3.2-1.6 1a11 11 0 0 0 5.6 5.6l1-1.6 3.2 1.1V16a2 2 0 0 1-2.2 2A14.5 14.5 0 0 1 6 6.7 2 2 0 0 1 8 4.5Z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function PersonIcon() {
-  return (
-    <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M6.5 19.2c.8-2.6 2.8-4 5.5-4s4.7 1.4 5.5 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function MailIcon() {
-  return (
-    <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function Eye({ open }: { open: boolean }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <circle cx="12" cy="12" r="2.4" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      {open ? null : <path d="M5 19 19 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />}
-    </svg>
-  );
+function EyeMark({ open }: { open: boolean }) {
+  const Icon = open ? Eye : EyeOff;
+  return <Icon strokeWidth={1.5} aria-hidden="true" />;
 }

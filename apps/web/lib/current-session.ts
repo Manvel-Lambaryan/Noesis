@@ -16,18 +16,22 @@ export async function currentSession(): Promise<AccountView | null> {
   if (token === undefined || token.length === 0) {
     return null;
   }
-  const result = await apiFetch("/v1/auth/session", { method: "GET", sessionToken: token });
-  if (result.status !== 200 || !isRecord(result.body)) {
+  try {
+    const result = await apiFetch("/v1/auth/session", { method: "GET", sessionToken: token });
+    if (result.status !== 200 || !isRecord(result.body)) {
+      return null;
+    }
+    return {
+      email: text(result.body.email),
+      roles: stringList(result.body.roles),
+      permissions: stringList(result.body.permissions),
+      emailVerified: result.body.emailVerified === true,
+      purchase: gateText(result.body.gates, "purchase"),
+      publish: gateText(result.body.gates, "sellerPublish"),
+    };
+  } catch {
     return null;
   }
-  return {
-    email: text(result.body.email),
-    roles: stringList(result.body.roles),
-    permissions: stringList(result.body.permissions),
-    emailVerified: result.body.emailVerified === true,
-    purchase: gateText(result.body.gates, "purchase"),
-    publish: gateText(result.body.gates, "sellerPublish"),
-  };
 }
 
 export async function ownSellerProfile(): Promise<{ displayName: string; verificationState: string } | null> {
@@ -35,14 +39,18 @@ export async function ownSellerProfile(): Promise<{ displayName: string; verific
   if (token === undefined || token.length === 0) {
     return null;
   }
-  const result = await apiFetch("/v1/seller/profile", { method: "GET", sessionToken: token });
-  if (result.status !== 200 || !isRecord(result.body)) {
+  try {
+    const result = await apiFetch("/v1/seller/profile", { method: "GET", sessionToken: token });
+    if (result.status !== 200 || !isRecord(result.body)) {
+      return null;
+    }
+    return {
+      displayName: text(result.body.displayName),
+      verificationState: text(result.body.verificationState),
+    };
+  } catch {
     return null;
   }
-  return {
-    displayName: text(result.body.displayName),
-    verificationState: text(result.body.verificationState),
-  };
 }
 
 function gateText(gates: unknown, name: string): string {

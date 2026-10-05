@@ -192,10 +192,17 @@ span.shot::after {
   place-items: center;
   width: 1.65rem;
   height: 1.65rem;
+  padding: 0;
   border: 1px solid rgba(243, 233, 220, 0.28);
   border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
   color: #f3e9dc;
+  letter-spacing: 0;
+  font-weight: 500;
 }
+
+button.cart:hover { filter: none; }
 
 .cart svg { width: 1.05rem; height: 1.05rem; }
 
@@ -220,17 +227,20 @@ button.arrow {
   color: #f6efe6;
   backdrop-filter: blur(8px);
   box-shadow: none;
+  transition: border-color 0.28s ease, background 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
 }
 
-button.arrow svg { width: 0.9rem; height: 0.9rem; }
+button.arrow svg { width: 0.9rem; height: 0.9rem; transition: transform 0.28s ease; }
 
 button.arrow:hover {
-  border-color: rgba(232, 196, 154, 0.7);
-  background: rgba(192, 133, 82, 0.32);
-  box-shadow: none;
-  transform: none;
+  border-color: #e0b07a;
+  background: rgba(192, 133, 82, 0.42);
+  box-shadow: 0 10px 18px rgba(8, 4, 2, 0.32);
+  transform: translateY(-2px);
   filter: none;
 }
+
+button.arrow:hover svg { transform: scale(1.08); }
 
 @media (max-width: 1100px) {
   .card[data-rank="2"] { --x: 19.5; }
@@ -251,5 +261,6 @@ button.arrow:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card, button.arrow { transition: none; }
+  .card, button.arrow, button.arrow svg { transition: none; }
+  button.arrow:hover, button.arrow:hover svg { transform: none; }
 }

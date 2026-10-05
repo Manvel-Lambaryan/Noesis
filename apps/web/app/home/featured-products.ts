@@ -49,13 +49,25 @@ export function fromListings(items: ListingCard[]): FeaturedProduct[] {
   }));
 }
 
+const HERO_FAN = 7;
+
+/** Live listings, padded with the temporary desk set when the fan would be too short. */
+export function heroProducts(products: FeaturedProduct[]): FeaturedProduct[] {
+  if (products.length >= HERO_FAN) return products;
+  const present = new Set(products.map((item) => item.id));
+  const fillers = FEATURED_FALLBACK.filter((item) => !present.has(item.id)).map((item) => ({ ...item, featured: false }));
+  const filled = [...products, ...fillers].slice(0, HERO_FAN);
+  if (filled.some((item) => item.featured)) return filled;
+  return filled.map((item, index) => ({ ...item, featured: index === 0 }));
+}
+
 export function launchProducts(products: FeaturedProduct[]): FeaturedProduct[] {
   return products.slice(0, 4);
 }
 
+/** Listed products for the popular rail. Not a ranked weekly chart. */
 export function trendingProducts(products: FeaturedProduct[]): FeaturedProduct[] {
-  const rest = products.slice(4);
-  return rest.length >= 3 ? rest : products;
+  return products;
 }
 
 function formatPrice(amountMinor: string, currency: string): string {

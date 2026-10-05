@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type ReactElement, type RefObject, type SVGAttributes } from "react";
 import { createPortal } from "react-dom";
+import { ChevronDown } from "lucide-react";
 import * as flags from "country-flag-icons/react/3x2";
 import { PHONE_COUNTRIES, type PhoneCountry } from "../../lib/phone-countries";
 import styles from "./country-select.module.css";
@@ -209,9 +210,5 @@ function iconFor(iso: string): FlagIcon | undefined {
 }
 
 function Caret() {
-  return (
-    <svg className={styles.caret} viewBox="0 0 12 8" aria-hidden="true">
-      <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
+  return <ChevronDown className={styles.caret} strokeWidth={1.75} aria-hidden="true" />;
 }
