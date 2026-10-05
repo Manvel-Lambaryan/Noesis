@@ -1,6 +1,16 @@
-import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { display } from "./fonts";
+import { HomeHero } from "./home/home-hero";
+import { FEATURED_FALLBACK, fromListings, heroProducts, launchProducts, trendingProducts } from "./home/featured-products";
+import { ExploreCategories } from "./home/explore-categories";
+import { ReadyToLaunch } from "./home/ready-to-launch";
+import { TrendingProducts } from "./home/trending-products";
+import { WhyNoesis } from "./home/why-noesis";
+import { AudienceSplit } from "./home/audience-split";
+import { FinalCta } from "./home/final-cta";
+import { HomeScroll } from "./home/home-scroll";
+import { loadCategories, loadListings } from "../lib/marketplace";
 import { ENTERED_COOKIE, onboardingRedirect } from "../lib/onboarding";
 import { SESSION_COOKIE } from "../lib/session-cookie";
 
@@ -16,27 +26,21 @@ export default async function HomePage() {
     redirect(target);
   }
 
+  const [listings, categories] = await Promise.all([
+    loadListings(new URLSearchParams({ view: "general" })),
+    loadCategories(),
+  ]);
+  const products = listings.items.length > 0 ? fromListings(listings.items) : FEATURED_FALLBACK;
   return (
-    <main className="stack">
-      <h1>NOESIS</h1>
-      <p>One catalog for code, JavaScript and TypeScript, and ready-to-launch business apps.</p>
-      <p className="note">
-        {entered && !registered
-          ? "Account created. Check your email before a purchase or a seller publication, then sign in."
-          : "Create an account to continue. Email verification is required before a purchase or a seller publication."}
-      </p>
-      <p>
-        <Link href="/marketplace">General marketplace</Link>
-        {" · "}
-        <Link href="/marketplace/javascript">JavaScript and TypeScript</Link>
-        {" · "}
-        <Link href="/marketplace/business-apps">Business applications</Link>
-      </p>
-      <p>
-        <Link href="/register">Create an account</Link>
-        {" · "}
-        <Link href="/login">Sign in</Link>
-      </p>
+    <main className={`home-stage ${display.variable}`}>
+      <HomeScroll />
+      <HomeHero products={heroProducts(products)} />
+      <ExploreCategories categories={categories} />
+      <ReadyToLaunch products={launchProducts(products)} />
+      <TrendingProducts products={trendingProducts(products)} />
+      <WhyNoesis />
+      <AudienceSplit />
+      <FinalCta />
     </main>
   );
 }

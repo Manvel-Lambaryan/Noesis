@@ -42,8 +42,8 @@ button.trigger:focus-visible {
 }
 
 .caret {
-  width: 0.7rem;
-  height: 0.45rem;
+  width: 0.85rem;
+  height: 0.85rem;
   flex: none;
   color: #8d7360;
 }

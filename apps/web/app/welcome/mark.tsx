@@ -1,3 +1,4 @@
+import { ChevronRight } from "lucide-react";
 import chrome from "./chrome.module.css";
 
 export function Monogram() {
@@ -5,9 +6,5 @@ export function Monogram() {
 }
 
 export function Chevron() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-      <path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <ChevronRight size={16} strokeWidth={1.75} aria-hidden="true" />;
 }
