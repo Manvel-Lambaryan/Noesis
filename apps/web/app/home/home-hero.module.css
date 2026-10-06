@@ -62,6 +62,7 @@
   border-radius: 0 0 var(--radius-section, clamp(1.35rem, 2vw, 1.85rem)) var(--radius-section, clamp(1.35rem, 2vw, 1.85rem));
   background-color: transparent;
   box-shadow: none;
+  transition: background-color 0.9s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .header.solid {
