@@ -1,5 +1,5 @@
 import type { CategoryOption } from "../../lib/marketplace";
-import { display, script } from "../fonts";
+import { script, text } from "../fonts";
 import { exploreCategories } from "./category-faces";
 import { CategoryCard } from "./category-card";
 import { ExploreDecor } from "./explore-decor";
@@ -13,12 +13,12 @@ export function ExploreCategories({ categories }: { categories: CategoryOption[]
   }
   return (
     <ExploreReveal>
-      <section className={`${styles.section} ${display.variable}`} aria-labelledby="explore-categories">
+      <section className={`${styles.section} ${text.className}`} aria-labelledby="explore-categories">
         <ExploreDecor />
         <div className={styles.inner}>
           <header className={styles.heading}>
             <p className={styles.eyebrow}>Discover · Build · Launch</p>
-            <h2 id="explore-categories" className={`${styles.title} ${display.className}`}>Explore by Category</h2>
+            <h2 id="explore-categories" className={styles.title}>Explore by Category</h2>
             <p className={styles.intro}>Find the perfect starting point for your next project. Hand-picked code, templates and tools from a global community of developers.</p>
             <p className={`${styles.script} ${script.className}`} aria-hidden="true">
               Build What&apos;s Next

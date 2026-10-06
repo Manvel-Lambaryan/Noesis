@@ -26,9 +26,11 @@ export function ReadyToLaunch({ products }: { products: FeaturedProduct[] }) {
 function LaunchCard({ product }: { product: FeaturedProduct }) {
   return (
     <article className={styles.card}>
-      {product.previewUrl !== null
-        ? <img className={styles.media} src={product.previewUrl} alt="" loading="lazy" />
-        : <span className={styles.media} aria-hidden="true" />}
+      <div className={styles.shot}>
+        {product.previewUrl !== null
+          ? <img src={product.previewUrl} alt="" loading="lazy" />
+          : <span aria-hidden="true" />}
+      </div>
       <div className={styles.body}>
         <p className={styles.kicker}>{product.category.length > 0 ? product.category : "Listing"}</p>
         <h3>{product.title}</h3>

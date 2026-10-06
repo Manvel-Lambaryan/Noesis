@@ -75,7 +75,8 @@
 
 .card {
   display: grid;
-  grid-template-rows: 8.4rem 1fr;
+  grid-template-rows: auto 1fr;
+  padding: 0.42rem 0.42rem 0;
   overflow: hidden;
   border: 1px solid rgba(243, 233, 220, 0.14);
   border-radius: var(--radius-card);
@@ -83,21 +84,30 @@
 }
 
 .card:hover { border-color: rgba(192, 133, 82, 0.7); }
-.card:hover .media { transform: scale(1.02); }
+.card:hover .shot img { transform: scale(1.04); }
 
-.media {
+.shot {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 10.5;
+  border-radius: 0.7rem;
+  background: #2a211c;
+}
+
+.shot img,
+.shot span {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #2a1c16;
-  transition: transform 0.28s ease;
+  transition: transform 0.35s ease;
 }
 
 .body {
   display: grid;
   grid-template-rows: auto auto 2.6rem auto auto;
   gap: 0.35rem;
-  padding: 0.85rem 0.9rem 0.8rem;
+  padding: 0.75rem 0.48rem 0.8rem;
 }
 
 .kicker {
@@ -173,10 +183,9 @@
   .catalog { grid-column: 1; grid-row: 3; justify-self: start; margin: 0.15rem 0 0.2rem; }
   .intro { grid-row: 4; }
   .grid { grid-template-columns: 1fr; }
-  .card { grid-template-rows: 11rem 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .media { transition: none; }
-  .card:hover .media { transform: none; }
+  .shot img { transition: none; }
+  .card:hover .shot img { transform: none; }
 }

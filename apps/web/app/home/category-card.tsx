@@ -33,5 +33,9 @@ const ICONS: Record<string, LucideIcon> = {
 
 function CategoryIcon({ slug }: { slug: string }) {
   const Icon = ICONS[slug] ?? Code2;
-  return <Icon className={styles.icon} strokeWidth={1.5} aria-hidden="true" />;
+  return (
+    <span className={styles.mark}>
+      <Icon className={styles.icon} strokeWidth={1.6} aria-hidden="true" />
+    </span>
+  );
 }
