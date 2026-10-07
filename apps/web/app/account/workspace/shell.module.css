@@ -15,7 +15,7 @@
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  padding: 0.75rem 0.85rem 0.9rem;
+  padding: 0;
   background: var(--cream);
   color: #3a2218;
 }
@@ -26,6 +26,7 @@
   gap: 0.4rem;
   width: fit-content;
   min-height: 2rem;
+  margin: 0.55rem 0 0 0.85rem;
   padding: 0 0.75rem;
   border: 1px solid rgba(94, 48, 35, 0.22);
   border-radius: 999px;
@@ -58,7 +59,9 @@
   min-width: 0;
   min-height: 0;
   margin: 0 auto;
+  padding: 0.9rem 1.1rem 1rem 0.15rem;
   overflow: auto;
+  font-family: var(--font-display), "Times New Roman", serif;
 }
 
 .content > :global(.stack) { width: min(100%, 46rem); }
@@ -77,9 +80,9 @@
     position: fixed;
     z-index: 30;
     top: 4.85rem;
-    bottom: 0.75rem;
-    left: 0.7rem;
-    width: min(19rem, calc(100vw - 1.4rem));
+    bottom: 0;
+    left: 0;
+    width: min(19rem, 88vw);
     height: auto;
     transform: translateX(calc(-100% - 1.6rem));
     transition: transform 0.2s ease;

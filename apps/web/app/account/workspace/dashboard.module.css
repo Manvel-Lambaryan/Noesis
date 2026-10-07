@@ -2,7 +2,7 @@
 
 .page h1, .pageHead h1 {
   margin: 0;
-  font-family: var(--font-display), "Times New Roman", serif;
+  font-family: inherit;
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   font-weight: 560;
   letter-spacing: -0.03em;
@@ -53,10 +53,22 @@
 
 .quiet { background: #f3eadf; }
 
+.quiet ul {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quiet li { display: flex; flex-wrap: wrap; gap: 0.15rem 0.55rem; }
+
+.quiet li span { color: #895737; font-weight: 600; }
+
 .board h2, .panel h2, .quiet h2, .empty h1, .empty h2, .error h2 {
   margin: 0;
   color: #3a2218;
-  font-family: var(--font-display), "Times New Roman", serif;
+  font-family: inherit;
   font-size: 1.2rem;
   font-weight: 560;
 }
@@ -155,7 +167,7 @@ span.thumb {
   display: grid;
   place-items: center;
   color: #5e3023;
-  font-family: var(--font-display), "Times New Roman", serif;
+  font-family: inherit;
 }
 
 .tags { display: flex; flex-wrap: wrap; gap: 0.25rem; margin: 0.28rem 0 0; }
