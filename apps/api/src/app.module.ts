@@ -16,6 +16,7 @@ import { PaymentsModule } from "./modules/payments/payments.module";
 import { PricingModule } from "./modules/pricing/pricing.module";
 import { ReviewsModule } from "./modules/reviews/reviews.module";
 import { SellerModule } from "./modules/seller/seller.module";
+import { WorkspaceModule } from "./modules/workspace/workspace.module";
 import { HealthModule } from "./health/health.module";
 
 @Module({
@@ -38,6 +39,7 @@ import { HealthModule } from "./health/health.module";
     ModerationModule,
     AdminModule,
     AnalyticsModule,
+    WorkspaceModule,
   ],
 })
 export class AppModule {}

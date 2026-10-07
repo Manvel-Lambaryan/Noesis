@@ -1,11 +1,12 @@
-﻿import { Global, Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { ArtifactRateLimit } from "../../infrastructure/artifacts/artifact-rate-limit";
 import { PrismaArtifactsRepository } from "../../infrastructure/artifacts/prisma-artifacts.repository";
 import { ArtifactQueue } from "../../infrastructure/queue/artifact-queue";
 import { PrismaService } from "../../infrastructure/prisma.service";
 import { RedisService } from "../../infrastructure/redis.service";
 import { PrismaSellability } from "../../infrastructure/artifacts/prisma-sellability";
-import { SELLABILITY } from "./artifacts.public-port";
+import { PrismaSellerVersions } from "../../infrastructure/artifacts/prisma-seller-versions";
+import { SELLABILITY, SELLER_VERSIONS } from "./artifacts.public-port";
 import { ARTIFACTS_REPOSITORY } from "./artifacts.repository";
 import { ArtifactsService } from "./artifacts.service";
 import { SellerArtifactController } from "./artifacts.controller";
@@ -23,6 +24,11 @@ import { QuarantineUploadController } from "./upload.controller";
       inject: [PrismaService],
     },
     {
+      provide: SELLER_VERSIONS,
+      useFactory: (prisma: PrismaService) => new PrismaSellerVersions(prisma),
+      inject: [PrismaService],
+    },
+    {
       provide: ARTIFACTS_REPOSITORY,
       useFactory: (prisma: PrismaService) => new PrismaArtifactsRepository(prisma),
       inject: [PrismaService],
@@ -33,6 +39,6 @@ import { QuarantineUploadController } from "./upload.controller";
       inject: [RedisService],
     },
   ],
-  exports: [SELLABILITY],
+  exports: [SELLABILITY, SELLER_VERSIONS],
 })
 export class ArtifactsModule {}

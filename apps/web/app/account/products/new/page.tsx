@@ -18,6 +18,7 @@ export default async function NewProductPage() {
   const categories = await loadCategories();
   return (
     <main className="stack">
+      <p><Link href="/account/products">All products</Link></p>
       <ProductDraftForm
         mode="create"
         categories={categories}

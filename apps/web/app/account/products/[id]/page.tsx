@@ -31,6 +31,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   }
   return (
     <main className="stack">
+      <p><Link href="/account/products">All products</Link></p>
       <ProductDraftForm
         mode="edit"
         productId={product.id}

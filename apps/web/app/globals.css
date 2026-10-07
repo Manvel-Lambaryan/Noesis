@@ -147,6 +147,28 @@ body:has(.auth-shell) .site-nav {
   display: none;
 }
 
+body:has(.seller-workspace) {
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--cream);
+  background-image: none;
+  color: #3a2218;
+  color-scheme: light;
+}
+
+body:has(.seller-workspace) > .wrap {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+  padding: 4.5rem 0 0;
+  overflow: hidden;
+}
+
+@media (max-width: 760px) {
+  body:has(.seller-workspace) > .wrap { padding-top: 6.5rem; }
+}
+
 body:has(.welcome-shell) > .wrap {
   width: 100%;
   max-width: none;

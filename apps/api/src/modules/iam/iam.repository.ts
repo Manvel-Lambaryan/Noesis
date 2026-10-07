@@ -6,6 +6,8 @@ export type UserRecord = {
   id: string;
   email: string;
   passwordHash: string;
+  givenName: string;
+  familyName: string;
   emailVerified: boolean;
   roles: RoleName[];
   permissions: PermissionName[];

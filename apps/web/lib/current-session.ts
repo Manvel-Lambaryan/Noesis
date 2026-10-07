@@ -1,9 +1,12 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { apiFetch, isRecord } from "./api";
 import { SESSION_COOKIE } from "./session-cookie";
 
 export type AccountView = {
   email: string;
+  givenName: string;
+  familyName: string;
   roles: string[];
   permissions: string[];
   emailVerified: boolean;
@@ -11,7 +14,13 @@ export type AccountView = {
   publish: string;
 };
 
-export async function currentSession(): Promise<AccountView | null> {
+export function personName(givenName: string, familyName: string): string {
+  return [givenName.trim(), familyName.trim()].filter((part) => part.length > 0).join(" ");
+}
+
+export const currentSession = cache(loadSession);
+
+async function loadSession(): Promise<AccountView | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (token === undefined || token.length === 0) {
     return null;
@@ -23,6 +32,8 @@ export async function currentSession(): Promise<AccountView | null> {
     }
     return {
       email: text(result.body.email),
+      givenName: text(result.body.givenName),
+      familyName: text(result.body.familyName),
       roles: stringList(result.body.roles),
       permissions: stringList(result.body.permissions),
       emailVerified: result.body.emailVerified === true,
@@ -34,7 +45,9 @@ export async function currentSession(): Promise<AccountView | null> {
   }
 }
 
-export async function ownSellerProfile(): Promise<{ displayName: string; verificationState: string } | null> {
+export const ownSellerProfile = cache(loadSellerProfile);
+
+async function loadSellerProfile(): Promise<{ displayName: string; verificationState: string } | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (token === undefined || token.length === 0) {
     return null;

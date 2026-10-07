@@ -1,0 +1,104 @@
+.shell button {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-weight: inherit;
+  letter-spacing: 0;
+}
+
+.shell {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.75rem 0.85rem 0.9rem;
+  background: var(--cream);
+  color: #3a2218;
+}
+
+.shell .menuButton {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  min-height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid rgba(94, 48, 35, 0.22);
+  border-radius: 999px;
+  color: #5e3023;
+  font-size: 0.82rem;
+}
+
+.menuButton svg { width: 1rem; height: 1rem; }
+
+.body {
+  display: grid;
+  grid-template-columns: 18.75rem minmax(0, 1fr);
+  gap: 0.85rem;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.rail {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.content {
+  width: min(100%, 76rem);
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 auto;
+  overflow: auto;
+}
+
+.content > :global(.stack) { width: min(100%, 46rem); }
+
+.backdrop { display: none; }
+
+@media (max-width: 1280px) {
+  .body { grid-template-columns: 17.5rem minmax(0, 1fr); }
+}
+
+@media (max-width: 960px) {
+  .shell { grid-template-rows: auto minmax(0, 1fr); gap: 0.4rem; }
+  .shell .menuButton { display: inline-flex; }
+  .body { grid-template-columns: minmax(0, 1fr); }
+  .rail {
+    position: fixed;
+    z-index: 30;
+    top: 4.85rem;
+    bottom: 0.75rem;
+    left: 0.7rem;
+    width: min(19rem, calc(100vw - 1.4rem));
+    height: auto;
+    transform: translateX(calc(-100% - 1.6rem));
+    transition: transform 0.2s ease;
+  }
+  .navOpen .rail { transform: translateX(0); }
+  .shell .backdrop {
+    display: block;
+    position: fixed;
+    z-index: 25;
+    inset: 4.5rem 0 0;
+    background: rgba(12, 8, 6, 0.55);
+  }
+}
+
+@media (max-width: 760px) {
+  .rail { top: 6.85rem; }
+  .shell .backdrop { inset: 6.5rem 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail { transition: none; }
+}

@@ -1,10 +1,11 @@
-﻿import type { VerificationState } from "../../auth/actor";
+import type { VerificationState } from "../../auth/actor";
 
 export type SellerRecord = {
   id: string;
   userId: string;
   displayName: string;
   verificationState: VerificationState;
+  createdAt: Date;
 };
 
 export interface SellerRepository {

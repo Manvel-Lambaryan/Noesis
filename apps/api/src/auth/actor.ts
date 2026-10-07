@@ -12,6 +12,8 @@ export type VerificationState =
 export type Actor = {
   userId: string;
   email: string;
+  givenName: string;
+  familyName: string;
   roles: RoleName[];
   permissions: PermissionName[];
   emailVerified: boolean;

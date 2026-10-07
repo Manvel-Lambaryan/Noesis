@@ -135,9 +135,9 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-.search, .cart, .signIn, .register, .account { color: #f3e9dc; text-decoration: none; }
+.search, .cart, .signIn, .register, .profile { color: #f3e9dc; text-decoration: none; }
 
-.search, .cart, .account {
+.search, .cart {
   display: grid;
   place-items: center;
   width: 2.15rem;
@@ -161,7 +161,7 @@ button.cart {
   font-weight: 500;
 }
 
-.search:hover, .cart:hover, .account:hover {
+.search:hover, .cart:hover {
   border-color: #e0b07a;
   background: rgba(192, 133, 82, 0.32);
   color: #fff;
@@ -185,8 +185,55 @@ button.cart {
   line-height: 1rem;
 }
 
-.search svg, .cart svg, .account svg { width: 1.05rem; height: 1.05rem; transition: transform 0.28s ease; }
-.search:hover svg, .cart:hover svg, .account:hover svg { transform: scale(1.08); }
+.search svg, .cart svg, .profile svg { width: 1.05rem; height: 1.05rem; transition: transform 0.28s ease; }
+.search:hover svg, .cart:hover svg { transform: scale(1.08); }
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  max-width: 14rem;
+  min-width: 0;
+  padding: 0.28rem 0.75rem 0.28rem 0.35rem;
+  border: 1px solid rgba(243, 233, 220, 0.24);
+  border-radius: 999px;
+  background: rgba(243, 233, 220, 0.06);
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.profile svg { flex: none; }
+
+.profile span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.1;
+}
+
+.profile strong, .profile em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile strong {
+  color: #f6efe6;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.profile em {
+  color: rgba(224, 176, 122, 0.92);
+  font-size: 0.68rem;
+  font-style: normal;
+  font-weight: 560;
+}
+
+.profile:hover {
+  border-color: #e0b07a;
+  background: rgba(192, 133, 82, 0.32);
+  color: #fff;
+}
 
 .divider {
   width: 1px;
@@ -270,7 +317,7 @@ button.cart {
   line-height: 1.55;
 }
 
-.nav a:focus-visible, .signIn:focus-visible, .register:focus-visible, .search:focus-visible, .cart:focus-visible, .account:focus-visible, .brand:focus-visible {
+.nav a:focus-visible, .signIn:focus-visible, .register:focus-visible, .search:focus-visible, .cart:focus-visible, .profile:focus-visible, .brand:focus-visible {
   outline: 2px solid #c08552;
   outline-offset: 3px;
 }
@@ -288,12 +335,13 @@ button.cart {
   .nav { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; }
   .nav a { padding: 0.28rem 0.45rem; font-size: 0.78rem; }
   .divider { display: none; }
+  .profile { max-width: 8.75rem; }
   .brandBlock { padding-bottom: 1rem; }
   .brandBlock h1 { font-size: 3.4rem; }
   .scene { object-position: 30% center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .header, .nav a, .brand, .brand img, .search, .cart, .account, .search svg, .cart svg, .account svg, .signIn, .register { transition: none; }
-  .search:hover, .cart:hover, .account:hover, .register:hover, .search:hover svg, .cart:hover svg, .account:hover svg { transform: none; }
+  .header, .nav a, .brand, .brand img, .search, .cart, .profile, .search svg, .cart svg, .profile svg, .signIn, .register { transition: none; }
+  .search:hover, .cart:hover, .profile:hover, .register:hover, .search:hover svg, .cart:hover svg { transform: none; }
 }

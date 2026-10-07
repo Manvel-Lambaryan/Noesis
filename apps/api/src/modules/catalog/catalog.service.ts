@@ -8,7 +8,7 @@ import { API_LOGGER } from "../../health/health.controller";
 import { ProductRateLimit } from "../../infrastructure/catalog/product-rate-limit";
 import { SELLABILITY, type Sellability } from "../artifacts/artifacts.public-port";
 import { SELLER_ACCESS, type SellerAccess } from "../seller/seller.public-port";
-import { type CatalogAccess, type CategoryView } from "./catalog.public-port";
+import { type CatalogAccess, type CategoryView, type OwnedProduct } from "./catalog.public-port";
 import { CATALOG_REPOSITORY, type CatalogRepository, type ProductRecord } from "./catalog.repository";
 import {
   missingProduct,
@@ -43,6 +43,22 @@ export class CatalogService implements CatalogAccess {
       return null;
     }
     return { id: product.id };
+  }
+
+  async listOwned(sellerId: string): Promise<OwnedProduct[]> {
+    const rows = await this.products.listBySeller(sellerId);
+    return rows.map((row) => ({
+      id: row.id,
+      slug: row.slug,
+      title: row.title,
+      kind: row.kind,
+      listingState: row.listingState,
+      hasPreview: row.previews.length > 0,
+      previewUrl: row.previews[0]?.url ?? null,
+      stacks: row.stacks,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    }));
   }
 
   listCategories(): Promise<CategoryView[]> {

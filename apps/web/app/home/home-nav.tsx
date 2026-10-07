@@ -7,15 +7,23 @@ import { useEffect, useState } from "react";
 import { useCart } from "./cart-state";
 import styles from "./home-hero.module.css";
 
-const LINKS: { href: string; label: string; current: (path: string) => boolean }[] = [
-  { href: "/", label: "Home", current: (path) => path === "/" },
-  { href: "/marketplace", label: "Marketplace", current: (path) => path.startsWith("/marketplace") },
-  { href: "/#explore-categories", label: "Explore", current: () => false },
-  { href: "/account/seller", label: "Sell", current: (path) => path.startsWith("/account/seller") || path.startsWith("/account/products") },
-  { href: "/#about", label: "About", current: () => false },
-];
+function navLinks(seller: boolean): { href: string; label: string; current: (path: string) => boolean }[] {
+  return [
+    { href: "/", label: "Home", current: (path) => path === "/" },
+    { href: "/marketplace", label: "Marketplace", current: (path) => path.startsWith("/marketplace") },
+    { href: "/#explore-categories", label: "Explore", current: () => false },
+    { href: seller ? "/account" : "/account/seller", label: "Sell", current: (path) => path.startsWith("/account") },
+    { href: "/#about", label: "About", current: () => false },
+  ];
+}
 
-export function HomeNav({ signedIn }: { signedIn: boolean }) {
+export function HomeNav({ signedIn, seller, name, role }: {
+  signedIn: boolean;
+  seller: boolean;
+  name: string;
+  role: string;
+}) {
+  const links = navLinks(seller);
   const path = usePathname();
   const onHome = path === "/";
   const solid = useSolidNav(onHome);
@@ -27,7 +35,7 @@ export function HomeNav({ signedIn }: { signedIn: boolean }) {
         <span>NOESIS</span>
       </Link>
       <nav className={styles.nav} aria-label="Primary">
-        {LINKS.map((link) => (
+        {links.map((link) => (
           <Link key={link.label} className={link.current(path) ? styles.lead : undefined} href={link.href} aria-current={link.current(path) ? "page" : undefined}>
             {link.label}
           </Link>
@@ -39,7 +47,7 @@ export function HomeNav({ signedIn }: { signedIn: boolean }) {
         </Link>
         <CartButton />
         <span className={styles.divider} aria-hidden="true" />
-        {signedIn ? <ProfileLink /> : <GuestLinks />}
+        {signedIn ? <ProfileLink name={name} role={role} /> : <GuestLinks />}
       </div>
     </header>
   );
@@ -82,10 +90,15 @@ function GuestLinks() {
   );
 }
 
-function ProfileLink() {
+function ProfileLink({ name, role }: { name: string; role: string }) {
+  const label = name.length > 0 ? name : "Profile";
   return (
-    <Link className={styles.account} href="/account" aria-label="Open your profile">
+    <Link className={styles.profile} href="/account/profile" aria-label={`Open profile for ${label}`}>
       <UserRound strokeWidth={1.75} aria-hidden="true" />
+      <span>
+        <strong>{label}</strong>
+        {role.length > 0 ? <em>{role}</em> : null}
+      </span>
     </Link>
   );
 }
