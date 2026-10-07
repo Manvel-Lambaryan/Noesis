@@ -8,20 +8,20 @@ describe("scan config", () => {
     assert.throws(() =>
       loadScanConfig({
         DATABASE_URL: "postgresql://noesis:noesis@localhost:5432/noesis",
-        REDIS_URL: "redis://127.0.0.1:6379",
+        REDIS_URL: "redis://127.0.0.1:63929",
       }),
     );
   });
 
   it("keeps database settings out of the config object", () => {
-    const config = loadScanConfig({ REDIS_URL: "redis://127.0.0.1:6379" });
+    const config = loadScanConfig({ REDIS_URL: "redis://127.0.0.1:63929" });
     assert.deepEqual(Object.keys(config).sort(), ["logLevel", "quarantineDir", "queueName", "redisUrl"]);
   });
 });
 
 describe("scan process", () => {
   it("starts and closes against Redis", async () => {
-    const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
+    const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:63929";
     const handle = await startScan({ REDIS_URL: redisUrl, LOG_LEVEL: "info" });
     await handle.close();
   });

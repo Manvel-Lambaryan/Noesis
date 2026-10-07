@@ -4,10 +4,7 @@ import { startWorker } from "./start-worker";
 void bootstrap();
 
 async function bootstrap(): Promise<void> {
-  const redisUrl = process.env.REDIS_URL;
-  if (redisUrl === undefined || redisUrl.length === 0) {
-    throw new Error("REDIS_URL is required");
-  }
+  const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:63929";
   const handle = await startWorker(redisUrl);
   if (process.env.DATABASE_URL !== undefined) {
     await retryApprovedPromotions();

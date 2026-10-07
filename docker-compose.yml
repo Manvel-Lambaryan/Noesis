@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: noesis
       POSTGRES_DB: noesis
     ports:
-      - "5432:5432"
+      - "54329:5432"
     volumes:
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
@@ -17,7 +17,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "63929:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s

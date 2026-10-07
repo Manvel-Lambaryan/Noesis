@@ -4,7 +4,7 @@ import { startWorker } from "./start-worker";
 
 describe("worker", () => {
   it("starts and closes against Redis", async () => {
-    const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
+    const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:63929";
     const handle = await startWorker(redisUrl);
     await handle.close();
     assert.equal(typeof handle.close, "function");

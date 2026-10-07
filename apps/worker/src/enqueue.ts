@@ -10,10 +10,7 @@ export async function enqueueVerdict(job: VerdictJob): Promise<void> {
 }
 
 async function add(name: string, jobId: string, data: object): Promise<void> {
-  const url = process.env.REDIS_URL;
-  if (url === undefined || url.length === 0) {
-    throw new Error("REDIS_URL is required");
-  }
+  const url = process.env.REDIS_URL ?? "redis://127.0.0.1:63929";
   const queue = new Queue(name, { connection: { url, maxRetriesPerRequest: null } });
   try {
     await queue.add(name, data, {

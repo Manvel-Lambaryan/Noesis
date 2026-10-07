@@ -11,10 +11,7 @@ export function loadScanConfig(env: Record<string, string | undefined>): ScanCon
   if (typeof env.DATABASE_URL === "string") {
     throw new Error("Scan process refuses DATABASE_URL");
   }
-  const redisUrl = env.REDIS_URL;
-  if (redisUrl === undefined || redisUrl.length === 0) {
-    throw new Error("REDIS_URL is required");
-  }
+  const redisUrl = env.REDIS_URL ?? "redis://127.0.0.1:63929";
   return {
     redisUrl,
     logLevel: env.LOG_LEVEL ?? "info",

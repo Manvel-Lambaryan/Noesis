@@ -21,7 +21,7 @@ describe("scanner isolation", () => {
   });
 
   it("lets only one scanner claim a version", async () => {
-    const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:6379";
+    const redisUrl = process.env.REDIS_URL ?? "redis://127.0.0.1:63929";
     const redis = new Redis(redisUrl, { maxRetriesPerRequest: 1 });
     const versionId = randomUUID();
     try {
