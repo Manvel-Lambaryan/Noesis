@@ -93,7 +93,7 @@ function GuestLinks() {
 function ProfileLink({ name, role }: { name: string; role: string }) {
   const label = name.length > 0 ? name : "Profile";
   return (
-    <Link className={styles.profile} href="/account/profile" aria-label={`Open profile for ${label}`}>
+    <Link className={styles.profile} href="/account" aria-label={`Open profile for ${label}`}>
       <UserRound strokeWidth={1.75} aria-hidden="true" />
       <span>
         <strong>{label}</strong>

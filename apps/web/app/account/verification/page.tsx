@@ -25,7 +25,7 @@ export default async function VerificationPage() {
         <h2>Seller verification</h2>
         <StatusBadge value={checks.seller} label={checkLabel(checks.seller)} />
         <p className={styles.note}>Current record: {loaded.view.seller.verificationState || "no profile yet"}. A product can be published only when this is verification approved, the email is verified, and the seller role is present.</p>
-        <p className={styles.note}><Link href="/account/profile">Edit display name</Link></p>
+        <p className={styles.note}><Link href="/account/seller">Edit display name</Link></p>
       </section>
       <section className={styles.quiet}>
         <h2>Payout verification</h2>

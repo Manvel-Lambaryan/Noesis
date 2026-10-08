@@ -1,7 +1,5 @@
-import { SellerProfileEditor } from "./seller-profile";
-
-export const dynamic = "force-dynamic";
+import { redirect } from "next/navigation";
 
 export default function ProfilePage() {
-  return <SellerProfileEditor />;
+  redirect("/account");
 }

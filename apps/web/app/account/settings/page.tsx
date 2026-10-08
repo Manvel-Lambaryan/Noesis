@@ -4,7 +4,7 @@ import styles from "../workspace/dashboard.module.css";
 export const dynamic = "force-dynamic";
 
 const GROUPS = [
-  { title: "Account", status: "Available", body: "Display name is saved on the seller profile.", href: "/account/profile", action: "Edit profile" },
+  { title: "Account", status: "Available", body: "Display name is saved on the seller profile.", href: "/account/seller", action: "Edit profile" },
   { title: "Security", status: "Available", body: "Password reset uses the existing account flow. Session management is not listed here.", href: "/forgot-password", action: "Reset password" },
   { title: "Notifications", status: "Not configured", body: "In-app and push preferences are not stored. Verification and password reset still send email.", href: "/account/notifications", action: "Notification status" },
   { title: "Marketplace preferences", status: "Not configured", body: "Default currency, timezone, and language are not stored." },

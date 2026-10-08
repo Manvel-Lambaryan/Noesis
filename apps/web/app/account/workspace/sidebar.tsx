@@ -96,7 +96,7 @@ function SellerChip({ name, email, verified, status, onClose }: {
   const label = name.trim().length > 0 ? name.trim() : email;
   return (
     <div className={styles.sellerRow}>
-      <Link className={styles.seller} href="/account/profile">
+      <Link className={styles.seller} href="/account">
         <span className={styles.avatar} aria-hidden="true">{initials(label, email)}</span>
         <span className={styles.identity}>
           <strong className={styles.name}>{label}</strong>
