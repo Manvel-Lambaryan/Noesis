@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { Viewport } from "next";
 import { cookies } from "next/headers";
 import { ZoomLock } from "./components/zoom-lock";
+import { display, text } from "./fonts";
 import { CartRoot } from "./home/cart-root";
 import { HomeNav } from "./home/home-nav";
 import { currentSession, personName } from "../lib/current-session";
@@ -25,8 +26,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const name = session === null ? "" : personName(session.givenName, session.familyName);
   const role = roleTitle((await cookies()).get(ONBOARDING_COOKIE)?.value);
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={`${text.variable} ${display.variable}`}>
+      <body className={text.className}>
         <ZoomLock />
         <CartRoot>
           <HomeNav signedIn={session !== null} seller={session?.roles.includes("seller") ?? false} name={name} role={role} />

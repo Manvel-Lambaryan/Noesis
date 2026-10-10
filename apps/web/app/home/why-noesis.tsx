@@ -20,7 +20,7 @@ export function WhyNoesis() {
           intro="A marketplace for code, templates and ready-to-launch products."
           tone="dark"
         />
-        <ul className={styles.points}>
+        <ul className={styles.points} id="docs">
           {POINTS.map((point) => (
             <li key={point.title}>
               <PointIcon icon={point.icon} />

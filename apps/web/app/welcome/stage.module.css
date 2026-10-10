@@ -6,7 +6,7 @@
   container-type: size;
   color: #fbf6ef;
   color-scheme: dark;
-  background: #3a2218;
+  background: #0c1914;
   font-family: "Segoe UI Variable Display", "Segoe UI", "Avenir Next", sans-serif;
 }
 
@@ -18,8 +18,8 @@
   height: 100%;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 46% 40% at 50% 46%, rgba(192, 133, 82, 0.16), transparent 64%),
-    #3a2218;
+    radial-gradient(ellipse 46% 40% at 50% 46%, rgba(83, 107, 84, 0.22), transparent 64%),
+    #0c1914;
 }
 
 .brand {

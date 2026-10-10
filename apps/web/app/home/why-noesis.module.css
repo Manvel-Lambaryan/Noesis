@@ -1,8 +1,7 @@
 .section {
   padding: var(--home-pad) 1.25rem;
   overflow: hidden;
-  border-radius: var(--radius-section);
-  background: var(--bg-darker);
+  background: var(--forest-950);
   color: var(--text-cream);
 }
 
@@ -14,7 +13,7 @@
   gap: clamp(1rem, 2vw, 2rem);
   margin: 0;
   padding: 1.4rem 0 0;
-  border-top: 1px solid rgba(192, 133, 82, 0.28);
+  border-top: 1px solid var(--border);
   list-style: none;
 }
 

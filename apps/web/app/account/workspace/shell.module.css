@@ -16,8 +16,8 @@
   min-height: 0;
   overflow: hidden;
   padding: 0;
-  background: var(--cream);
-  color: #3a2218;
+  background: var(--forest-950);
+  color: var(--text-primary);
 }
 
 .shell .menuButton {
@@ -28,9 +28,9 @@
   min-height: 2rem;
   margin: 0.55rem 0 0 0.85rem;
   padding: 0 0.75rem;
-  border: 1px solid rgba(94, 48, 35, 0.22);
-  border-radius: 999px;
-  color: #5e3023;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  color: var(--ivory-100);
   font-size: 0.82rem;
 }
 
@@ -61,7 +61,7 @@
   margin: 0 auto;
   padding: 0.9rem 1.1rem 1rem 0.15rem;
   overflow: auto;
-  font-family: var(--font-display), "Times New Roman", serif;
+  font-family: var(--font-sans);
 }
 
 .content > :global(.stack) { width: min(100%, 46rem); }

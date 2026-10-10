@@ -31,5 +31,6 @@ export const text = localFont({
     { path: "../fonts/AderoTrial-ExtraBold.otf", weight: "800", style: "normal" },
   ],
   display: "swap",
+  variable: "--font-text",
   adjustFontFallback: "Arial",
 });

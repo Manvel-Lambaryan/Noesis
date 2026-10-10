@@ -4,8 +4,8 @@
   place-items: center;
   overflow: hidden;
   padding: 1.35rem 1.25rem 0.85rem;
-  border-top: 1px solid rgba(243, 233, 220, 0.12);
-  background: #120e0c;
+  border-top: 1px solid var(--border);
+  background: var(--forest-950);
   text-align: center;
 }
 
@@ -23,8 +23,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 50% 48%, rgba(12, 8, 6, 0.72) 0%, rgba(12, 8, 6, 0.28) 42%, transparent 68%),
-    linear-gradient(90deg, rgba(12, 8, 6, 0.05), rgba(12, 8, 6, 0.35) 30%, rgba(12, 8, 6, 0.35) 70%, rgba(12, 8, 6, 0.08));
+    radial-gradient(ellipse at 50% 48%, rgba(7, 17, 12, 0.78) 0%, rgba(7, 17, 12, 0.35) 46%, transparent 70%),
+    linear-gradient(90deg, rgba(7, 17, 12, 0.2), rgba(7, 17, 12, 0.45) 30%, rgba(7, 17, 12, 0.45) 70%, rgba(7, 17, 12, 0.2));
 }
 
 .copy {
@@ -77,13 +77,13 @@
 
 .primary {
   padding: 0.55rem 1rem;
-  border-radius: 999px;
-  background: #f4e6d4;
-  color: #3a2218;
+  border-radius: var(--radius-control);
+  background: var(--button-primary);
+  color: var(--text-inverse);
   font-size: 0.88rem;
 }
 
-.primary:hover { background: #fff6ec; }
+.primary:hover { background: var(--button-primary-hover); color: var(--text-inverse); }
 
 .quiet { color: var(--text-cream); font-size: 0.9rem; }
 .quiet:hover { color: var(--accent-caramel); }

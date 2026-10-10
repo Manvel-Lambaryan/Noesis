@@ -15,12 +15,11 @@
   position: relative;
   min-height: 20.5rem;
   overflow: hidden;
-  border-radius: 1.5rem;
-  box-shadow: 0 22px 48px rgba(12, 8, 6, 0.28);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--forest-800);
+  color: var(--ivory-100);
 }
-
-.dev { border: 1px solid rgba(94, 48, 35, 0.14); background: #f6efe6; color: var(--text-dark); }
-.biz { border: 1px solid rgba(243, 233, 220, 0.14); background: #1a120e; color: var(--text-cream); }
 
 .dev img, .biz img {
   position: absolute;
@@ -37,8 +36,8 @@
   inset: 0;
 }
 
-.dev::after { background: linear-gradient(90deg, rgba(246, 239, 230, 0.94) 0%, rgba(246, 239, 230, 0.78) 30%, rgba(246, 239, 230, 0.12) 58%); }
-.biz::after { background: linear-gradient(90deg, rgba(16, 10, 8, 0.9) 0%, rgba(16, 10, 8, 0.62) 32%, rgba(16, 10, 8, 0.08) 60%); }
+.dev::after { background: linear-gradient(90deg, rgba(7, 17, 12, 0.92) 0%, rgba(12, 25, 20, 0.72) 34%, rgba(12, 25, 20, 0.08) 64%); }
+.biz::after { background: linear-gradient(90deg, rgba(7, 17, 12, 0.92) 0%, rgba(18, 33, 27, 0.7) 34%, rgba(18, 33, 27, 0.08) 64%); }
 
 .copy {
   position: relative;
@@ -106,15 +105,14 @@
   text-decoration: none;
 }
 
-.dev .copy a { color: #3a2218; }
+.dev .copy a { color: var(--ivory-100); }
 .copy a:hover { color: var(--accent-bronze); }
 .copy a:focus-visible { outline: 2px solid var(--accent-caramel); outline-offset: 3px; }
 
 @media (max-width: 800px) {
   .section { padding-inline: 0.9rem; }
   .split { grid-template-columns: 1fr; }
-  .dev::after, .biz::after { background: linear-gradient(180deg, rgba(246, 239, 230, 0.94) 0%, rgba(246, 239, 230, 0.2) 58%); }
-  .biz::after { background: linear-gradient(180deg, rgba(16, 10, 8, 0.92) 0%, rgba(16, 10, 8, 0.2) 58%); }
+  .dev::after, .biz::after { background: linear-gradient(180deg, rgba(7, 17, 12, 0.92) 0%, rgba(7, 17, 12, 0.2) 62%); }
 }
 
 @media (prefers-reduced-motion: reduce) {

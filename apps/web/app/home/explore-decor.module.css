@@ -4,20 +4,19 @@
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  color: rgba(192, 133, 82, 0.22);
+  color: rgba(92, 119, 92, 0.28);
 }
 
 .left,
 .right {
   position: absolute;
-  width: clamp(6rem, 11vw, 9rem);
+  width: clamp(7rem, 12vw, 11rem);
   height: auto;
 }
 
-.left { left: -2.4rem; bottom: -1.2rem; transform: rotate(-16deg); }
-.right { right: -2.6rem; top: 7%; transform: rotate(164deg); }
+.left { left: -2.6rem; bottom: 8%; transform: rotate(-18deg); }
+.right { right: -2.8rem; top: 18%; transform: scaleX(-1) rotate(-12deg); }
 
-@media (max-width: 700px) {
-  .left, .right { width: 5.5rem; opacity: 0.7; }
-  .right { top: 8%; }
+@media (max-width: 760px) {
+  .left, .right { width: 5rem; opacity: 0.7; }
 }

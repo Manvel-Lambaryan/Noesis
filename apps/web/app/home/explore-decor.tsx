@@ -3,17 +3,20 @@ import styles from "./explore-decor.module.css";
 export function ExploreDecor() {
   return (
     <div className={styles.layer} aria-hidden="true">
-      <Leaf className={styles.left} />
-      <Leaf className={styles.right} />
+      <Sprig className={styles.left} />
+      <Sprig className={styles.right} />
     </div>
   );
 }
 
-function Leaf({ className }: { className: string }) {
+function Sprig({ className }: { className: string }) {
   return (
-    <svg className={className} viewBox="0 0 160 220" fill="none">
-      <path d="M80 8C118 48 138 96 124 156C112 198 92 214 80 216C68 214 48 198 36 156C22 96 42 48 80 8Z" fill="currentColor" />
-      <path d="M80 208C82 150 78 90 80 24" stroke="#f3e9dc" strokeWidth="1.2" />
+    <svg className={className} viewBox="0 0 180 280" fill="none">
+      <path d="M92 268C90 190 74 128 92 18" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M92 214C48 192 24 156 36 122C70 144 90 178 92 214Z" fill="currentColor" />
+      <path d="M92 168C140 146 168 112 158 78C122 100 98 134 92 168Z" fill="currentColor" />
+      <path d="M92 122C46 100 22 66 34 34C68 56 90 88 92 122Z" fill="currentColor" />
+      <path d="M92 78C136 58 162 28 148 6C116 24 98 50 92 78Z" fill="currentColor" />
     </svg>
   );
 }
