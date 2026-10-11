@@ -99,10 +99,9 @@ function onKey(event: KeyboardEvent<HTMLUListElement>, move: (direction: number)
 
 function PopularEdge() {
   return (
-    <svg className={styles.edge} viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
-      <path fill="var(--forest-900)" d="M0 68C200 24 390 112 640 64C900 14 1100 118 1300 72C1372 52 1416 84 1440 74V160H0Z" />
-      <path fill="none" stroke="var(--gold)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" d="M0 68C200 24 390 112 640 64C900 14 1100 118 1300 72C1372 52 1416 84 1440 74" />
-      <path fill="none" stroke="var(--gold)" strokeWidth="0.7" opacity="0.42" vectorEffect="non-scaling-stroke" d="M0 84C220 46 410 124 660 80C920 34 1120 128 1320 88C1384 70 1420 96 1440 90" />
+    <svg className={styles.edge} viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="var(--forest-950)" d="M0 0H1440V62C1388 78 1310 42 1180 64C980 102 820 20 580 58C360 92 190 16 0 52Z" />
+      <path fill="none" stroke="var(--gold)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" d="M0 52C190 16 360 92 580 58C820 20 980 102 1180 64C1310 42 1388 78 1440 62" />
     </svg>
   );
 }
