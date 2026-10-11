@@ -144,6 +144,8 @@ function toUser(row: UserRow): UserRecord {
     id: row.id,
     email: row.email,
     passwordHash: row.passwordHash,
+    givenName: row.givenName ?? "",
+    familyName: row.familyName ?? "",
     emailVerified: row.emailVerifiedAt !== null,
     roles: row.roles.map((role) => role.role),
     permissions: row.permissions.map((permission) => permission.permission),

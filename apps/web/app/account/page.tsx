@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SignOutButton } from "../components/sign-out-button";
-import { currentSession, ownSellerProfile, type AccountView } from "../../lib/current-session";
+import { currentSession, type AccountView } from "../../lib/current-session";
+import { SellerDashboard } from "./workspace/dashboard";
 
 export const dynamic = "force-dynamic";
 
@@ -9,20 +10,20 @@ export default async function AccountPage() {
   if (session === null) {
     return (
       <main className="card stack">
-        <h1>Profile</h1>
-        <p>Sign in to open your profile.</p>
+        <h1>Account</h1>
+        <p>Sign in to open your account.</p>
         <p><Link href="/login">Sign in</Link></p>
       </main>
     );
   }
-  const seller = session.roles.includes("seller") ? await ownSellerProfile() : null;
+  if (session.roles.includes("seller")) return <SellerDashboard />;
   return (
     <main className="card stack">
-      <h1>Profile</h1>
+      <h1>Account</h1>
       <Identity session={session} />
-      {session.roles.includes("buyer") ? <BuyerPanel session={session} /> : null}
-      {session.roles.includes("seller") ? <SellerPanel session={session} name={seller?.displayName ?? ""} state={seller?.verificationState ?? "no profile yet"} /> : null}
+      <BuyerPanel session={session} />
       {session.roles.includes("admin") || session.permissions.includes("moderation") ? <AdminPanel /> : null}
+      <p><Link href="/account/seller">Open a seller profile</Link></p>
       <SignOutButton />
     </main>
   );
@@ -45,19 +46,6 @@ function BuyerPanel({ session }: { session: AccountView }) {
       <h2>Buyer</h2>
       <p>Purchase: {session.purchase}</p>
       <p><Link href="/marketplace">Browse the marketplace</Link></p>
-    </section>
-  );
-}
-
-function SellerPanel({ session, name, state }: { session: AccountView; name: string; state: string }) {
-  return (
-    <section>
-      <h2>Seller</h2>
-      <p>{name.length > 0 ? name : "No display name yet"}</p>
-      <p>Identity: {state}</p>
-      <p>Publication: {session.publish}</p>
-      <p><Link href="/account/seller">Seller profile</Link></p>
-      <p><Link href="/account/products">Product drafts</Link></p>
     </section>
   );
 }

@@ -1,4 +1,4 @@
-﻿export type CategoryView = {
+export type CategoryView = {
   id: string;
   slug: string;
   name: string;
@@ -21,9 +21,23 @@ export type IndexSource = {
   updatedAt: Date;
 };
 
+export type OwnedProduct = {
+  id: string;
+  slug: string;
+  title: string;
+  kind: string;
+  listingState: string;
+  hasPreview: boolean;
+  previewUrl: string | null;
+  stacks: string[];
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type CatalogAccess = {
   listForIndex(): Promise<IndexSource[]>;
   findOwned(sellerId: string, productId: string): Promise<{ id: string } | null>;
+  listOwned(sellerId: string): Promise<OwnedProduct[]>;
 };
 
 export const CATALOG_ACCESS = Symbol("CATALOG_ACCESS");

@@ -67,6 +67,11 @@ export type OnboardingState = {
 
 export type SecondaryAction = { href: OnboardingExit; label: string };
 
+export function roleTitle(value: string | undefined): string {
+  const role = parseOnboarding(value).role;
+  return role === null ? "" : ROLE_COPY[role].title;
+}
+
 export function initialOnboardingState(): OnboardingState {
   return { version: ONBOARDING_VERSION, status: "draft", step: 1, role: null, goals: [] };
 }

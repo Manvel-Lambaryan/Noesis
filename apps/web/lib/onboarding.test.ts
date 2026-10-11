@@ -5,6 +5,7 @@ import {
   ONBOARDING_COOKIE,
   ONBOARDING_ROLES,
   ROLE_COPY,
+  roleTitle,
   WELCOME_QUESTION,
   WELCOME_SUPPORT,
   destinationFor,
@@ -128,6 +129,10 @@ describe("onboarding copy", () => {
     assert.equal(GOAL_COPY.guest.length, 4);
     assert.equal(GOAL_COPY.guest[3]?.label, "Look around before I choose a role.");
     assert.equal(GOAL_COPY.developer[6]?.label, "Prepare to create a seller profile.");
+    assert.equal(roleTitle("v1|complete|3|developer|_"), "Developer");
+    assert.equal(roleTitle("v1|complete|3|business|_"), "Business Professional");
+    assert.equal(roleTitle("v1|draft|1|guest|_"), "Guest");
+    assert.equal(roleTitle(undefined), "");
   });
 
   it("stores a persistent httpOnly preference cookie", () => {

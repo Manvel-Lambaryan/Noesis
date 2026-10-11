@@ -12,10 +12,10 @@ button.trigger {
   min-height: 65px;
   margin: 0;
   padding: 0 0.55rem;
-  border: 1px solid #efe4d6;
-  border-radius: 12px;
-  background: #fffdfb;
-  color: #5e3023;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--forest-950);
+  color: var(--ivory-100);
   font-family: "Segoe UI", sans-serif;
   font-size: 0.82rem;
   font-weight: 500;
@@ -27,8 +27,8 @@ button.trigger {
 button.trigger:hover,
 button.trigger:focus-visible {
   filter: none;
-  border-color: #c08552;
-  background: #fff;
+  border-color: var(--gold-400);
+  background: var(--forest-900);
   box-shadow: none;
   outline: none;
 }
@@ -45,7 +45,7 @@ button.trigger:focus-visible {
   width: 0.85rem;
   height: 0.85rem;
   flex: none;
-  color: #8d7360;
+  color: var(--ivory-300);
 }
 
 .menu {
@@ -56,14 +56,14 @@ button.trigger:focus-visible {
   padding: 0.35rem;
   overflow: auto;
   list-style: none;
-  border: 1px solid #efe4d6;
+  border: 1px solid var(--border-strong);
   border-radius: 12px;
-  background: #fffdfb;
-  box-shadow: 0 18px 40px rgba(58, 34, 24, 0.18);
+  background: var(--forest-850);
+  box-shadow: 0 18px 40px rgba(7, 17, 12, 0.35);
 }
 
 .menu::-webkit-scrollbar { width: 8px; }
-.menu::-webkit-scrollbar-thumb { background: #e4d3c2; border-radius: 8px; }
+.menu::-webkit-scrollbar-thumb { background: var(--sage-600); border-radius: 8px; }
 
 button.option {
   display: flex;
@@ -76,7 +76,7 @@ button.option {
   border: 0;
   border-radius: 8px;
   background: transparent;
-  color: #5e3023;
+  color: var(--ivory-100);
   font-family: "Segoe UI", sans-serif;
   font-size: 0.92rem;
   font-weight: 500;
@@ -89,7 +89,7 @@ button.option:hover,
 button.active,
 button.option[aria-selected="true"] {
   filter: none;
-  background: #f4e6d4;
+  background: var(--forest-700);
   box-shadow: none;
 }
 
@@ -103,7 +103,7 @@ button.option[aria-selected="true"] {
 
 .dial {
   flex: none;
-  color: #8d7360;
+  color: var(--ivory-300);
   font-variant-numeric: tabular-nums;
 }
 

@@ -24,11 +24,13 @@ function toRecord(row: {
   userId: string;
   displayName: string;
   verificationState: SellerRecord["verificationState"];
+  createdAt: Date;
 }): SellerRecord {
   return {
     id: row.id,
     userId: row.userId,
     displayName: row.displayName,
     verificationState: row.verificationState,
+    createdAt: row.createdAt,
   };
 }

@@ -1,0 +1,54 @@
+.carousel { position: relative; margin-top: clamp(1.75rem, 3vw, 2.6rem); }
+
+.track {
+  display: flex;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0.45rem 0.15rem 0.9rem;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.track::-webkit-scrollbar { display: none; }
+.track:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+.track li {
+  flex: 0 0 clamp(13.25rem, 16vw, 15.75rem);
+  scroll-snap-align: start;
+}
+
+.prev,
+.next {
+  position: absolute;
+  top: 46%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  min-width: 2.65rem;
+  min-height: 2.65rem;
+  padding: 0;
+  border: 1px solid var(--border-dark);
+  border-radius: 50%;
+  background: var(--surface-parchment);
+  color: var(--text-on-light);
+  box-shadow: none;
+}
+
+.prev { left: 0.15rem; }
+.next { right: 0.15rem; }
+.prev:disabled, .next:disabled { visibility: hidden; }
+.prev:hover, .next:hover { border-color: var(--gold); background: var(--surface-card); color: var(--text-on-light); }
+
+@media (max-width: 760px) {
+  .track li { flex-basis: min(78vw, 18rem); }
+  .prev, .next { width: 2.3rem; height: 2.3rem; min-width: 2.3rem; min-height: 2.3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prev, .next { transition: none; }
+}

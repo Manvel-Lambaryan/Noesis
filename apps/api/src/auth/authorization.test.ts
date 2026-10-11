@@ -6,6 +6,8 @@ import { purchaseGate, sellerPublishGate } from "./authorization";
 const buyer = (emailVerified: boolean): Actor => ({
   userId: "user",
   email: "buyer@example.com",
+  givenName: "Nora",
+  familyName: "Petrosyan",
   roles: ["buyer"],
   permissions: [],
   emailVerified,

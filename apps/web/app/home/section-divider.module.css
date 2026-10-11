@@ -1,0 +1,44 @@
+.divider {
+  position: relative;
+  z-index: 1;
+  margin-top: -1.35rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.wave {
+  display: block;
+  width: 100%;
+  height: clamp(5.5rem, 9vw, 8.5rem);
+}
+
+.left,
+.right {
+  position: absolute;
+  bottom: -0.4rem;
+  width: clamp(6.5rem, 12vw, 10.5rem);
+  height: auto;
+  color: var(--sage);
+  opacity: 0.55;
+}
+
+.left { left: -1.2rem; transform: rotate(-8deg); }
+.right { right: -1.4rem; bottom: 0.2rem; }
+.flip { transform: scaleX(-1) rotate(-6deg); }
+
+.arc {
+  position: absolute;
+  bottom: 0.35rem;
+  left: 50%;
+  width: min(16rem, 34vw);
+  height: auto;
+  color: var(--gold);
+  opacity: 0.55;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 760px) {
+  .divider { margin-top: -2rem; }
+  .left, .right { width: 5.2rem; opacity: 0.4; }
+  .arc { display: none; }
+}

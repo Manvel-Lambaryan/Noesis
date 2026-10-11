@@ -22,3 +22,15 @@ export const script = localFont({
   weight: "500",
   display: "swap",
 });
+
+export const text = localFont({
+  src: [
+    { path: "../fonts/AderoTrial-Light.otf", weight: "300", style: "normal" },
+    { path: "../fonts/AderoTrial-SemiBold.otf", weight: "600", style: "normal" },
+    { path: "../fonts/AderoTrial-Bold.otf", weight: "700", style: "normal" },
+    { path: "../fonts/AderoTrial-ExtraBold.otf", weight: "800", style: "normal" },
+  ],
+  display: "swap",
+  variable: "--font-text",
+  adjustFontFallback: "Arial",
+});

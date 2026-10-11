@@ -170,6 +170,8 @@ function toActor(user: UserRecord): Actor {
   return {
     userId: user.id,
     email: user.email,
+    givenName: user.givenName,
+    familyName: user.familyName,
     roles: user.roles,
     permissions: user.permissions,
     emailVerified: user.emailVerified,

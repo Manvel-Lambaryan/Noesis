@@ -5,6 +5,8 @@ export function sessionView(actor: Actor, verificationState: VerificationState |
   return {
     userId: actor.userId,
     email: actor.email,
+    givenName: actor.givenName,
+    familyName: actor.familyName,
     roles: actor.roles,
     permissions: actor.permissions,
     emailVerified: actor.emailVerified,

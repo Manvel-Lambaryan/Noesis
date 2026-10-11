@@ -1,4 +1,4 @@
-﻿export type ArtifactsPort = {
+export type ArtifactsPort = {
   readonly module: "artifacts";
 };
 
@@ -13,6 +13,22 @@ export type Sellability = {
 };
 
 export const SELLABILITY = Symbol("SELLABILITY");
+
+export type VersionSignal = {
+  id: string;
+  productId: string;
+  versionLabel: string;
+  state: string;
+  reasonCode: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export interface SellerVersionAccess {
+  listForSeller(sellerId: string): Promise<VersionSignal[]>;
+}
+
+export const SELLER_VERSIONS = Symbol("SELLER_VERSIONS");
 
 export class NoSellableVersions implements Sellability {
   sellableProductIds(): Promise<ReadonlySet<string>> {
