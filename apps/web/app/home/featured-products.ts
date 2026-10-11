@@ -50,7 +50,7 @@ export function fromListings(items: ListingCard[]): FeaturedProduct[] {
 }
 
 export function launchProducts(products: FeaturedProduct[]): FeaturedProduct[] {
-  return products.slice(0, 4);
+  return products.slice(0, 3);
 }
 
 /** Listed products for the popular rail. Not a ranked weekly chart. */

@@ -115,7 +115,7 @@
 .foot {
   display: block;
   width: calc(100% + (var(--page-gutter) * 2));
-  height: clamp(3.2rem, 5.5vw, 5rem);
+  height: clamp(4.2rem, 7vw, 6.4rem);
   margin: 0.4rem calc(var(--page-gutter) * -1) 0;
 }
 

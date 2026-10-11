@@ -36,8 +36,9 @@ export function ExploreCategories({ categories }: { categories: CategoryOption[]
 
 function ReturnEdge() {
   return (
-    <svg className={styles.foot} viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
-      <path fill="var(--forest-900)" d="M0 36C220 78 460 8 720 42C980 76 1200 12 1440 48V90H0Z" />
+    <svg className={styles.foot} viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="var(--forest-900)" d="M0 78C180 28 340 112 560 72C790 30 980 118 1200 78C1320 56 1390 96 1440 84V160H0Z" />
+      <path fill="none" stroke="var(--gold)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" d="M0 78C180 28 340 112 560 72C790 30 980 118 1200 78C1320 56 1390 96 1440 84" />
     </svg>
   );
 }

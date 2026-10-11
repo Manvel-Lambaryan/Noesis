@@ -1,7 +1,10 @@
 .section {
-  padding: var(--home-pad) 1.25rem;
+  margin-top: -1px;
+  padding: clamp(1.2rem, 2.4vw, 1.8rem) 1.25rem var(--home-pad);
   overflow: hidden;
-  background: var(--forest-950);
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(198, 169, 110, 0.07), transparent 34%),
+    var(--forest-900);
   color: var(--text-cream);
 }
 
