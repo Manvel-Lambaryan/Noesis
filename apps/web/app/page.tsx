@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { display } from "./fonts";
-import { HomeFooter } from "./home/home-footer";
 import { HomeHero } from "./home/home-hero";
 import { FEATURED_FALLBACK, fromListings, launchProducts, trendingProducts } from "./home/featured-products";
 import { ExploreCategories } from "./home/explore-categories";
@@ -42,7 +41,6 @@ export default async function HomePage() {
       <WhyNoesis />
       <AudienceSplit />
       <FinalCta />
-      <HomeFooter />
     </main>
   );
 }
