@@ -6,6 +6,7 @@ import { BadgeCheck, ShoppingCart, Users, Zap, type LucideIcon } from "lucide-re
 import { script } from "../fonts";
 import { AddToCart } from "./add-to-cart";
 import type { FeaturedProduct } from "./featured-products";
+import { SettlingPath } from "./settling-path";
 import styles from "./ready-to-launch.module.css";
 
 const VALUES: { title: string; body: string; icon: LucideIcon }[] = [
@@ -20,7 +21,7 @@ export function ReadyToLaunch({ products }: { products: FeaturedProduct[] }) {
   return (
     <section className={styles.section} aria-labelledby="ready-to-launch">
       <LaunchDecor />
-      <div className={styles.inner}>
+      <div className={styles.inner} data-scroll="">
         <div className={styles.copy}>
           <p className={styles.eyebrow}>Deploy · Customize · Scale</p>
           <h2 id="ready-to-launch">Ready to Launch</h2>
@@ -119,8 +120,8 @@ function LaunchDecor() {
 function LaunchEdge() {
   return (
     <svg className={styles.edge} viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
-      <path fill="var(--forest-950)" d="M0 52C190 16 360 92 580 58C820 20 980 102 1180 64C1310 42 1388 78 1440 62V150H0Z" />
-      <path fill="none" stroke="var(--gold)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" d="M0 52C190 16 360 92 580 58C820 20 980 102 1180 64C1310 42 1388 78 1440 62" />
+      <SettlingPath fill="var(--forest-950)" from="M0 62C190 62 360 62 580 62C820 62 980 62 1180 62C1310 62 1388 62 1440 62V150H0Z" to="M0 52C190 16 360 92 580 58C820 20 980 102 1180 64C1310 42 1388 78 1440 62V150H0Z" />
+      <SettlingPath stroke="var(--gold)" strokeWidth={1.4} from="M0 62C190 62 360 62 580 62C820 62 980 62 1180 62C1310 62 1388 62 1440 62" to="M0 52C190 16 360 92 580 58C820 20 980 102 1180 64C1310 42 1388 78 1440 62" />
     </svg>
   );
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { AddToCart } from "./add-to-cart";
 import type { FeaturedProduct } from "./featured-products";
+import { SettlingPath } from "./settling-path";
 import styles from "./trending-products.module.css";
 
 export function TrendingProducts({ products }: { products: FeaturedProduct[] }) {
@@ -12,7 +13,7 @@ export function TrendingProducts({ products }: { products: FeaturedProduct[] }) 
   return (
     <section className={styles.section} aria-labelledby="popular-week">
       <div className={styles.inner}>
-        <div className={styles.copy}>
+        <div className={styles.copy} data-scroll="">
           <p className={styles.eyebrow}>Trending · Community Favorites</p>
           <h2 id="popular-week">Popular This Week</h2>
           <p className={styles.intro}>Discover code, templates and tools listed for builders this week.</p>
@@ -45,7 +46,7 @@ function PopularRail({ products }: { products: FeaturedProduct[] }) {
   const move = (direction: number) => scrollRail(scroller.current, direction);
 
   return (
-    <div className={styles.rail}>
+    <div className={styles.rail} data-scroll="0.28">
       <ul ref={scroller} className={styles.track} tabIndex={0} aria-label="Popular products" onKeyDown={(event) => onKey(event, move)}>
         {products.map((product) => (
           <li key={product.id}><TrendCard product={product} /></li>
@@ -100,8 +101,8 @@ function onKey(event: KeyboardEvent<HTMLUListElement>, move: (direction: number)
 function PopularEdge() {
   return (
     <svg className={styles.edge} viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
-      <path fill="var(--forest-950)" d="M0 0H1440V62C1388 78 1310 42 1180 64C980 102 820 20 580 58C360 92 190 16 0 52Z" />
-      <path fill="none" stroke="var(--gold)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" d="M0 52C190 16 360 92 580 58C820 20 980 102 1180 64C1310 42 1388 78 1440 62" />
+      <SettlingPath fill="var(--forest-950)" from="M0 0H1440V62C1388 62 1310 62 1180 62C980 62 820 62 580 62C360 62 190 62 0 62Z" to="M0 0H1440V62C1388 78 1310 42 1180 64C980 102 820 20 580 58C360 92 190 16 0 52Z" />
+      <SettlingPath stroke="var(--gold)" strokeWidth={1.4} from="M0 62C190 62 360 62 580 62C820 62 980 62 1180 62C1310 62 1388 62 1440 62" to="M0 52C190 16 360 92 580 58C820 20 980 102 1180 64C1310 42 1388 78 1440 62" />
     </svg>
   );
 }

@@ -1,28 +1,13 @@
+import { SettlingPath } from "./settling-path";
 import styles from "./section-divider.module.css";
 
 export function SectionDivider() {
   return (
     <div className={styles.divider} aria-hidden="true">
       <svg className={styles.wave} viewBox="0 0 1440 200" preserveAspectRatio="none">
-        <path
-          fill="var(--surface-parchment)"
-          d="M0 118C220 86 420 148 680 112C940 76 1120 142 1440 108V200H0Z"
-        />
-        <path
-          fill="none"
-          stroke="var(--gold)"
-          strokeWidth="1.4"
-          vectorEffect="non-scaling-stroke"
-          d="M0 118C220 86 420 148 680 112C940 76 1120 142 1440 108"
-        />
-        <path
-          fill="none"
-          stroke="var(--gold)"
-          strokeWidth="0.7"
-          opacity="0.45"
-          vectorEffect="non-scaling-stroke"
-          d="M0 128C240 98 440 156 700 122C960 88 1140 150 1440 118"
-        />
+        <SettlingPath fill="var(--surface-parchment)" from="M0 112C220 112 420 112 680 112C940 112 1120 112 1440 112V200H0Z" to="M0 118C220 86 420 148 680 112C940 76 1120 142 1440 108V200H0Z" />
+        <SettlingPath stroke="var(--gold)" strokeWidth={1.4} from="M0 112C220 112 420 112 680 112C940 112 1120 112 1440 112" to="M0 118C220 86 420 148 680 112C940 76 1120 142 1440 108" />
+        <SettlingPath stroke="var(--gold)" strokeWidth={0.7} opacity={0.45} from="M0 120C240 120 440 120 700 120C960 120 1140 120 1440 120" to="M0 128C240 98 440 156 700 122C960 88 1140 150 1440 118" />
       </svg>
       <Sprig className={styles.left} />
       <Sprig className={`${styles.right} ${styles.flip}`} />

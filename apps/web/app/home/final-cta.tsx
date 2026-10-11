@@ -6,7 +6,7 @@ export function FinalCta() {
     <section className={styles.section} aria-labelledby="final-cta">
       <img className={styles.scene} src="/brand/join-noesis-scene.jpg" alt="" />
       <div className={styles.veil} aria-hidden="true" />
-      <div className={styles.copy}>
+      <div className={styles.copy} data-scroll="0.2">
         <p>Join NOESIS</p>
         <h2 id="final-cta">Build, Sell, and Launch the Next Big Thing.</h2>
         <p className={styles.lead}>Join developers and businesses listing code, templates and ready-to-launch products.</p>

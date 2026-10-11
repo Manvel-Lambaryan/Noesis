@@ -4,6 +4,7 @@ import { exploreCategories } from "./category-faces";
 import { CategoryCarousel } from "./category-carousel";
 import { ExploreDecor } from "./explore-decor";
 import type { CategoryOption } from "../../lib/marketplace";
+import { SettlingPath } from "./settling-path";
 import styles from "./explore-categories.module.css";
 
 export function ExploreCategories({ categories }: { categories: CategoryOption[] }) {
@@ -37,8 +38,8 @@ export function ExploreCategories({ categories }: { categories: CategoryOption[]
 function ReturnEdge() {
   return (
     <svg className={styles.foot} viewBox="0 0 1440 160" preserveAspectRatio="none" aria-hidden="true">
-      <path fill="var(--forest-900)" d="M0 78C180 28 340 112 560 72C790 30 980 118 1200 78C1320 56 1390 96 1440 84V160H0Z" />
-      <path fill="none" stroke="var(--gold)" strokeWidth="1.4" vectorEffect="non-scaling-stroke" d="M0 78C180 28 340 112 560 72C790 30 980 118 1200 78C1320 56 1390 96 1440 84" />
+      <SettlingPath fill="var(--forest-900)" from="M0 80C180 80 340 80 560 80C790 80 980 80 1200 80C1320 80 1390 80 1440 80V160H0Z" to="M0 78C180 28 340 112 560 72C790 30 980 118 1200 78C1320 56 1390 96 1440 84V160H0Z" />
+      <SettlingPath stroke="var(--gold)" strokeWidth={1.4} from="M0 80C180 80 340 80 560 80C790 80 980 80 1200 80C1320 80 1390 80 1440 80" to="M0 78C180 28 340 112 560 72C790 30 980 118 1200 78C1320 56 1390 96 1440 84" />
     </svg>
   );
 }

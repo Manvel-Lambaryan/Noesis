@@ -20,7 +20,7 @@ const BUSINESSES: Point[] = [
 export function AudienceSplit() {
   return (
     <section className={styles.section} aria-label="Who NOESIS is for">
-      <div className={styles.split}>
+      <div className={styles.split} data-scroll="">
         <Panel image="/brand/audience-developers-scene.jpg" kicker="Developers" title="For Developers" points={DEVELOPERS} href="/account/seller" action="Start Selling" tone="primary" />
         <Panel image="/brand/audience-businesses-scene.jpg" kicker="Businesses" title="For Businesses" points={BUSINESSES} href="/marketplace" action="Explore Marketplace" tone="quiet" />
       </div>

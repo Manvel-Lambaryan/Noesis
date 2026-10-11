@@ -18,15 +18,17 @@ export function HomeScroll() {
 }
 
 function bindScroll(item: HTMLElement): void {
-  gsap.fromTo(item, { y: 64, autoAlpha: 0 }, {
+  const time = Number(item.dataset.scroll);
+  const lag = Number.isFinite(time) ? time : 0;
+  gsap.fromTo(item, { y: 48, autoAlpha: 0 }, {
     y: 0,
     autoAlpha: 1,
     ease: "none",
     scrollTrigger: {
       trigger: item,
       start: "top 96%",
-      end: "top 80%",
-      scrub: 0.8,
+      end: "top 74%",
+      scrub: 0.55 + lag,
     },
   });
 }

@@ -13,7 +13,7 @@ export function WhyNoesis() {
     <section id="about" className={styles.section} aria-labelledby="why-noesis">
       <img className={styles.scene} src="/brand/why-noesis.jpg" alt="" aria-hidden="true" />
       <div className={styles.veil} aria-hidden="true" />
-      <div className={styles.inner}>
+      <div className={styles.inner} data-scroll="">
         <header className={styles.head}>
           <p className={styles.eyebrow}>Why NOESIS <span /></p>
           <h2 id="why-noesis">Built for Developers.<br />Trusted by Businesses.</h2>
